@@ -5,9 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0F172A"
     android:fillViewport="true"
     tools:context=".ui.profile.ProfileFragment">
+
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +24,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:background="#1E293B" /> <!-- Placeholder se não tiver a imagem ainda -->
+            tools:background="@color/roxo_primario" /> <!-- Placeholder se não tiver a imagem ainda -->
 
         <!-- Foto de Perfil Centralizada na interseção -->
         <com.google.android.material.imageview.ShapeableImageView
@@ -63,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Usuario"
-            android:textColor="#FFFFFF"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="20sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif-medium"
@@ -71,14 +73,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/img_perfil_avatar" />
 
-        <!-- Email da Usuária -->
+        <!-- Status -->
         <TextView
             android:id="@+id/tv_email_usuario"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="usuario@email.com"
-            android:textColor="#94A3B8"
+            android:drawableStart="@drawable/status_offline"
+            android:text="status"
+            android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -89,7 +92,7 @@
             android:id="@+id/ll_menu_opcoes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="36dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -106,16 +109,15 @@
                 android:paddingHorizontal="24dp"
                 android:paddingVertical="18dp"
                 android:text="Informações pessoais"
-                android:textColor="#FFFFFF"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="16sp"
                 android:drawablePadding="16dp"
-                app:drawableStartCompat="@android:drawable/ic_menu_myplaces"
-                app:drawableEndCompat="@android:drawable/ic_media_next"
+                app:drawableStartCompat="@drawable/ic_circle_info"
                 app:drawableTint="#94A3B8" />
 
-            <!-- 2. Contatos de Confiança -->
+            <!-- 2. Dispositivo Embarcado -->
             <TextView
-                android:id="@+id/menu_contatos_confianca"
+                android:id="@+id/menu_dispositivo_embarcado"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
@@ -123,15 +125,31 @@
                 android:focusable="true"
                 android:paddingHorizontal="24dp"
                 android:paddingVertical="18dp"
-                android:text="Contatos de confiança"
-                android:textColor="#FFFFFF"
+                android:text="Dispositivo Embarcado"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="16sp"
                 android:drawablePadding="16dp"
-                app:drawableStartCompat="@android:drawable/ic_menu_recent_history"
-                app:drawableEndCompat="@android:drawable/ic_media_next"
+                app:drawableStartCompat="@drawable/ic_hardware"
                 app:drawableTint="#94A3B8" />
 
-            <!-- 3. Histórico -->
+            <!-- 3. Contatos -->
+            <TextView
+                android:id="@+id/menu_contatos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="18dp"
+                android:text="Contatos"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="16sp"
+                android:drawablePadding="16dp"
+                app:drawableStartCompat="@drawable/ic_contatos"
+                app:drawableTint="#94A3B8" />
+
+            <!-- 4. Histórico -->
             <TextView
                 android:id="@+id/menu_historico"
                 android:layout_width="match_parent"
@@ -142,14 +160,13 @@
                 android:paddingHorizontal="24dp"
                 android:paddingVertical="18dp"
                 android:text="Histórico"
-                android:textColor="#FFFFFF"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="16sp"
                 android:drawablePadding="16dp"
-                app:drawableStartCompat="@android:drawable/ic_menu_info_details"
-                app:drawableEndCompat="@android:drawable/ic_media_next"
+                app:drawableStartCompat="@drawable/ic_historico"
                 app:drawableTint="#94A3B8" />
 
-            <!-- 4. Configurações -->
+            <!-- 5. Planos de Assinatura -->
             <TextView
                 android:id="@+id/menu_configuracoes"
                 android:layout_width="match_parent"
@@ -159,15 +176,14 @@
                 android:focusable="true"
                 android:paddingHorizontal="24dp"
                 android:paddingVertical="18dp"
-                android:text="Configurações"
-                android:textColor="#FFFFFF"
+                android:text="Planos de assinatura"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="16sp"
                 android:drawablePadding="16dp"
-                app:drawableStartCompat="@android:drawable/ic_menu_manage"
-                app:drawableEndCompat="@android:drawable/ic_media_next"
+                app:drawableStartCompat="@drawable/ic_cash"
                 app:drawableTint="#94A3B8" />
 
-            <!-- 5. Privacidade -->
+            <!-- 6. Configurações -->
             <TextView
                 android:id="@+id/menu_privacidade"
                 android:layout_width="match_parent"
@@ -177,12 +193,11 @@
                 android:focusable="true"
                 android:paddingHorizontal="24dp"
                 android:paddingVertical="18dp"
-                android:text="Privacidade"
-                android:textColor="#FFFFFF"
+                android:text="Configurações"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="16sp"
                 android:drawablePadding="16dp"
-                app:drawableStartCompat="@android:drawable/ic_secure"
-                app:drawableEndCompat="@android:drawable/ic_media_next"
+                app:drawableStartCompat="@drawable/ic_config"
                 app:drawableTint="#94A3B8" />
 
         </LinearLayout>

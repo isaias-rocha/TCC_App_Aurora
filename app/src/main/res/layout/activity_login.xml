@@ -70,6 +70,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
+                android:drawableEnd="@drawable/ic_email"
+                android:drawableTint="?android:attr/textColorSecondary"
                 android:textColor="?android:attr/textColorPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -95,7 +97,7 @@
                 android:textColor="?android:attr/textColorPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- CHECK - guardar e lembrar os dados em uma pasta -->
+        <!-- CHECK - guardar e lembrar os dados na pasta do dispositivo -->
         <CheckBox
             android:id="@+id/check_lembrarCredenciais"
             style="@style/TextAppearance.Aurora.Body"

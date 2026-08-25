@@ -1,4 +1,4 @@
-package com.equipe1.aurora;
+package com.equipe1.aurora.ui.profile;
 
 import android.os.Bundle;
 
@@ -8,17 +8,26 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class PrivacyProfileActivity extends AppCompatActivity {
+import com.equipe1.aurora.R;
+
+public class PersonalInfoActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_privacy_profile);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        setContentView(R.layout.activity_personal_info);
+        
+        initComponents();
+        
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.personal_info), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    private void initComponents() {
+
     }
 }

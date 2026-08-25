@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- ScrollView principal habilitado para preencher a tela inteira (fillViewport) -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/accessibility"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:id="@+id/accessibility"
+    android:padding="24dp"
     tools:context=".ui.config.AccessibilityActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="24dp">
+        android:layout_height="wrap_content">
 
-        <!-- BOTÃO VOLTAR -->
+        <!-- BOTÃO VOLTAR: voltar à página anterior. -->
         <ImageButton
             android:id="@+id/btn_voltar_acessibilidade"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Voltar"
+            android:contentDescription="Voltar para a tela anterior"
             android:src="@drawable/ic_back"
-            app:tint="?android:attr/textColorPrimary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorOnBackground" />
 
-        <!-- TÍTULO DA TELA -->
+        <!-- TÍTULO DA TELA: Não precisa de contentDescription manual, pois o TalkBack lê o android:text diretamente. -->
         <TextView
             android:id="@+id/tv_titulo_acessibilidade"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Acessibiliidade"
-            android:textColor="?android:attr/textColorPrimary"
+            android:text="Acessibilidade"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="28sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -66,34 +67,45 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_visual"
+            style="@style/Widget.Aurora.SwitchCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:cardBackgroundColor="?attr/colorSurface"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
-            app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_secao_visual">
+            app:layout_constraintTop_toBottomOf="@id/tv_secao_visual"
+            app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:paddingVertical="8dp">
 
-                <!-- ITEM: ALTO CONTRASTE -->
+                <!-- ITEM: ALTO CONTRASTE
+                     O contêiner (ConstraintLayout) é o elemento focável e clicável.
+                     O contentDescription unifica o título e o detalhe em uma única leitura fluida para o TalkBack. -->
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/row_alto_contraste"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:contentDescription="Modo de Alto Contraste. Destaca bordas e aumenta a legibilidade das cores."
+                    android:focusable="true"
+                    android:minHeight="56dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp">
 
                     <TextView
                         android:id="@+id/tv_alto_contraste"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
                         android:text="Modo de Alto Contraste"
-                        android:textColor="?android:attr/textColorPrimary"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@id/switch_alto_contraste"
@@ -104,6 +116,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
+                        android:layout_marginEnd="16dp"
                         android:text="Destaca bordas e aumenta a legibilidade das cores"
                         android:textColor="?android:attr/textColorSecondary"
                         android:textSize="12sp"
@@ -111,33 +124,49 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_alto_contraste" />
 
+                    <!-- O Switch fica marcado como clickable/focusable=false para evitar que o leitor
+                         de tela precise passar duas vezes no mesmo item (no container e na chave). -->
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/switch_alto_contraste"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:contentDescription="Alternar Modo de Alto Contraste"
+                        android:focusable="false"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <!-- Divisor visual (oculto para o leitor de tela para não interromper a navegação) -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginVertical="12dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:alpha="0.1"
                     android:background="?android:attr/textColorSecondary"
-                    android:alpha="0.1" />
+                    android:importantForAccessibility="no" />
 
-                <!-- ITEM: REDUZIR ANIMAÇÕES -->
+                <!-- ITEM: TEMA DO APLICATIVO -->
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/row_reduzir_animacoes"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:contentDescription="Tema do Aplicativo. Alternar entre tema claro e escuro."
+                    android:focusable="true"
+                    android:minHeight="56dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp">
 
                     <TextView
-                        android:id="@+id/tv_reduzir_animacoes"
+                        android:id="@+id/tv_modo_tema"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Reduzir Animações"
-                        android:textColor="?android:attr/textColorPrimary"
+                        android:layout_marginEnd="16dp"
+                        android:text="Tema do Aplicativo"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@id/switch_reduzir_animacoes"
@@ -148,17 +177,21 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Desativa efeitos visuais de transição de tela"
+                        android:layout_marginEnd="16dp"
+                        android:text="Alterar tema do aplicativo"
                         android:textColor="?android:attr/textColorSecondary"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toStartOf="@id/switch_reduzir_animacoes"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_reduzir_animacoes" />
+                        app:layout_constraintTop_toBottomOf="@id/tv_modo_tema" />
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/switch_reduzir_animacoes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:contentDescription="Alternar tema do aplicativo"
+                        android:focusable="false"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -188,28 +221,37 @@
             app:cardBackgroundColor="?attr/colorSurface"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
-            app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_secao_interacao">
+            app:layout_constraintTop_toBottomOf="@id/tv_secao_interacao"
+            app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:paddingVertical="8dp">
 
-                <!-- ITEM: FEEDBACK TÁTIL -->
+                <!-- ITEM: FEEDBACK TÁTIL (VIBRAÇÃO) -->
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/row_feedback_tatil"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:contentDescription="Vibração. Vibra o celular ao acionar o botão SOS e alertas."
+                    android:focusable="true"
+                    android:minHeight="56dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp">
 
                     <TextView
                         android:id="@+id/tv_feedback_tatil"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Vibração e Feedback Tátil"
-                        android:textColor="?android:attr/textColorPrimary"
+                        android:layout_marginEnd="16dp"
+                        android:text="Vibração"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@id/switch_feedback_tatil"
@@ -220,6 +262,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
+                        android:layout_marginEnd="16dp"
                         android:text="Vibra o celular ao acionar o botão SOS e alertas"
                         android:textColor="?android:attr/textColorSecondary"
                         android:textSize="12sp"
@@ -231,30 +274,45 @@
                         android:id="@+id/switch_feedback_tatil"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true"
+                        android:checked="false"
+                        android:clickable="false"
+                        android:contentDescription="Alternar feedback por vibração"
+                        android:focusable="false"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <!-- Divisor visual -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginVertical="12dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:alpha="0.1"
                     android:background="?android:attr/textColorSecondary"
-                    android:alpha="0.1" />
+                    android:importantForAccessibility="no" />
 
-                <!-- ITEM: OTIMIZAÇÃO PARA LEITOR DE TELA -->
+                <!-- ITEM: LEITOR DE TELA (TALKBACK)
+                     Corrigido clickable="true" na linha para manter padronização de toque estendido. -->
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/row_leitor_tela"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:contentDescription="Suporte a TalkBack. Otimiza a leitura de voz dos botões e alertas do app."
+                    android:focusable="true"
+                    android:minHeight="56dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp">
 
                     <TextView
                         android:id="@+id/tv_leitor_tela"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
                         android:text="Suporte a TalkBack"
-                        android:textColor="?android:attr/textColorPrimary"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@id/switch_leitor_tela"
@@ -265,6 +323,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
+                        android:layout_marginEnd="16dp"
                         android:text="Otimiza a leitura de voz dos botões e alertas do app"
                         android:textColor="?android:attr/textColorSecondary"
                         android:textSize="12sp"
@@ -276,82 +335,10 @@
                         android:id="@+id/switch_leitor_tela"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- SEÇÃO 3: ATALHOS RÁPIDOS -->
-        <TextView
-            android:id="@+id/tv_secao_atalhos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="ATALHOS DE EMERGÊNCIA"
-            android:textColor="?attr/colorPrimary"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/card_interacao" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_atalhos"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:cardBackgroundColor="?attr/colorSurface"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:strokeWidth="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_secao_atalhos"
-            app:layout_constraintVertical_bias="0.0">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <!-- ITEM: BOTÃO DE ENERGIA -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/tv_triplo_clique"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="Atalho do Botão Power (3x)"
-                        android:textColor="?android:attr/textColorPrimary"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@id/switch_triplo_clique"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="Pressione o botão de ligar 3 vezes para acionar o SOS silencioso"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toStartOf="@id/switch_triplo_clique"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_triplo_clique" />
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/switch_triplo_clique"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
+                        android:checked="false"
+                        android:clickable="false"
+                        android:contentDescription="Alternar otimização para leitor de tela"
+                        android:focusable="false"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

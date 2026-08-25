@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Olá, Usuário!"
-            android:textColor="#FFFFFF"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@id/img_profile"
@@ -75,7 +75,7 @@
                 android:background="@null"
                 android:hint="Pesquisar lugares, amigos..."
                 android:paddingStart="12dp"
-                android:textColor="#FFFFFF"
+                android:textColor="?android:attr/textColorPrimary"
                 android:textColorHint="#94A3B8"
                 android:textSize="14sp" />
 
@@ -241,6 +241,79 @@
                     android:layout_height="wrap_content"
                     android:text="Adicionar"
                     android:textColor="#94A3B8"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+
+            <!-- Item: Trabalho -->
+            <LinearLayout
+                android:id="@+id/btn_shortcut_trabalho"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/card_icons"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_work"
+                    app:tint="@color/texto" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Trabalho"
+                    android:textColor="#ffff"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Adicionar"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <!-- Item: Adicionar -->
+            <LinearLayout
+                android:id="@+id/btn_shortcut_adicionar"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/card_icons"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_circle_add"
+                    app:tint="@color/texto" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Trabalho"
+                    android:textColor="#ffff"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Adicionar"
+                    android:textColor="?android:attr/textColorSecondary"
                     android:textSize="10sp" />
             </LinearLayout>
 

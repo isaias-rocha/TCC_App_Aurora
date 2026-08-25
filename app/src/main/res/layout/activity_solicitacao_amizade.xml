@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".ui.friends.SolicitacaoAmizadeActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
+
+        <!-- BOTÃO VOLTAR -->
+        <ImageView
+            android:id="@+id/btn_voltar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="Voltar para a tela anterior"
+            android:focusable="true"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?android:attr/textColorPrimary" />
+
+        <!-- TÍTULO -->
+        <TextView
+            android:id="@+id/tv_titulo_amizade"
+            style="@style/TextAppearance.Aurora.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Solicitação de amizade"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_voltar" />
+
+        <!-- SUBTÍTULO -->
+        <TextView
+            android:id="@+id/tv_subtitulo_amizade"
+            style="@style/TextAppearance.Aurora.Subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Digite o e-mail ou número de telefone \ndo usuário para enviar um convite."
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_titulo_amizade" />
+
+        <!-- CAMPO: BUSCAR USUÁRIO -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_busca_usuario"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:hint="Digite o E-mail"
+            android:textColorHint="?android:attr/textColorSecondary"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_subtitulo_amizade">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_busca_usuario"
+                style="@style/TextAppearance.Aurora.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="username"
+                android:inputType="textEmailAddress"
+                android:textColor="?android:attr/textColorPrimary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- CAMPO: Buscar Telefone -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_buscar_telefone"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Digite o número do telefone"
+            android:textColorHint="?android:attr/textColorSecondary"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_busca_usuario">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_busca_telefone"
+                style="@style/TextAppearance.Aurora.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="username"
+                android:inputType="textEmailAddress"
+                android:textColor="?android:attr/textColorPrimary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        <!-- CARD DE PRÉ-VISUALIZAÇÃO DO USUÁRIO ENCONTRADO -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_usuario"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="42dp"
+            android:visibility="gone"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_buscar_telefone"
+            tools:visibility="visible">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/img_usuario_encontrado"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:contentDescription="Foto de perfil do usuário encontrado"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/tv_nome_usuario"
+                    style="@style/TextAppearance.Aurora.Body"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="16dp"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/img_usuario_encontrado"
+                    app:layout_constraintTop_toTopOf="@id/img_usuario_encontrado"
+                    tools:text="Nome Usuario" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- BOTÃO ENVIAR SOLICITAÇÃO -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_enviar_solicitacao"
+            style="@style/TextAppearance.Aurora.Body"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="32dp"
+            android:backgroundTint="?attr/colorPrimary"
+            android:text="Enviar solicitação"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:cornerRadius="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_usuario"
+            app:layout_constraintVertical_bias="1.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

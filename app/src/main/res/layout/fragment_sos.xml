@@ -2,118 +2,123 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_sos"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?android:attr/windowBackground">
+    android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/btnCall190"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
             android:padding="24dp">
 
-            <ImageView
+            <!-- Botão Voltar -->
+            <ImageButton
+                android:id="@+id/btn_voltar"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@android:drawable/ic_dialog_alert"
-                app:tint="?android:attr/textColorPrimary" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Voltar"
+                android:src="@drawable/ic_back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="#FFFFFF" />
 
+            <!-- Título -->
             <TextView
+                android:id="@+id/tv_titulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:text="Emergência"
-                android:textColor="@color/text_primary_claro"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textColor="#FFFFFF"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_voltar" />
 
+            <!-- Subtítulo -->
             <TextView
+                android:id="@+id/tv_subtitulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="subtitulo"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:text="Precisa de ajuda?"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_titulo" />
 
-            <!-- BIG SOS BUTTON -->
+
+            <!-- Botão SOS Circular - container-->
             <FrameLayout
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_marginTop="32dp">
+                android:id="@+id/container_sos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="56dp"
+                android:background="@drawable/bg_sos_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_subtitulo">
 
+                <!-- Botão SOS Circular - dentro do container-->
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnBigSos"
-                    style="@style/Animation.Design.BottomSheetDialog"
-                    android:layout_width="180dp"
-                    android:layout_height="200dp"
+                    android:id="@+id/btn_sos"
+                    android:layout_width="350dp"
+                    android:layout_height="350dp"
                     android:layout_gravity="center"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
                     android:text="SOS"
-                    android:textSize="48sp"
-                    app:cornerRadius="90dp" />
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="100sp"
+                    app:backgroundTint="@color/vermelho_alerta"
+                    app:cornerRadius="170dp" />
             </FrameLayout>
 
+
+            <!-- Texto Explicativo -->
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/tv_descricao_sos"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="Ao acionar o SOS por 3 segundos, sua localização \nserá envaida para seus contatos confiáveis."
-                android:textAlignment="center"
-                android:textColor="?attr/colorOnSurface" />
-
-            <!-- Menu Items -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/colorSurface"
-                    android:drawableStart="@android:drawable/ic_menu_mylocation"
-                    android:drawableEnd="@android:drawable/ic_media_next"
-                    android:drawablePadding="16dp"
-                    android:padding="16dp"
-                    android:text="Compartilhar Localização"
-                    android:textColor="?android:attr/textColorPrimary" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:background="?attr/colorSurface"
-                    android:drawableStart="@android:drawable/ic_menu_camera"
-                    android:drawableEnd="@android:drawable/ic_media_next"
-                    android:drawablePadding="16dp"
-                    android:padding="16dp"
-                    android:text="adicionar foto do relato"
-                    android:textColor="?android:attr/textColorPrimary" />
-            </LinearLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCall190"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginBottom="24dp"
-                android:text="Ligar para Emergência"
-                android:textColor="#FFFFFF"
-                app:backgroundTint="@color/vermelho_alerta"
-                app:cornerRadius="12dp"
-                app:icon="@android:drawable/ic_menu_call"
-                app:iconGravity="textStart"
-                app:iconTint="@color/text_secondary_claro" />
+                android:text="Ao acionar o SOS, sua localização será enviada \npara seus contatos confiáveis e a central."
+                android:textAlignment="center"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/container_sos" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
+    <!-- Botão Fixo de Emergência (Ligar 190) -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCall190"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_margin="24dp"
+        android:text="Ligar para emergência 190"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:backgroundTint="#E74C3C"
+        app:cornerRadius="12dp"
+        app:icon="@drawable/ic_telefone"
+        app:iconGravity="textStart"
+        app:iconTint="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

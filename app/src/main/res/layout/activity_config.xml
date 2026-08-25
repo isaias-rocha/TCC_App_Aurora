@@ -18,7 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Configurações"
-            android:textColor="#FFFFFF"
+            android:textColor="?android:attr/textColorPrimary"
+            style="@style/TextAppearance.Aurora.Title"
             android:textSize="22sp"
             android:textStyle="bold" />
 
@@ -26,7 +27,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ajuste o app do seu jeito."
-            android:textColor="#94A3B8"
+            android:textColor="?android:attr/textColorSecondary"
+            style="@style/TextAppearance.Aurora.Subtitle"
             android:textSize="14sp" />
 
         <!-- Card Opções -->
@@ -41,18 +43,22 @@
                 android:id="@+id/switchNotificacoes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:checked="true"
+                android:checked="false"
                 android:text="Notificações"
-                android:textColor="#FFFFFF" />
+                android:textColor="?android:attr/textColorPrimary"
+                style="@style/TextAppearance.Aurora.Body"
+                />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchLocalizacao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:checked="true"
+                android:checked="false"
                 android:text="Compartilhamento de localização"
-                android:textColor="#FFFFFF" />
+                android:textColor="?android:attr/textColorPrimary"
+                style="@style/TextAppearance.Aurora.Body"
+                />
 
             <TextView
                 android:id="@+id/btnSeguranca"
@@ -60,7 +66,9 @@
                 android:layout_height="wrap_content"
                 android:paddingVertical="12dp"
                 android:text="Segurança ›"
-                android:textColor="#FFFFFF" />
+                android:textColor="?android:attr/textColorPrimary"
+                style="@style/TextAppearance.Aurora.Body"
+                />
 
             <TextView
                 android:id="@+id/btnTema"
@@ -68,7 +76,8 @@
                 android:layout_height="wrap_content"
                 android:paddingVertical="12dp"
                 android:text="Tema: Escuro"
-                android:textColor="#FFFFFF" />
+                android:textColor="?android:attr/textColorPrimary"
+                style="@style/TextAppearance.Aurora.Body"/>
 
             <TextView
                 android:id="@+id/btnIdioma"
@@ -76,7 +85,8 @@
                 android:layout_height="wrap_content"
                 android:paddingVertical="12dp"
                 android:text="Idioma: Português ›"
-                android:textColor="#FFFFFF" />
+                android:textColor="?android:attr/textColorPrimary"
+                style="@style/TextAppearance.Aurora.Body"/>
 
             <TextView
                 android:id="@+id/btnSobre"
@@ -84,7 +94,8 @@
                 android:layout_height="wrap_content"
                 android:paddingVertical="12dp"
                 android:text="Sobre o aplicativo (v1.0.0) ›"
-                android:textColor="#FFFFFF" />
+                android:textColor="?android:attr/textColorPrimary"
+                style="@style/TextAppearance.Aurora.Body"/>
         </LinearLayout>
 
         <TextView
@@ -94,7 +105,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="24dp"
             android:text="Sair da conta"
-            android:textColor="#E74C3C"
+            android:textColor="@color/vermelho_alerta"
+            style="@style/TextAppearance.Aurora.Body"
             android:textStyle="bold" />
     </LinearLayout>
 

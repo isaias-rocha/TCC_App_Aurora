@@ -2,142 +2,234 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/personal_info"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context=".ui.auth.RegisterActivity">
+    tools:context=".ui.profile.PersonalInfoActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="24dp">
+        android:paddingBottom="24dp">
 
         <!-- BOTÃO VOLTAR -->
-        <ImageView
+        <ImageButton
             android:id="@+id/btn_voltar"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
             android:contentDescription="Voltar para a tela anterior"
-            android:focusable="true"
             android:src="@drawable/ic_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="?android:attr/textColorPrimary" />
+            app:tint="?attr/colorOnBackground" />
 
-
+        <!-- TÍTULO -->
         <TextView
-            android:id="@+id/tv_titulo_cadastro"
+            android:id="@+id/tv_titulo_pessoal"
             style="@style/TextAppearance.Aurora.Title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            android:text="Criar Conta"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:text="Informações pessoais"
             android:textColor="?attr/colorPrimary"
-            android:textSize="32sp"
+            android:textSize="28sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/tv_subtitulo_cadastro"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_voltar" />
 
+        <!-- SUBTÍTULO -->
         <TextView
-            android:id="@+id/tv_subtitulo_cadastro"
+            android:id="@+id/tv_subtitulo_pessoal"
             style="@style/TextAppearance.Aurora.Subtitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:text="Preencha os dados abaixo"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="24dp"
+            android:text="Mantenha seus dados atualizados."
             android:textColor="?android:attr/textColorSecondary"
-            android:textSize="16sp"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_titulo_cadastro" />
+            app:layout_constraintTop_toBottomOf="@id/tv_titulo_pessoal" />
 
+        <!-- IMAGEM DE CAPA DA AURORA -->
+        <ImageView
+            android:id="@+id/img_header_aurora"
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:layout_marginTop="24dp"
+            android:contentDescription="Foto de capa do perfil"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_subtitulo_pessoal"
+            tools:background="@color/on_surface_claro" />
+
+        <!-- BOTÃO ALTERAR FOTO DE CAPA -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_alterar_foto_bg"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:contentDescription="Botão para alterar a foto de capa"
+            android:focusable="true"
+            app:cardBackgroundColor="?attr/colorPrimary"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/img_header_aurora"
+            app:layout_constraintEnd_toEndOf="@id/img_header_aurora">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_camera"
+                app:tint="@android:color/white" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- FOTO DE PERFIL -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/img_foto_perfil"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="24dp"
+            android:contentDescription="Sua foto de perfil atual"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/img_header_aurora"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <!-- BOTÃO ALTERAR FOTO DE PERFIL -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_alterar_foto"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="-4dp"
+            android:layout_marginBottom="-4dp"
+            android:clickable="true"
+            android:contentDescription="Botão para alterar a foto de perfil"
+            android:focusable="true"
+            app:cardBackgroundColor="?attr/colorPrimary"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/img_foto_perfil"
+            app:layout_constraintEnd_toEndOf="@id/img_foto_perfil">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_camera"
+                app:tint="@android:color/white" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- CAMPO: NOME COMPLETO -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_nome"
+            android:id="@+id/til_nome_pessoal"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="24dp"
             android:hint="Nome Completo"
             android:textColorHint="?android:attr/textColorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_subtitulo_cadastro">
+            app:layout_constraintTop_toBottomOf="@id/img_foto_perfil">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_nome"
+                android:id="@+id/et_nome_pessoal"
                 style="@style/TextAppearance.Aurora.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints="name"
                 android:inputType="textPersonName"
-                android:drawableEnd="@drawable/ic_name"
-                android:drawableTint="?android:attr/textColorSecondary"
                 android:textColor="?android:attr/textColorPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- CAMPO: E-MAIL -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_email_cadastro"
+            android:id="@+id/til_email_pessoal"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
             android:hint="E-mail"
             android:textColorHint="?android:attr/textColorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/til_nome">
+            app:layout_constraintTop_toBottomOf="@id/til_nome_pessoal">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_email_cadastro"
+                android:id="@+id/et_email_pessoal"
                 style="@style/TextAppearance.Aurora.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints="emailAddress"
                 android:inputType="textEmailAddress"
-                android:drawableEnd="@drawable/ic_email"
-                android:drawableTint="?android:attr/textColorSecondary"
                 android:textColor="?android:attr/textColorPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
-
-
-        <!-- campo Telefone-->
+        <!-- CAMPO: TELEFONE -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_telefone"
+            android:id="@+id/til_telefone_pessoal"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
             android:hint="Telefone"
             android:textColorHint="?android:attr/textColorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/til_email_cadastro">
+            app:layout_constraintTop_toBottomOf="@id/til_email_pessoal">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_telefone"
+                android:id="@+id/et_telefone_pessoal"
                 style="@style/TextAppearance.Aurora.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints="phone"
                 android:inputType="phone"
-                android:drawableEnd="@drawable/ic_telefone"
-                android:drawableTint="?android:attr/textColorSecondary"
-                android:maxLength="11"
+                android:maxLength="15"
                 android:textColor="?android:attr/textColorPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- CAMPO: SENHA -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_senha"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
             android:hint="Senha"
             android:textColorHint="?android:attr/textColorSecondary"
             app:endIconMode="password_toggle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/til_telefone">
+            app:layout_constraintTop_toBottomOf="@id/til_telefone_pessoal">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_senha_cadastro"
@@ -148,12 +240,15 @@
                 android:textColor="?android:attr/textColorPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- CAMPO: CONFIRMAR SENHA -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_confirmar_senha"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
             android:hint="Confirmar senha"
             android:textColorHint="?android:attr/textColorSecondary"
             app:endIconMode="password_toggle"
@@ -170,50 +265,24 @@
                 android:textColor="?android:attr/textColorPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- BOTÃO SALVAR ALTERAÇÕES -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_cadastrar"
-            style="@style/TextAppearance.Aurora.Body"
+            android:id="@+id/btn_salvar_informacoes"
+            style="@style/AuroraButtonStyle"
             android:layout_width="0dp"
             android:layout_height="60dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="32dp"
-            android:backgroundTint="?attr/colorPrimary"
-            android:text="Cadastrar"
+            android:layout_marginEnd="24dp"
+            android:text="Salvar alterações"
+            android:textAllCaps="false"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:cornerRadius="8dp"
-            app:layout_constraintBottom_toTopOf="@id/tv_ir_para_login_desc"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/til_confirmar_senha" />
-
-        <TextView
-            android:id="@+id/tv_ir_para_login_desc"
-            style="@style/TextAppearance.Aurora.Body"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Já tem uma conta?"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@+id/tv_ir_para_login"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_cadastrar" />
-
-        <TextView
-            android:id="@+id/tv_ir_para_login"
-            style="@style/TextAppearance.Aurora.Body"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="Logar"
-            android:textColor="?android:attr/colorPrimary"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_ir_para_login_desc"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@id/tv_ir_para_login_desc"
-            app:layout_constraintTop_toTopOf="@id/tv_ir_para_login_desc" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

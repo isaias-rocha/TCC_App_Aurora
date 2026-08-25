@@ -2,4 +2,20 @@
 <resources>
 
     <style name="AuroraButtonStyle">button_style</style>
+
+    <!-- Em res/values/styles.xml -->
+    <style name="Widget.Aurora.SwitchCard" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <!-- Fundo arredondado -->
+        <item name="android:background">@drawable/card</item> <!-- card fundo -->
+
+        <!-- Espaçamento interno para o texto não colar nas bordas -->
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+
+        <!-- Tipografia e Cores -->
+        <item name="android:textAppearance">@style/TextAppearance.Aurora.Body</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
 </resources>

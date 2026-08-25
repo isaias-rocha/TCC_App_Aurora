@@ -63,9 +63,9 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- FILTROS DE CATEGORIA -->
+        <!-- Menu - FILTROS DE CATEGORIA -->
         <HorizontalScrollView
-            android:id="@+id/scrollFilters"
+            android:id="@+id/scrollFiltros"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -83,9 +83,9 @@
                 android:orientation="horizontal"
                 android:paddingHorizontal="16dp">
 
-                <Button
+                <Button android:id="@+id/btn_filtro_todos"
                     android:layout_width="wrap_content"
-                    android:layout_height="38dp"
+                    android:layout_height="48dp"
                     android:layout_marginEnd="8dp"
                     android:backgroundTint="#6C5CE7"
                     android:text="Todos"
@@ -93,26 +93,38 @@
                     android:textColor="#FFFFFF"
                     android:textSize="12sp" />
 
-                <Button
+                <Button android:id="@+id/btn_filtro_rotas"
                     android:layout_width="wrap_content"
-                    android:layout_height="38dp"
+                    android:layout_height="48dp"
                     android:layout_marginEnd="8dp"
-                    android:backgroundTint="#1E293B"
+                    android:backgroundTint="@color/on_surface_claro"
+                    android:text="Rotas"
+                    android:textAllCaps="false"
+                    android:textColor="#94A3B8"
+                    android:textSize="12sp" />
+
+                <Button android:id="@+id/btn_filtro_amigos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@color/on_surface_claro"
                     android:text="Amigos"
                     android:textAllCaps="false"
                     android:textColor="#94A3B8"
                     android:textSize="12sp" />
 
-                <Button
+                <Button android:id="@+id/btn_filtro_grupos"
                     android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:backgroundTint="#1E293B"
-                    android:text="Grupo"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@color/on_surface_claro"
+                    android:text="Grupos"
                     android:textAllCaps="false"
                     android:textColor="#94A3B8"
                     android:textSize="12sp" />
             </LinearLayout>
         </HorizontalScrollView>
+
 
         <!-- BOTÃO FLUTUANTE PARA VOLTAR À MINHA LOCALIZAÇÃO -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -179,7 +191,7 @@
                         <Button
                             android:id="@+id/btnModeCar"
                             android:layout_width="wrap_content"
-                            android:layout_height="36dp"
+                            android:layout_height="48dp"
                             android:layout_marginEnd="8dp"
                             android:backgroundTint="#6C5CE7"
                             android:text="🚗 Carro"
@@ -190,7 +202,7 @@
                         <Button
                             android:id="@+id/btnModeWalk"
                             android:layout_width="wrap_content"
-                            android:layout_height="36dp"
+                            android:layout_height="48dp"
                             android:layout_marginEnd="8dp"
                             android:backgroundTint="#334155"
                             android:text="🚶 A pé"
@@ -201,7 +213,7 @@
                         <Button
                             android:id="@+id/btnModeBike"
                             android:layout_width="wrap_content"
-                            android:layout_height="36dp"
+                            android:layout_height="48dp"
                             android:layout_marginEnd="8dp"
                             android:backgroundTint="#334155"
                             android:text="🚴 Bicicleta"

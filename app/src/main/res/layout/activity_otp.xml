@@ -66,8 +66,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="60dp"
-                android:layout_height="64dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
                 android:layout_marginEnd="8dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -78,14 +78,15 @@
                     android:inputType="number"
                     android:maxLength="1"
                     android:textColor="?android:attr/textColorPrimary"
+                    android:contentDescription="código do primeiro número"
                     android:textSize="22sp"
                     android:textStyle="bold" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="60dp"
-                android:layout_height="64dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="8dp">
 
@@ -96,6 +97,7 @@
                     android:gravity="center"
                     android:inputType="number"
                     android:maxLength="1"
+                    android:contentDescription="código do segundo número"
                     android:textColor="?android:attr/textColorPrimary"
                     android:textSize="22sp"
                     android:textStyle="bold" />
@@ -103,10 +105,11 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="60dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="8dp">
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+               >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_otp_3"
@@ -115,6 +118,7 @@
                     android:gravity="center"
                     android:inputType="number"
                     android:maxLength="1"
+                    android:contentDescription="código do terceiro número"
                     android:textColor="?android:attr/textColorPrimary"
                     android:textSize="22sp"
                     android:textStyle="bold" />
@@ -122,8 +126,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="60dp"
-                android:layout_height="64dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
                 android:layout_marginStart="4dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -133,6 +137,7 @@
                     android:gravity="center"
                     android:inputType="number"
                     android:maxLength="1"
+                    android:contentDescription="código do quarto número"
                     android:textColor="?android:attr/textColorPrimary"
                     android:textSize="22sp"
                     android:textStyle="bold" />

@@ -21,6 +21,16 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+
+        // Classe Main, só tem a função do menu de navegação, para ir às telas fragmentadas
+
+        // Ajusta o padding inferior do BottomNavigationView para não atropelar os botões do celular
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.bottom_navigation), (v, insets) -> {
+            Insets navBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
+            v.setPadding(0, 0, 0, navBars.bottom);
+            return insets;
+        });
+
         // 1. Ajuste de Insets das barras do sistema
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -30,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 2. Vincula o NavHostFragment com o BottomNavigationView
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.nav_host_fragment); // ID correto vindo do activity_main.xml
+                .findFragmentById(R.id.nav_host_fragment); // "ID" correto vindo do activity_main.xml
 
         if (navHostFragment != null) {
             NavController navController = navHostFragment.getNavController();

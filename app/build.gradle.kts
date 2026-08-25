@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.equipe1.aurora"
-        minSdk = 28
+        minSdk = 29
         targetSdk = 37
         versionCode = 1
         versionName = "1.0"
