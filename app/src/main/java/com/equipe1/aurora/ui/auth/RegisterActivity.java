@@ -1,12 +1,12 @@
 package com.equipe1.aurora.ui.auth;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,22 +19,25 @@ import com.google.android.material.textfield.TextInputEditText;
 public class RegisterActivity extends AppCompatActivity {
 
     // 1. Declaração das variáveis dos componentes da tela
-    private TextInputEditText etNome;
-    private TextInputEditText etTelefone;
-    private TextInputEditText etEmailCadastro;
-    private TextInputEditText etSenhaCadastro;
-    private TextInputEditText etConfirmarSenha;
+
+    private ImageButton btnVoltar;
+    private TextInputEditText etNome, etTelefone,etEmailCadastro, etSenhaCadastro, etConfirmarSenha;
     private MaterialButton btnCadastrar;
-    private TextView tvVoltarLogin;
-    private TextView tvVoltarLoginDesc;
+    private TextView tvVoltarLogin, tvVoltarLoginDesc;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_cadastro);
 
         initComponents();
+
+        btnVoltar.setOnClickListener(view -> {
+            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
         // 3. Aplicação da Máscara Automática de Telefone: (XX) XXXXX-XXXX
         aplicarMascaraTelefone();
@@ -53,10 +56,10 @@ public class RegisterActivity extends AppCompatActivity {
             startActivity(intent);
             finish(); // Fecha a tela atual para não acumular na pilha
         };
-
         tvVoltarLogin.setOnClickListener(irParaLoginListener);
         tvVoltarLoginDesc.setOnClickListener(irParaLoginListener);
     }
+
 
     // 2. Inicialização das views encontradas no XML
     private void initComponents() {
@@ -66,14 +69,14 @@ public class RegisterActivity extends AppCompatActivity {
         etSenhaCadastro     = findViewById(R.id.et_senha_cadastro);
         etConfirmarSenha    = findViewById(R.id.et_confirmar_senha_cadastro);
 
+        btnVoltar           = findViewById(R.id.btn_voltar);
         btnCadastrar        = findViewById(R.id.btn_cadastrar);
         tvVoltarLogin       = findViewById(R.id.tv_ir_para_login);
         tvVoltarLoginDesc   = findViewById(R.id.tv_ir_para_login_desc);
     }
 
-    /**
-     * Método responsável por formatar o campo de telefone dinamicamente enquanto a pessoa digita.
-     */
+    //Método responsável por formatar o campo de telefone dinamicamente enquanto a pessoa digita.
+
     private void aplicarMascaraTelefone() {
         etTelefone.addTextChangedListener(new TextWatcher() {
             private boolean isUpdating = false;
@@ -99,12 +102,12 @@ public class RegisterActivity extends AppCompatActivity {
                         formatted.append(unformatted);
                     } else {
                         formatted.append(unformatted.substring(0, 2)).append(") ");
-                        if (unformatted.length() <= 7) {
+                        if (unformatted.length() <= 11) {
                             formatted.append(unformatted.substring(2));
                         } else {
-                            formatted.append(unformatted.substring(2, 7))
+                            formatted.append(unformatted.substring(2, 11))
                                     .append("-")
-                                    .append(unformatted.substring(7, Math.min(unformatted.length(), 11)));
+                                    .append(unformatted.substring(11, Math.min(unformatted.length(), 11)));
                         }
                     }
                 }
@@ -119,9 +122,8 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Método que valida as entradas de texto e processa a criação da conta.
-     */
+
+     //Método que valida as entradas de texto e processa a criação da conta.
     private void executarCadastro() {
         String nome           = etNome.getText().toString().trim();
         String telefone       = etTelefone.getText().toString().trim();

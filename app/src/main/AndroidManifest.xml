@@ -9,7 +9,9 @@
     <!-- Permissão: GPS -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <!-- Permissão: Vibração-->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -77,14 +79,14 @@
             android:name=".ui.history.HistoryActivity"
             android:exported="false" />
         <activity
-            android:name=".PrivacyProfileActivity"
+            android:name=".ui.profile.PersonalInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.profile.PersonalInfoActivity"
+            android:name=".ui.friends.SolicitacaoAmizadeActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ui.friends.SolicitacaoAmizadeActivity"
+            android:name=".AdicionarContatoActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
     </application>

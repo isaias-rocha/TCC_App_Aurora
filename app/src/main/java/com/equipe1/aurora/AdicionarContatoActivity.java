@@ -1,4 +1,4 @@
-package com.equipe1.aurora.ui.profile;
+package com.equipe1.aurora;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -9,17 +9,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.equipe1.aurora.R;
-
-public class ProfileActivity extends AppCompatActivity {
+public class AdicionarContatoActivity extends AppCompatActivity {
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.fragment_perfil);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.layout_perfil), (v, insets) -> {
+        setContentView(R.layout.activity_adicionar_contato);
+
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.adicionar_contato), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;

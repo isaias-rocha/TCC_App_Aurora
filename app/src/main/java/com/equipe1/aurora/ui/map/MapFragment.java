@@ -108,7 +108,7 @@ public class MapFragment extends Fragment {
         Configuration.getInstance().load(requireContext(), PreferenceManager.getDefaultSharedPreferences(requireContext()));
         Configuration.getInstance().setUserAgentValue(requireContext().getPackageName());
 
-        View root = inflater.inflate(R.layout.fragment_map, container, false);
+        View root = inflater.inflate(R.layout.fragment_mapa, container, false);
 
         // Inicializar Views da Interface
         inicializarViews(root);

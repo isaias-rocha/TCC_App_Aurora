@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/layout_solicitacao_amizade"
     android:fillViewport="true"
     tools:context=".ui.friends.SolicitacaoAmizadeActivity">
 
@@ -11,6 +12,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="24dp">
+
+
+        <!-- BARRA DE ARRASTE (DECORATIVA) -->
+        <View
+            android:id="@+id/drag_handle"
+            android:layout_width="32dp"
+            android:layout_height="4dp"
+            android:alpha="0.4"
+            android:background="?android:attr/textColorSecondary"
+            android:importantForAccessibility="no"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- BOTÃO VOLTAR -->
         <ImageView
@@ -23,7 +37,7 @@
             android:focusable="true"
             android:src="@drawable/ic_back"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/drag_handle"
             app:tint="?android:attr/textColorPrimary" />
 
         <!-- TÍTULO -->
@@ -55,7 +69,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_titulo_amizade" />
 
-        <!-- CAMPO: BUSCAR USUÁRIO -->
+        <!-- CAMPO: BUSCAR E-MAIL -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_busca_usuario"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -74,14 +88,14 @@
                 style="@style/TextAppearance.Aurora.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autofillHints="username"
+                android:autofillHints="emailAddress"
                 android:inputType="textEmailAddress"
                 android:textColor="?android:attr/textColorPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- CAMPO: Buscar Telefone -->
+        <!-- CAMPO: BUSCAR TELEFONE -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/et_buscar_telefone"
+            android:id="@+id/til_buscar_telefone"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -91,32 +105,30 @@
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/til_busca_usuario">
+            app:layout_constraintTop_toBottomOf="@id/til_busca_usuario">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_busca_telefone"
                 style="@style/TextAppearance.Aurora.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autofillHints="username"
-                android:inputType="textEmailAddress"
+                android:autofillHints="phone"
+                android:inputType="phone"
                 android:textColor="?android:attr/textColorPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
-
-
 
         <!-- CARD DE PRÉ-VISUALIZAÇÃO DO USUÁRIO ENCONTRADO -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_usuario"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="42dp"
+            android:layout_marginTop="32dp"
             android:visibility="gone"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_buscar_telefone"
+            app:layout_constraintTop_toBottomOf="@id/til_buscar_telefone"
             tools:visibility="visible">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -141,14 +153,15 @@
                     style="@style/TextAppearance.Aurora.Body"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
                     android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="16sp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/img_usuario_encontrado"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/img_usuario_encontrado"
                     app:layout_constraintTop_toTopOf="@id/img_usuario_encontrado"
-                    tools:text="Nome Usuario" />
+                    tools:text="Nome do Usuário" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

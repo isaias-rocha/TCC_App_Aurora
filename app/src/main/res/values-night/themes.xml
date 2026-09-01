@@ -3,9 +3,9 @@
 
     <style name="Base.Theme.Aurora" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Cores Primárias e de Destaque -->
-        <item name="colorPrimary">@color/roxo_primario</item>
+        <item name="colorPrimary">@color/cor_primaria</item>
         <item name="colorOnPrimary">@color/texto</item>
-        <item name="colorSecondary">@color/verde_destaque</item>
+        <item name="colorSecondary">@color/cor_segundaria</item>
 
         <!-- Fundos e Superfícies no Modo Escuro -->
         <item name="android:windowBackground">@color/bg_escuro</item>

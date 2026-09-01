@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:id="@+id/layout_perfil"
     tools:context=".ui.profile.ProfileFragment">
 
 
@@ -18,19 +19,20 @@
         <!-- Imagem de Fundo (Aurora) -->
         <ImageView
             android:id="@+id/img_header_aurora"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="160dp"
-            android:scaleType="centerCrop"
+            android:scaleType="center"
+            android:src="@android:drawable/ic_menu_camera"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:background="@color/roxo_primario" /> <!-- Placeholder se não tiver a imagem ainda -->
+            tools:background="@color/cor_primaria" /> <!-- Placeholder se não tiver a imagem ainda -->
 
         <!-- Foto de Perfil Centralizada na interseção -->
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/img_perfil_avatar"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="@id/img_header_aurora"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,23 +42,6 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <!-- Botão/Ícone de Editar Foto -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            app:cardBackgroundColor="#FFFFFF"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:strokeWidth="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/img_perfil_avatar"
-            app:layout_constraintEnd_toEndOf="@id/img_perfil_avatar">
-
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_gravity="center"
-                android:src="@android:drawable/ic_menu_edit"
-                app:tint="#0F172A" />
-        </com.google.android.material.card.MaterialCardView>
 
         <!-- Nome da Usuária -->
         <TextView

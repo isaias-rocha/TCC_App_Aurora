@@ -15,7 +15,7 @@
         android:id="@+id/nav_mapa"
         android:name="com.equipe1.aurora.ui.map.MapFragment"
         android:label="Mapa"
-        tools:layout="@layout/fragment_map" />
+        tools:layout="@layout/fragment_mapa" />
 
     <fragment
         android:id="@+id/nav_sos"
@@ -27,12 +27,12 @@
         android:id="@+id/nav_contatos"
         android:name="com.equipe1.aurora.ui.contacts.ContactsFragment"
         android:label="Contatos"
-        tools:layout="@layout/fragment_contacts" />
+        tools:layout="@layout/fragment_contactos" />
 
     <fragment
         android:id="@+id/nav_perfil"
         android:name="com.equipe1.aurora.ui.profile.ProfileFragment"
         android:label="Perfil"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_perfil" />
 
 </navigation>
