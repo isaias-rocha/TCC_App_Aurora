@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/layout_contatos"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    tools:context=".ui.contacts.ContactsActivity">
+
+    <!-- TÍTULO -->
+    <TextView
+        android:id="@+id/tv_titulo"
+        style="@style/TextAppearance.Aurora.Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Contatos"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- SUBTÍTULO -->
+    <TextView
+        android:id="@+id/tv_subtitulo"
+        style="@style/TextAppearance.Aurora.Subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="Pessoas que você selecionou em caso de emergência"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_titulo" />
+
+    <!-- RECYCLERVIEW DA LISTA DE CONTATOS -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_contatos"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
+        android:clipToPadding="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/btn_adicionar_contato"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_subtitulo"
+        />
+
+    <!-- BOTÃO ADICIONAR CONTATO -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_adicionar_contato"
+        style="@style/TextAppearance.Aurora.Body"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="100dp"
+        android:backgroundTint="?attr/colorPrimary"
+        android:text="Adicionar contato"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:cornerRadius="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

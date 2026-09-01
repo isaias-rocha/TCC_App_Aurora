@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Cores Globais / Design System -->
-    <color name="roxo_primario">#6C5CE7</color>
-    <color name="verde_destaque">#2ECC71</color>
+    <color name="cor_primaria">#6C5CE7</color>
+    <color name="cor_segundaria">#2ECC71</color>
     <color name="vermelho_alerta">#E74C3C</color>
     <color name="texto">#000000</color>
 

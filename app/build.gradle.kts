@@ -31,6 +31,7 @@ android {
     }
 }
 
+
 dependencies {
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)

@@ -7,26 +7,40 @@
     android:fillViewport="true"
     tools:context=".ui.auth.LoginActivity">
 
+
+    <!-- espaçamento externo na tela -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="24dp">
 
+        <!-- BOTÃO VOLTAR -->
+        <ImageButton android:id="@+id/btn_voltar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="Voltar para a tela anterior"
+            android:focusable="true"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?android:attr/textColorPrimary" />
+
         <!-- LOGO -->
-        <ImageView
-            android:id="@+id/iv_logoAurora"
+        <ImageView android:id="@+id/iv_logoAurora"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_marginTop="42dp"
+            android:layout_marginTop="36dp"
             android:contentDescription="Logo Aurora"
             android:src="@drawable/logo_aurora_horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_voltar" />
 
         <!-- TÍTULOS -->
-        <TextView
-            android:id="@+id/tv_titulo_login"
+        <TextView android:id="@+id/tv_titulo_login"
             style="@style/TextAppearance.Aurora.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,8 +52,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_logoAurora" />
 
-        <TextView
-            android:id="@+id/tv_subtitulo_login"
+        <!-- SUBTÍTULOS -->
+        <TextView android:id="@+id/tv_subtitulo_login"
             style="@style/TextAppearance.Aurora.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,9 +65,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_titulo_login" />
 
-        <!-- CAMPOS DE ENTRADA -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_email"
+        <!-- CAMPO EMAIL -->
+        <com.google.android.material.textfield.TextInputLayout android:id="@+id/til_email"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -64,8 +77,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_subtitulo_login">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_email"
+            <com.google.android.material.textfield.TextInputEditText android:id="@+id/et_email"
                 style="@style/TextAppearance.Aurora.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -75,8 +87,8 @@
                 android:textColor="?android:attr/textColorPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_senha"
+        <!-- CAMPO EMAIL -->
+        <com.google.android.material.textfield.TextInputLayout android:id="@+id/til_senha"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -88,8 +100,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/til_email">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_senha"
+            <com.google.android.material.textfield.TextInputEditText android:id="@+id/et_senha"
                 style="@style/TextAppearance.Aurora.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -98,13 +109,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- CHECK - guardar e lembrar os dados na pasta do dispositivo -->
-        <CheckBox
-            android:id="@+id/check_lembrarCredenciais"
+        <CheckBox android:id="@+id/check_lembrarCredenciais"
             style="@style/TextAppearance.Aurora.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Lembrar Credenciais"
-            android:textSize="12sp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@id/btn_logar"
             app:layout_constraintEnd_toStartOf="@id/tv_ir_para_esqueceuSenha"
             app:layout_constraintHorizontal_bias="0.0"
@@ -114,12 +124,11 @@
 
 
         <!-- ESQUECEU A SENHA -->
-        <TextView
-            android:id="@+id/tv_ir_para_esqueceuSenha"
+        <TextView android:id="@+id/tv_ir_para_esqueceuSenha"
             style="@style/TextAppearance.Aurora.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="14dp"
             android:text="Esqueceu a senha?"
             android:textColor="?attr/colorPrimary"
             android:textSize="14sp"
@@ -129,9 +138,9 @@
             app:layout_constraintBottom_toTopOf="@id/btn_logar"
             />
 
+
         <!-- BOTÕES -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_logar"
+            <com.google.android.material.button.MaterialButton android:id="@+id/btn_logar"
             style="@style/TextAppearance.Aurora.Body"
             android:layout_width="0dp"
             android:layout_height="56dp"
@@ -146,8 +155,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_ir_para_esqueceuSenha" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_logar_google"
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_logar_google"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="56dp"
@@ -167,7 +175,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_logar" />
 
-        <!-- LINK PARA REGISTRO -->
+
+    <!-- LINK PARA REGISTRO -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

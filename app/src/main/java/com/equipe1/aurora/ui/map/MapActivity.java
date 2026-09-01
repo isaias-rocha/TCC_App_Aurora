@@ -32,7 +32,7 @@ public class MapActivity extends AppCompatActivity {
 
 
         EdgeToEdge.enable(this);
-        setContentView(R.layout.fragment_map);
+        setContentView(R.layout.fragment_mapa);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.map), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
