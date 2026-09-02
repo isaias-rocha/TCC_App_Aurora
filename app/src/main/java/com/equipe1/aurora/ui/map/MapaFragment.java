@@ -58,7 +58,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
 
-public class MapFragment extends Fragment {
+public class MapaFragment extends Fragment {
 
     // =========================================================================
     // 1. VARIÁVEIS E COMPONENTES

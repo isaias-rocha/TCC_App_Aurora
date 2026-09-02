@@ -2,9 +2,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutOtp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/layoutOtp"
     android:fillViewport="true"
     tools:context=".ui.auth.OtpActivity">
 
@@ -22,9 +22,9 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Voltar"
             android:src="@drawable/ic_back"
-            app:tint="?android:attr/textColorPrimary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?android:attr/textColorPrimary" />
 
         <!-- TÍTULO E SUBTÍTULO -->
         <TextView
@@ -64,11 +64,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_subtitulo_otp">
 
+            <!-- DÍGITO 1 -->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
-                android:layout_marginEnd="8dp">
+                android:layout_marginEnd="8dp"
+                android:contentDescription="Primeiro dígito do código OTP"
+                app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_otp_1"
@@ -78,17 +81,19 @@
                     android:inputType="number"
                     android:maxLength="1"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:contentDescription="código do primeiro número"
                     android:textSize="22sp"
                     android:textStyle="bold" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- DÍGITO 2 -->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
                 android:layout_marginStart="4dp"
-                android:layout_marginEnd="8dp">
+                android:layout_marginEnd="8dp"
+                android:contentDescription="Segundo dígito do código OTP"
+                app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_otp_2"
@@ -97,19 +102,20 @@
                     android:gravity="center"
                     android:inputType="number"
                     android:maxLength="1"
-                    android:contentDescription="código do segundo número"
                     android:textColor="?android:attr/textColorPrimary"
                     android:textSize="22sp"
                     android:textStyle="bold" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- DÍGITO 3 -->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-               >
+                android:contentDescription="Terceiro dígito do código OTP"
+                app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_otp_3"
@@ -118,17 +124,19 @@
                     android:gravity="center"
                     android:inputType="number"
                     android:maxLength="1"
-                    android:contentDescription="código do terceiro número"
                     android:textColor="?android:attr/textColorPrimary"
                     android:textSize="22sp"
                     android:textStyle="bold" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- DÍGITO 4 -->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
-                android:layout_marginStart="4dp">
+                android:layout_marginStart="4dp"
+                android:contentDescription="Quarto dígito do código OTP"
+                app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_otp_4"
@@ -137,12 +145,10 @@
                     android:gravity="center"
                     android:inputType="number"
                     android:maxLength="1"
-                    android:contentDescription="código do quarto número"
                     android:textColor="?android:attr/textColorPrimary"
                     android:textSize="22sp"
                     android:textStyle="bold" />
             </com.google.android.material.textfield.TextInputLayout>
-
         </LinearLayout>
 
         <!-- BOTÃO CONFIRMAR -->

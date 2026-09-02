@@ -1,4 +1,4 @@
-package com.equipe1.aurora.ui.history;
+package com.equipe1.aurora.ui.profile;
 
 import android.os.Bundle;
 
@@ -10,17 +10,24 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.equipe1.aurora.R;
 
-public class HistoryActivity extends AppCompatActivity {
+public class InfoPessoaisActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_historico);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.splash_screen), (v, insets) -> {
+        setContentView(R.layout.activity_info_pessoais);
+        
+        initComponents();
+        
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.personal_info), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    private void initComponents() {
+
     }
 }

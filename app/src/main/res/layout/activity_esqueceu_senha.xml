@@ -66,7 +66,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_subtitulo">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_email_esqueceu"
+                android:id="@+id/et_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"

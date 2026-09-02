@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:id="@+id/layout_perfil"
-    tools:context=".ui.profile.ProfileFragment">
+    tools:context=".ui.profile.PerfilFragment">
 
 
 
@@ -153,7 +153,7 @@
 
             <!-- 5. Planos de Assinatura -->
             <TextView
-                android:id="@+id/menu_configuracoes"
+                android:id="@+id/menu_plano_assinatura"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
@@ -170,7 +170,7 @@
 
             <!-- 6. Configurações -->
             <TextView
-                android:id="@+id/menu_privacidade"
+                android:id="@+id/menu_configuracoes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"

@@ -6,6 +6,10 @@ android {
     namespace = "com.equipe1.aurora"
     compileSdk {
         version = release(37)
+
+        buildFeatures {
+            viewBinding = true
+        }
     }
 
     defaultConfig {
@@ -44,9 +48,11 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
+
     implementation(libs.osmdroid.android)
     implementation(libs.core.splashscreen)
 
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
     implementation("androidx.navigation:navigation-fragment:2.7.7")
     implementation("androidx.navigation:navigation-ui:2.7.7")
 

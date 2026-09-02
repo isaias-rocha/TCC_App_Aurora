@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Cor - quando o item estiver selecionado -->
     <item android:color="@color/cor_primaria" android:state_checked="true" />
+
+    <!-- Cor - quando o item não estiver selecionado -->
     <item android:color="@color/text_secondary_escuro" android:state_checked="false" />
 
 </selector>

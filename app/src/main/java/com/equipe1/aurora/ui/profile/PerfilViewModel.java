@@ -1,4 +1,4 @@
 package com.equipe1.aurora.ui.profile;
 
-public class ProfileViewModel {
+public class PerfilViewModel {
 }
