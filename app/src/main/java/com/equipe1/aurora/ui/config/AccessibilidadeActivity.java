@@ -18,7 +18,7 @@
     import com.equipe1.aurora.R;
     import com.google.android.material.switchmaterial.SwitchMaterial;
 
-    public class AccessibilityActivity extends AppCompatActivity {
+    public class AccessibilidadeActivity extends AppCompatActivity {
 
         // Constantes para persistência local via SharedPreferences
         private static final String PREFS_NAME = "AuroraAccessibilityPrefs";
@@ -39,7 +39,7 @@
 
             // Ativa exibição sem bordas (Edge-to-Edge) para Android 10+
             EdgeToEdge.enable(this);
-            setContentView(R.layout.activity_accessibility);
+            setContentView(R.layout.activity_accessibilidade);
 
             // Inicializa o gerenciador de preferências
             preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);

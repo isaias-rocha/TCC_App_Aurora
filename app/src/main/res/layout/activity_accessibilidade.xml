@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:padding="24dp"
-    tools:context=".ui.config.AccessibilityActivity">
+    tools:context=".ui.config.AccessibilidadeActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

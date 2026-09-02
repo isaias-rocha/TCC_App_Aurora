@@ -17,7 +17,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
-public class MapActivity extends AppCompatActivity {
+public class MapaActivity extends AppCompatActivity {
     private MapView map = null;
 
     @Override

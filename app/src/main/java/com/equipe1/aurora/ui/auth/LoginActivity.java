@@ -1,105 +1,143 @@
 package com.equipe1.aurora.ui.auth;
 
-import static com.equipe1.aurora.R.id.btn_logar;
-import static com.equipe1.aurora.R.id.tv_ir_para_cadastro;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.equipe1.aurora.R;
-import com.equipe1.aurora.ui.home.HomeActivity;
+import com.equipe1.aurora.ui.main.MainActivity;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 
 public class LoginActivity extends AppCompatActivity {
-// variáveis
 
-    ImageButton voltar;
-    Button login, loginGoogle;
-    TextView esqueceuSenha, cadastrarUsuario;
-    TextInputEditText email, senha;
-    CheckBox checkBox;
-    SharedPreferences preferences;
+    // --- Componentes de UI ---
+    private ImageButton btnVoltar;
+    private TextInputEditText etEmail, etSenha;
+    private CheckBox checkLembrar;
+    private TextView tvEsqueceuSenha, tvIrParaCadastro;
+    private MaterialButton btnLogar, btnLogarGoogle;
+
+    // --- MVVM e Google Auth ---
+    private AuthViewModel viewModel;
+    private GoogleSignInClient googleSignInClient;
+    private SharedPreferences preferences;
+
+    // Launcher para capturar o resultado do Google Sign-In
+    private final ActivityResultLauncher<Intent> googleSignInLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+                    try {
+                        GoogleSignInAccount account = task.getResult(ApiException.class);
+                        if (account != null) {
+                            viewModel.autenticarComGoogle(account.getIdToken());
+                        }
+                    } catch (ApiException e) {
+                        Toast.makeText(this, "Erro Google: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+
         iniciarComponentes();
-
-        // ações de clique
-        voltar.setOnClickListener((view -> {
-            finish(); // sair do app
-        }));
-
-        login.setOnClickListener(v -> {
-            if (validarDados() ) {
-                if (checkBox.isChecked())   {
-                    preferences = (SharedPreferences) getSharedPreferences ("login_Credenciais", 0); // nome do arquivo, modo privado (guardar na pasta do app.)
-                    SharedPreferences.Editor dados = preferences.edit();
-                    dados.putString("email: ", email.getText().toString() );
-                    dados.putString("senha: ", senha.getText().toString() );
-
-                }
-            }
-            // limpar 0 campo
-            email.setText("");
-            senha.setText("");
-
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            // Abrir a nova tela
-            startActivity(intent);
-        });
-
-        cadastrarUsuario.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-            // Abrir a nova tela cadastro
-            startActivity(intent);
-        });
-
-        esqueceuSenha.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, EsqueceuSenhaActivity.class);
-            // Abrir a nova tela esqueceuSenha
-            startActivity(intent);
-        });
-
-        checkBox.setOnClickListener(view -> {
-            checkBox.isChecked();
-
-        } );
+        configurarGoogleSignIn();
+        configurarObservadores();
+        configurarCliques();
     }
 
-    // validar campo email e senha, caso estejam vazio
-    private boolean validarDados() {
-        boolean retorno = true;
+    private void configurarObservadores() {
+        // Observa erros nos campos
+        viewModel.getEmailLoginError().observe(this, erro -> {
+            etEmail.setError(erro);
+            etEmail.requestFocus();
+        });
 
-        if (email.getText().toString().isEmpty() )  {
-            retorno = false;
-            email.setError("Campo Nome não pode estar vazio!");
-        }
-        if (senha.getText().toString().isEmpty() )  {
-            retorno = false;
-            email.setError("Campo Nome não pode estar vázio!");
-        }
-        return retorno;
+        viewModel.getSenhaLoginError().observe(this, erro -> {
+            etSenha.setError(erro);
+            etSenha.requestFocus();
+        });
+
+        // Observa Toasts gerais
+        viewModel.getMensagemToast().observe(this, msg -> {
+            if (msg != null) Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        });
+
+        // Observa Sucesso de Login
+        viewModel.getLoginSucesso().observe(this, sucesso -> {
+            if (sucesso) {
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
+            }
+        });
+    }
+
+    private void configurarCliques() {
+        btnVoltar.setOnClickListener(v -> finish());
+
+        btnLogar.setOnClickListener(v -> {
+            String email = getTexto(etEmail);
+            String senha = getTexto(etSenha);
+            preferences = getSharedPreferences("login_credenciais", MODE_PRIVATE);
+
+            viewModel.realizarLogin(email, senha, checkLembrar.isChecked(), preferences);
+        });
+
+        btnLogarGoogle.setOnClickListener(v -> {
+            Intent signInIntent = googleSignInClient.getSignInIntent();
+            googleSignInLauncher.launch(signInIntent);
+        });
+
+        tvEsqueceuSenha.setOnClickListener(v ->
+                startActivity(new Intent(LoginActivity.this, EsqueceuSenhaActivity.class))
+        );
+
+        tvIrParaCadastro.setOnClickListener(v ->
+                startActivity(new Intent(LoginActivity.this, CadastroActivity.class))
+        );
+    }
+
+    private void configurarGoogleSignIn() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("SEU_WEB_CLIENT_ID_AQUI")
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
     private void iniciarComponentes() {
+        btnVoltar = findViewById(R.id.btn_voltar);
+        etEmail = findViewById(R.id.et_email);
+        etSenha = findViewById(R.id.et_senha);
+        checkLembrar = findViewById(R.id.check_lembrarCredenciais);
+        tvEsqueceuSenha = findViewById(R.id.tv_ir_para_esqueceuSenha);
+        btnLogar = findViewById(R.id.btn_logar);
+        btnLogarGoogle = findViewById(R.id.btn_logar_google);
+        tvIrParaCadastro = findViewById(R.id.tv_ir_para_cadastro);
+    }
 
-        email =  findViewById(R.id.et_email);
-        senha =  findViewById(R.id.et_senha);
-        login = findViewById(btn_logar);
-        loginGoogle = findViewById(R.id.btn_logar_google);
-        voltar = findViewById(R.id.btn_voltar);
-        cadastrarUsuario = findViewById(tv_ir_para_cadastro);
-        checkBox = findViewById(R.id.check_lembrarCredenciais);
-        esqueceuSenha = findViewById(R.id.tv_ir_para_esqueceuSenha);
+    private String getTexto(TextInputEditText editText) {
+        return editText.getText() != null ? editText.getText().toString().trim() : "";
     }
 }

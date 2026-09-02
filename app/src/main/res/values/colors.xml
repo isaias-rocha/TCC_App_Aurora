@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Cores Globais / Design System -->
-    <color name="cor_primaria">#6C5CE7</color>
+    <color name="cor_primaria">#1F51E6</color>
     <color name="cor_segundaria">#2ECC71</color>
     <color name="vermelho_alerta">#E74C3C</color>
     <color name="texto">#000000</color>
@@ -14,11 +14,11 @@
     <color name="text_primary_claro">#2E2E2E</color>
     <color name="text_secondary_claro">#64748B</color>
 
-    <!-- Mapeamento MODO ESCURO -->
-    <color name="bg_escuro">#0F172A</color>
-    <color name="surface_escuro">#1E293B</color>
-    <color name="on_bg_escuro">#FFFFFF</color>
-    <color name="on_surface_escuro">#FFFFFF</color>
-    <color name="text_primary_escuro">#FFFFFF</color>
-    <color name="text_secondary_escuro">#94A3B8</color>
+    <!-- Mapeamento MODO ESCURO (Cinza Neutro / Confortável) -->
+    <color name="bg_escuro">#121212</color>
+    <color name="surface_escuro">#1E1E1E</color>
+    <color name="on_bg_escuro">#E2E2E2</color>
+    <color name="on_surface_escuro">#E2E2E2</color>
+    <color name="text_primary_escuro">#EDEDED</color>
+    <color name="text_secondary_escuro">#A0A0A0</color>
 </resources>

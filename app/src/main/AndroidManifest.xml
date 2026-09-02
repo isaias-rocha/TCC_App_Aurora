@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <!-- Permissão: Vibração-->
+    <!-- Permissão: Vibração -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
@@ -40,7 +40,7 @@
             android:name=".ui.auth.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.auth.RegisterActivity"
+            android:name=".ui.auth.CadastroActivity"
             android:exported="false" />
         <activity
             android:name=".ui.auth.EsqueceuSenhaActivity"
@@ -55,38 +55,42 @@
             android:name=".ui.home.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.map.MapActivity"
+            android:name=".ui.map.MapaActivity"
             android:exported="false" />
         <activity
             android:name=".ui.sos.SosActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.contacts.ContactsActivity"
+            android:name=".ui.contacts.ContatosActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.profile.ProfileActivity"
+            android:name=".ui.profile.PerfilActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.plans.PlansActivity"
+            android:name=".ui.plans.PlanosAssinaturaActivity"
             android:exported="false" />
         <activity
             android:name=".ui.config.ConfigActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.config.AccessibilityActivity"
+            android:name=".ui.config.AccessibilidadeActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.history.HistoryActivity"
+            android:name=".ui.history.HistoricoActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.profile.PersonalInfoActivity"
+            android:name=".ui.profile.InfoPessoaisActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.friends.SolicitacaoAmizadeActivity"
+            android:name=".ui.solicitazao.SolicitacaoAmizadeActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".AdicionarContatoActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".DispositivoEmbarcadoActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
     </application>
