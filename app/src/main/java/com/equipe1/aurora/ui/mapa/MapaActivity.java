@@ -1,4 +1,4 @@
-package com.equipe1.aurora.ui.map;
+package com.equipe1.aurora.ui.mapa;
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;

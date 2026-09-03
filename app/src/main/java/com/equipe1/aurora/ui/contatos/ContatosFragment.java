@@ -1,4 +1,4 @@
-package com.equipe1.aurora.ui.contacts;
+package com.equipe1.aurora.ui.contatos;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

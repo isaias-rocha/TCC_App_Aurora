@@ -1,8 +1,6 @@
-package com.equipe1.aurora.ui.profile;
+package com.equipe1.aurora.ui.perfil;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,10 +10,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 // Importação do binding gerado automaticamente com base no arquivo fragment_perfil.xml
 import com.equipe1.aurora.databinding.FragmentPerfilBinding;
-import com.equipe1.aurora.ui.config.ConfigActivity;
-import com.equipe1.aurora.ui.contacts.ContatosActivity;
-import com.equipe1.aurora.ui.history.HistoricoActivity;
-import com.equipe1.aurora.ui.plans.PlanosAssinaturaActivity;
 
 public class PerfilActivity extends AppCompatActivity {
 

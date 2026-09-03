@@ -55,19 +55,19 @@
             android:name=".ui.home.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.map.MapaActivity"
+            android:name=".ui.mapa.MapaActivity"
             android:exported="false" />
         <activity
             android:name=".ui.sos.SosActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.contacts.ContatosActivity"
+            android:name=".ui.contatos.ContatosActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.profile.PerfilActivity"
+            android:name=".ui.perfil.PerfilActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.plans.PlanosAssinaturaActivity"
+            android:name=".ui.planos.PlanosAssinaturaActivity"
             android:exported="false" />
         <activity
             android:name=".ui.config.ConfigActivity"
@@ -76,13 +76,14 @@
             android:name=".ui.config.AccessibilidadeActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.history.HistoricoActivity"
+            android:name=".ui.historico.HistoricoActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.profile.InfoPessoaisActivity"
-            android:exported="false" />
+            android:name=".ui.perfil.InfoPessoaisActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name=".ui.solicitazao.SolicitacaoAmizadeActivity"
+            android:name=".ui.solicitacao.SolicitacaoAmizadeActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity

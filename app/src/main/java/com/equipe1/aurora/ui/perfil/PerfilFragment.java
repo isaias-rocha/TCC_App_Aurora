@@ -1,4 +1,4 @@
-package com.equipe1.aurora.ui.profile;
+package com.equipe1.aurora.ui.perfil;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,9 +19,9 @@ import com.equipe1.aurora.databinding.FragmentPerfilBinding;
 
 // Importações das Activities de destino
 import com.equipe1.aurora.ui.config.ConfigActivity;
-import com.equipe1.aurora.ui.contacts.ContatosActivity;
-import com.equipe1.aurora.ui.history.HistoricoActivity;
-import com.equipe1.aurora.ui.plans.PlanosAssinaturaActivity;
+import com.equipe1.aurora.ui.contatos.ContatosActivity;
+import com.equipe1.aurora.ui.historico.HistoricoActivity;
+import com.equipe1.aurora.ui.planos.PlanosAssinaturaActivity;
 
 public class PerfilFragment extends Fragment {
 

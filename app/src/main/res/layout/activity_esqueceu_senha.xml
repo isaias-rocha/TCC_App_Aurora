@@ -112,7 +112,7 @@
                 android:id="@+id/tv_voltar_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Entrar"
+                android:text="Voltar para login"
                 android:textColor="?attr/colorPrimary"
                 android:textSize="14sp"
                 android:textStyle="bold" />

@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/nav_mapa"
-        android:name="com.equipe1.aurora.ui.map.MapaFragment"
+        android:name="com.equipe1.aurora.ui.mapa.MapaFragment"
         android:label="Mapa"
         tools:layout="@layout/fragment_mapa" />
 
@@ -25,13 +25,13 @@
 
     <fragment
         android:id="@+id/nav_contatos"
-        android:name="com.equipe1.aurora.ui.contacts.ContatosFragment"
+        android:name="com.equipe1.aurora.ui.contatos.ContatosFragment"
         android:label="Contatos"
         tools:layout="@layout/fragment_contatos" />
 
     <fragment
         android:id="@+id/nav_perfil"
-        android:name="com.equipe1.aurora.ui.profile.PerfilFragment"
+        android:name="com.equipe1.aurora.ui.perfil.PerfilFragment"
         android:label="Perfil"
         tools:layout="@layout/fragment_perfil" />
 

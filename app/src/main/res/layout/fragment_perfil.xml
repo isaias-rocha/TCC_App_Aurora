@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 1. Envelopamos tudo com o NestedScrollView -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,7 +6,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:id="@+id/layout_perfil"
-    tools:context=".ui.profile.PerfilFragment">
+    tools:context=".ui.perfil.PerfilFragment">
 
 
 
@@ -22,7 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="160dp"
             android:scaleType="center"
-            android:src="@android:drawable/ic_menu_camera"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -83,12 +81,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_email_usuario">
 
+
             <!-- 1. Informações Pessoais -->
             <TextView
                 android:id="@+id/menu_info_pessoais"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
+                android:background="@drawable/card"
                 android:clickable="true"
                 android:focusable="true"
                 android:paddingHorizontal="24dp"

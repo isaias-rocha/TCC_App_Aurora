@@ -1,4 +1,4 @@
-package com.equipe1.aurora.ui.map;
+package com.equipe1.aurora.ui.mapa;
 
 // --- IMPORTS DAS BIBLIOTECAS DO ANDROID E MATERIAL DESIGN ---
 import android.Manifest;

@@ -1,4 +1,4 @@
-package com.equipe1.aurora.ui.history;
+package com.equipe1.aurora.ui.historico;
 
 import android.os.Bundle;
 

@@ -6,7 +6,7 @@
     android:id="@+id/layout_contatos"
     android:layout_height="match_parent"
     android:padding="24dp"
-    tools:context=".ui.contacts.ContatosActivity">
+    tools:context=".ui.contatos.ContatosActivity">
 
     <!-- TÍTULO -->
     <TextView

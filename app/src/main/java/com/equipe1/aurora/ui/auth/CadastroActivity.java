@@ -1,6 +1,5 @@
 package com.equipe1.aurora.ui.auth;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -62,7 +61,7 @@ public class CadastroActivity extends AppCompatActivity {
         tvVoltarLogin.setOnClickListener(irParaLoginListener);
         tvVoltarLoginDesc.setOnClickListener(irParaLoginListener);
 
-        btnCadastrar.setOnClickListener(v -> viewModel.executarCadastro(
+        btnCadastrar.setOnClickListener(v -> viewModel.validarCadastro(
                 getTexto(etNome),
                 getTexto(etTelefone),
                 getTexto(etEmailCadastro),

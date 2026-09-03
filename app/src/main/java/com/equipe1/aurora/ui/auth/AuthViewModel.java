@@ -133,7 +133,7 @@ public class AuthViewModel extends ViewModel {
         }
 
         /*
-         * Exemplo de integração com Firebase Auth (caso utilize no futuro):
+         * Exemplo de integração com Firebase Auth (caso utilize):
          *
          * FirebaseAuth auth = FirebaseAuth.getInstance();
          * AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
@@ -158,7 +158,7 @@ public class AuthViewModel extends ViewModel {
      * Valida em cascata todos os dados exigidos para a criação manual de conta de usuário.
      * Executa a interrupção no primeiro erro encontrado para focar a atenção do usuário no campo correto.
      */
-    public void executarCadastro(String nome, String telefone, String email, String senha, String confirmarSenha) {
+    public void validarCadastro(String nome, String telefone, String email, String senha, String confirmarSenha) {
 
         // 1. Validação de Nome
         if (TextUtils.isEmpty(nome)) {

@@ -15,4 +15,5 @@
     <color name="on_surface_escuro">#E2E2E2</color>
     <color name="text_primary_escuro">#EDEDED</color>
     <color name="text_secondary_escuro">#A0A0A0</color>
+    <color name="cor_borda" />
 </resources>

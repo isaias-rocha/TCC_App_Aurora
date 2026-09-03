@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/layout_solicitacao_amizade"
     android:fillViewport="true"
-    tools:context=".ui.solicitazao.SolicitacaoAmizadeActivity">
+    tools:context=".ui.solicitacao.SolicitacaoAmizadeActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
