@@ -41,8 +41,8 @@
                 android:paddingHorizontal="16dp">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:src="@drawable/ic_search"
                     app:tint="#ffff"/>
 
@@ -59,6 +59,12 @@
                     android:textColor="#FFFFFF"
                     android:textColorHint="#94A3B8"
                     android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_circle_voice"
+                    app:tint="@color/cor_primaria"/>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -150,8 +156,8 @@
         android:layout_height="wrap_content"
         app:behavior_hideable="true"
         app:behavior_peekHeight="170dp"
-        app:cardBackgroundColor="#1E293B"
-        app:cardCornerRadius="24dp"
+        app:cardBackgroundColor="@color/on_bg_claro"
+        app:cardCornerRadius="8dp"
         app:cardElevation="12dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
@@ -189,7 +195,7 @@
                         android:orientation="horizontal">
 
                         <Button
-                            android:id="@+id/btnModeCar"
+                            android:id="@+id/btnModeCarro"
                             android:layout_width="wrap_content"
                             android:layout_height="48dp"
                             android:layout_marginEnd="8dp"
@@ -200,18 +206,18 @@
                             android:textSize="12sp" />
 
                         <Button
-                            android:id="@+id/btnModeWalk"
+                            android:id="@+id/btnModePe"
                             android:layout_width="wrap_content"
                             android:layout_height="48dp"
                             android:layout_marginEnd="8dp"
-                            android:backgroundTint="#334155"
+                            android:backgroundTint="@color/nav_item_color"
                             android:text="🚶 A pé"
                             android:textAllCaps="false"
                             android:textColor="#94A3B8"
                             android:textSize="12sp" />
 
                         <Button
-                            android:id="@+id/btnModeBike"
+                            android:id="@+id/btnModeBicicleta"
                             android:layout_width="wrap_content"
                             android:layout_height="48dp"
                             android:layout_marginEnd="8dp"
