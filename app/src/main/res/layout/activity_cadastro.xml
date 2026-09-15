@@ -122,7 +122,7 @@
                 android:inputType="phone"
                 android:drawableEnd="@drawable/ic_telefone"
                 android:drawableTint="?android:attr/textColorSecondary"
-                android:maxLength="11"
+                android:maxLength="14"
                 android:textColor="?android:attr/textColorPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
