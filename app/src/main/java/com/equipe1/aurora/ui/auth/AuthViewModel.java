@@ -8,6 +8,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.equipe1.aurora.domain.model.UsuarioDto;
+
+
 /**
  * AuthViewModel: O "cérebro" do fluxo de autenticação.
  *
@@ -55,26 +58,64 @@ public class AuthViewModel extends ViewModel {
     // ============================================================================================
 
     // Getters para a tela de Login
-    public LiveData<String> getEmailLoginError() { return emailLoginError; }
-    public LiveData<String> getSenhaLoginError() { return senhaLoginError; }
-    public LiveData<Boolean> getLoginSucesso() { return loginSucesso; }
+    public LiveData<String> getEmailLoginError() {
+        return emailLoginError;
+    }
+
+    public LiveData<String> getSenhaLoginError() {
+        return senhaLoginError;
+    }
+
+    public LiveData<Boolean> getLoginSucesso() {
+        return loginSucesso;
+    }
 
     // Getters para a tela de Cadastro
-    public LiveData<String> getNomeRegError() { return nomeRegError; }
-    public LiveData<String> getTelefoneRegError() { return telefoneRegError; }
-    public LiveData<String> getEmailRegError() { return emailRegError; }
-    public LiveData<String> getSenhaRegError() { return senhaRegError; }
-    public LiveData<String> getConfirmarSenhaRegError() { return confirmarSenhaRegError; }
-    public LiveData<Boolean> getCadastroSucesso() { return cadastroSucesso; }
+    public LiveData<String> getNomeRegError() {
+        return nomeRegError;
+    }
+
+    public LiveData<String> getTelefoneRegError() {
+        return telefoneRegError;
+    }
+
+    public LiveData<String> getEmailRegError() {
+        return emailRegError;
+    }
+
+    public LiveData<String> getSenhaRegError() {
+        return senhaRegError;
+    }
+
+    public LiveData<String> getConfirmarSenhaRegError() {
+        return confirmarSenhaRegError;
+    }
+
+    public LiveData<Boolean> getCadastroSucesso() {
+        return cadastroSucesso;
+    }
 
     // Getters para Recuperação de Senha e OTP
-    public LiveData<String> getEmailEsqueceuError() { return emailEsqueceuError; }
-    public LiveData<Boolean> getEnvioEmailSucesso() { return envioEmailSucesso; }
-    public LiveData<String> getOtpError() { return otpError; }
-    public LiveData<Boolean> getOtpSucesso() { return otpSucesso; }
+    public LiveData<String> getEmailEsqueceuError() {
+        return emailEsqueceuError;
+    }
+
+    public LiveData<Boolean> getEnvioEmailSucesso() {
+        return envioEmailSucesso;
+    }
+
+    public LiveData<String> getOtpError() {
+        return otpError;
+    }
+
+    public LiveData<Boolean> getOtpSucesso() {
+        return otpSucesso;
+    }
 
     // Getter para mensagens em formato de Toast
-    public LiveData<String> getMensagemToast() { return mensagemToast; }
+    public LiveData<String> getMensagemToast() {
+        return mensagemToast;
+    }
 
 
     // ============================================================================================
@@ -84,10 +125,10 @@ public class AuthViewModel extends ViewModel {
     /**
      * Valida os campos do formulário de login tradicional e realiza a persistência local se solicitado.
      *
-     * @param email Email digitado no campo.
-     * @param senha Senha digitada no campo.
+     * @param email              Email digitado no campo.
+     * @param senha              Senha digitada no campo.
      * @param lembrarCredenciais Estado da CheckBox "Lembrar-me".
-     * @param preferences Instância para salvar dados localmente no dispositivo.
+     * @param preferences        Instância para salvar dados localmente no dispositivo.
      */
     public void realizarLogin(String email, String senha, boolean lembrarCredenciais, SharedPreferences preferences) {
         boolean valido = true;
@@ -217,11 +258,30 @@ public class AuthViewModel extends ViewModel {
             return;
         }
 
-        // Sucesso
-        mensagemToast.setValue("Conta criada com sucesso!");
-        cadastroSucesso.setValue(true);
-    }
+        // --- INTEGRAÇÃO COM O BACKEND SPRING BOOT ---
+        // Cria o objeto com os dados validados
+        UsuarioDto novoUsuario = new UsuarioDto(nome, email, senha, numerosTelefone, "mock_firebase_uid");
 
+        // Dispara a requisição assíncrona usando o Retrofit
+        com.equipe1.aurora.domain.model.ApiClient.getApiService().cadastrarUsuario(novoUsuario)
+                .enqueue(new retrofit2.Callback<UsuarioDto>() {
+                    @Override
+                    public void onResponse(retrofit2.Call<UsuarioDto> call, retrofit2.Response<UsuarioDto> response) {
+                        if (response.isSuccessful()) {
+                            mensagemToast.setValue("Conta criada com sucesso no servidor!");
+                            cadastroSucesso.setValue(true);
+                        } else {
+                            // Caso o backend retorne erro (ex: e-mail já cadastrado)
+                            mensagemToast.setValue("Erro: Este e-mail já está cadastrado!");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(retrofit2.Call<UsuarioDto> call, Throwable t) {
+                        mensagemToast.setValue("Falha de conexão com o servidor: " + t.getMessage());
+                    }
+                });
+        }
     /**
      * Valida o e-mail digitado para iniciar o fluxo de recuperação de senha.
      */
@@ -234,17 +294,16 @@ public class AuthViewModel extends ViewModel {
         mensagemToast.setValue("Código enviado para o e-mail!");
         envioEmailSucesso.setValue(true);
     }
-
     /**
-     * Valida se o código de verificação numérico (OTP) atende ao tamanho mínimo exigido.
+     * Valida o código OTP digitado pelo usuário.
      */
     public void validarOtp(String codigo) {
         if (TextUtils.isEmpty(codigo) || codigo.length() < 4) {
-            otpError.setValue("Digite o código completo de 4 dígitos");
+            otpError.setValue("Digite um código válido");
             return;
         }
 
-        mensagemToast.setValue("Código verificado com sucesso!");
+        mensagemToast.setValue("Código validado com sucesso!");
         otpSucesso.setValue(true);
     }
 }

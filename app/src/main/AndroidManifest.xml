@@ -21,7 +21,8 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_launcher_foreground"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Aurora">
+        android:theme="@style/Theme.Aurora"
+        android:usesCleartextTraffic="true">
 
         <!-- Tela de Splash (Inicial) -->
         <activity
