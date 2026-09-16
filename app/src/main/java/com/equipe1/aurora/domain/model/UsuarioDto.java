@@ -11,6 +11,9 @@ public class UsuarioDto {
     @SerializedName("firebase_uid")
     private String firebaseUid;
 
+    public UsuarioDto() {
+    }
+
     public UsuarioDto(String nome, String email, String senha, String telefone, String firebaseUid) {
         this.nome = nome;
         this.email = email;
@@ -25,4 +28,11 @@ public class UsuarioDto {
     public String getSenha() { return senha; }
     public String getTelefone() { return telefone; }
     public String getFirebaseUid() { return firebaseUid; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
 }

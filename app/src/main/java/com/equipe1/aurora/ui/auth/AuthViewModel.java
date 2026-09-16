@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.equipe1.aurora.domain.model.ApiClient;
 import com.equipe1.aurora.domain.model.UsuarioDto;
 
 
@@ -132,33 +133,49 @@ public class AuthViewModel extends ViewModel {
      */
     public void realizarLogin(String email, String senha, boolean lembrarCredenciais, SharedPreferences preferences) {
         boolean valido = true;
-
-        // Validação 1: O campo de e-mail está em branco?
         if (TextUtils.isEmpty(email)) {
             emailLoginError.setValue("O e-mail não pode estar vazio!");
             valido = false;
         }
-
-        // Validação 2: O campo de senha está em branco?
         if (TextUtils.isEmpty(senha)) {
             senhaLoginError.setValue("A senha não pode estar vazia!");
             valido = false;
         }
-
-        // Se alguma validação falhou, interrompe a execução
         if (!valido) return;
 
-        // Regra de Persistência: Salva os dados caso o usuário tenha marcado a opção
-        if (lembrarCredenciais && preferences != null) {
-            SharedPreferences.Editor dados = preferences.edit();
-            dados.putString("email", email);
-            dados.putString("senha", senha);
-            dados.apply(); // Salva de forma assíncrona
-        }
+        // Cria um DTO apenas com e-mail e senha para enviar ao servidor
+        UsuarioDto loginDto = new UsuarioDto();
+        loginDto.setEmail(email);
+        loginDto.setSenha(senha);
 
-        // Notifica a Activity do sucesso no login
-        loginSucesso.setValue(true);
+        // Dispara a requisição para o Spring Boot consultar o MySQL
+        ApiClient.getApiService().realizarLoginApi(loginDto)
+                .enqueue(new retrofit2.Callback<UsuarioDto>() {
+                    @Override
+                    public void onResponse(retrofit2.Call<UsuarioDto> call, retrofit2.Response<UsuarioDto> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            // Login bem-sucedido validado pelo banco de dados!
+                            if (lembrarCredenciais && preferences != null) {
+                                SharedPreferences.Editor dados = preferences.edit();
+                                dados.putString("email", email);
+                                dados.putString("senha", senha);
+                                dados.apply();
+                            }
+                            mensagemToast.setValue("Login realizado com sucesso!");
+                            loginSucesso.setValue(true);
+                        } else {
+                            // Servidor recusou (e-mail ou senha incorretos)
+                            mensagemToast.setValue("E-mail ou senha inválidos!");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(retrofit2.Call<UsuarioDto> call, Throwable t) {
+                        mensagemToast.setValue("Falha de conexão com o servidor: " + t.getMessage());
+                    }
+                });
     }
+
 
     /**
      * Processa o token de autenticação recebido do SDK do Google Sign-In.
@@ -271,8 +288,16 @@ public class AuthViewModel extends ViewModel {
                             mensagemToast.setValue("Conta criada com sucesso no servidor!");
                             cadastroSucesso.setValue(true);
                         } else {
-                            // Caso o backend retorne erro (ex: e-mail já cadastrado)
-                            mensagemToast.setValue("Erro: Este e-mail já está cadastrado!");
+                            // Tenta ler a mensagem de erro exata que veio do Spring Boot
+                            String erroServidor = "Erro desconhecido";
+                            try {
+                                if (response.errorBody() != null) {
+                                    erroServidor = response.errorBody().string();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            mensagemToast.setValue("Erro do Servidor (" + response.code() + "): " + erroServidor);
                         }
                     }
 
@@ -306,4 +331,5 @@ public class AuthViewModel extends ViewModel {
         mensagemToast.setValue("Código validado com sucesso!");
         otpSucesso.setValue(true);
     }
-}
+
+    }
