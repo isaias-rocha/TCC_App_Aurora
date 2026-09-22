@@ -31,10 +31,10 @@
         <!-- LOGO -->
         <ImageView android:id="@+id/iv_logoAurora"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="150dp"
             android:layout_marginTop="36dp"
             android:contentDescription="Logo Aurora"
-            android:src="@drawable/logo_aurora_horizontal"
+            android:src="@drawable/logo_aurora"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_voltar" />

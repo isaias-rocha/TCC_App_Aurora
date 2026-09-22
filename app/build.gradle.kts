@@ -7,6 +7,13 @@ android {
     compileSdk {
         version = release(37)
 
+        packaging {
+            resources.excludes.add("META-INF/INDEX.LIST")
+            resources.excludes.add("META-INF/DEPENDENCIES")
+            resources.excludes.add("META-INF/io.netty.versions.properties")
+        }
+
+
         buildFeatures {
             viewBinding = true
         }
@@ -40,6 +47,7 @@ dependencies {
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
+    implementation(libs.firebase.appdistribution.gradle)
     implementation(libs.material)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
@@ -59,7 +67,4 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:21.0.0")
     implementation("androidx.navigation:navigation-fragment:2.7.7")
     implementation("androidx.navigation:navigation-ui:2.7.7")
-
-
-
 }

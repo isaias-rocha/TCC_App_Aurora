@@ -61,7 +61,7 @@ public class CadastroActivity extends AppCompatActivity {
         tvVoltarLogin.setOnClickListener(irParaLoginListener);
         tvVoltarLoginDesc.setOnClickListener(irParaLoginListener);
 
-        btnCadastrar.setOnClickListener(v -> viewModel.validarCadastro(
+        btnCadastrar.setOnClickListener(v -> viewModel.executarCadastro(
                 getTexto(etNome),
                 getTexto(etTelefone),
                 getTexto(etEmailCadastro),

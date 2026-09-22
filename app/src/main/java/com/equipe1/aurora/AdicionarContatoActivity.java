@@ -16,11 +16,11 @@ public class AdicionarContatoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_adicionar_contato);
+        setContentView(R.layout.dialog_adicionar_contato);
 
 
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.layout_adicionar_contato), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.layout_adicionarContato), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;

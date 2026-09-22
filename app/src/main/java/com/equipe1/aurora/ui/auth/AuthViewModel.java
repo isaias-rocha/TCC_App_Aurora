@@ -23,11 +23,11 @@ import com.equipe1.aurora.domain.model.UsuarioDto;
  */
 public class AuthViewModel extends ViewModel {
 
-    // ============================================================================================
-    // 1. ESTADOS INTERNOS (MutableLiveData)
-    // Usamos MutableLiveData internamente para podermos alterar (setValue) o valor dos dados.
-    // Eles são declarados como 'private' para evitar que as Activities alterem os dados diretamente.
-    // ============================================================================================
+// ============================================================================================
+// 1. ESTADOS INTERNOS (MutableLiveData)
+// Usamos MutableLiveData internamente para podermos alterar (setValue) o valor dos dados.
+// Eles são declarados como 'private' para evitar que as Activities alterem os dados diretamente.
+// ============================================================================================
 
     // --- Estados para Login (Tradicional e Social) ---
     private final MutableLiveData<String> emailLoginError = new MutableLiveData<>();
@@ -52,11 +52,11 @@ public class AuthViewModel extends ViewModel {
     private final MutableLiveData<String> mensagemToast = new MutableLiveData<>();
 
 
-    // ============================================================================================
-    // 2. EXPOSIÇÃO PÚBLICA (LiveData - Apenas Leitura)
-    // Convertemos para LiveData simples para que a Activity consiga apenas "observar" os dados,
-    // sem a permissão de modificar seus valores. É o princípio do encapsulamento no MVVM.
-    // ============================================================================================
+// ============================================================================================
+// 2. EXPOSIÇÃO PÚBLICA (LiveData - Apenas Leitura)
+// Convertemos para LiveData simples para que a Activity consiga apenas "observar" os dados,
+// sem a permissão de modificar seus valores. É o princípio do encapsulamento no MVVM.
+// ============================================================================================
 
     // Getters para a tela de Login
     public LiveData<String> getEmailLoginError() {
@@ -119,9 +119,9 @@ public class AuthViewModel extends ViewModel {
     }
 
 
-    // ============================================================================================
-    // 3. MÉTODOS DE NEGÓCIO E VALIDAÇÕES
-    // ============================================================================================
+// ============================================================================================
+// 3. MÉTODOS DE NEGÓCIO E VALIDAÇÕES
+// ============================================================================================
 
     /**
      * Valida os campos do formulário de login tradicional e realiza a persistência local se solicitado.
@@ -133,21 +133,36 @@ public class AuthViewModel extends ViewModel {
      */
     public void realizarLogin(String email, String senha, boolean lembrarCredenciais, SharedPreferences preferences) {
         boolean valido = true;
+
+        // Validação 1: O campo de e-mail está em branco?
         if (TextUtils.isEmpty(email)) {
             emailLoginError.setValue("O e-mail não pode estar vazio!");
             valido = false;
         }
+
+        // Validação 2: O campo de senha está em branco?
         if (TextUtils.isEmpty(senha)) {
             senhaLoginError.setValue("A senha não pode estar vazia!");
             valido = false;
         }
+
+        // Se alguma validação falhou, interrompe a execução
         if (!valido) return;
 
+        // Regra de Persistência: Salva os dados caso o usuário tenha marcado a opção
+        if (lembrarCredenciais && preferences != null) {
+            SharedPreferences.Editor dados = preferences.edit();
+            dados.putString("email", email);
+            dados.putString("senha", senha);
+            dados.apply(); // Salva de forma assíncrona
+        }
         // Cria um DTO apenas com e-mail e senha para enviar ao servidor
         UsuarioDto loginDto = new UsuarioDto();
         loginDto.setEmail(email);
         loginDto.setSenha(senha);
 
+        // Notifica a Activity do sucesso no login
+        loginSucesso.setValue(true);
         // Dispara a requisição para o Spring Boot consultar o MySQL
         ApiClient.getApiService().realizarLoginApi(loginDto)
                 .enqueue(new retrofit2.Callback<UsuarioDto>() {
@@ -184,14 +199,14 @@ public class AuthViewModel extends ViewModel {
      * @param idToken Token de credencial fornecido pelo SDK do Google após o consentimento do usuário.
      */
     public void autenticarComGoogle(String idToken) {
-        // Validação: Garante que o Token retornado não seja nulo ou vazio
+// Validação: Garante que o Token retornado não seja nulo ou vazio
         if (TextUtils.isEmpty(idToken)) {
             mensagemToast.setValue("Falha ao obter credenciais do Google.");
             return;
         }
 
         /*
-         * Exemplo de integração com Firebase Auth (caso utilize):
+         * Exemplo de integração com Firebase Auth (caso utilize no futuro):
          *
          * FirebaseAuth auth = FirebaseAuth.getInstance();
          * AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
@@ -207,7 +222,7 @@ public class AuthViewModel extends ViewModel {
          *     });
          */
 
-        // Simulação de Sucesso Reativo:
+// Simulação de Sucesso Reativo:
         mensagemToast.setValue("Autenticado com sucesso via Google!");
         loginSucesso.setValue(true);
     }
@@ -216,70 +231,70 @@ public class AuthViewModel extends ViewModel {
      * Valida em cascata todos os dados exigidos para a criação manual de conta de usuário.
      * Executa a interrupção no primeiro erro encontrado para focar a atenção do usuário no campo correto.
      */
-    public void validarCadastro(String nome, String telefone, String email, String senha, String confirmarSenha) {
+    public void executarCadastro(String nome, String telefone, String email, String senha, String confirmarSenha) {
 
-        // 1. Validação de Nome
+// 1. Validação de Nome
         if (TextUtils.isEmpty(nome)) {
             nomeRegError.setValue("O nome é obrigatório");
             return;
         }
 
-        // 2. Validação de Telefone Vazio
+// 2. Validação de Telefone Vazio
         if (TextUtils.isEmpty(telefone)) {
             telefoneRegError.setValue("O telefone é obrigatório");
             return;
         }
 
-        // Sanitização: Remove caracteres não numéricos
+// Sanitização: Remove caracteres não numéricos
         String numerosTelefone = telefone.replaceAll("[^\\d]", "");
 
-        // 3. Validação de Tamanho do Telefone (DDD + Número)
+// 3. Validação de Tamanho do Telefone (DDD + Número)
         if (numerosTelefone.length() < 10) {
             telefoneRegError.setValue("Insira um telefone válido com o DDD completo");
             return;
         }
 
-        // 4. Validação de E-mail Vazio
+// 4. Validação de E-mail Vazio
         if (TextUtils.isEmpty(email)) {
             emailRegError.setValue("O e-mail é obrigatório");
             return;
         }
 
-        // 5. Validação do Formato do E-mail
+// 5. Validação do Formato do E-mail
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailRegError.setValue("Insira um e-mail válido");
             return;
         }
 
-        // 6. Validação de Senha Vazia
+// 6. Validação de Senha Vazia
         if (TextUtils.isEmpty(senha)) {
             senhaRegError.setValue("A senha é obrigatória");
             return;
         }
 
-        // 7. Validação de Tamanho Mínimo da Senha
+// 7. Validação de Tamanho Mínimo da Senha
         if (senha.length() < 8) {
             senhaRegError.setValue("A senha deve ter pelo menos 8 caracteres");
             return;
         }
 
-        // 8. Validação de Campo Confirmar Senha Vazio
+// 8. Validação de Campo Confirmar Senha Vazio
         if (TextUtils.isEmpty(confirmarSenha)) {
             confirmarSenhaRegError.setValue("Confirme sua senha");
             return;
         }
 
-        // 9. Validação de Igualdade das Senhas
+// 9. Validação de Igualdade das Senhas
         if (!senha.equals(confirmarSenha)) {
             confirmarSenhaRegError.setValue("As senhas não estão iguais");
             return;
         }
 
-        // --- INTEGRAÇÃO COM O BACKEND SPRING BOOT ---
-        // Cria o objeto com os dados validados
+// --- INTEGRAÇÃO COM O BACKEND SPRING BOOT ---
+// Cria o objeto com os dados validados
         UsuarioDto novoUsuario = new UsuarioDto(nome, email, senha, numerosTelefone, "mock_firebase_uid");
 
-        // Dispara a requisição assíncrona usando o Retrofit
+// Dispara a requisição assíncrona usando o Retrofit
         com.equipe1.aurora.domain.model.ApiClient.getApiService().cadastrarUsuario(novoUsuario)
                 .enqueue(new retrofit2.Callback<UsuarioDto>() {
                     @Override
@@ -288,6 +303,8 @@ public class AuthViewModel extends ViewModel {
                             mensagemToast.setValue("Conta criada com sucesso no servidor!");
                             cadastroSucesso.setValue(true);
                         } else {
+                            // Caso o backend retorne erro (ex: e-mail já cadastrado)
+                            mensagemToast.setValue("Erro: Este e-mail já está cadastrado!");
                             // Tenta ler a mensagem de erro exata que veio do Spring Boot
                             String erroServidor = "Erro desconhecido";
                             try {
@@ -306,7 +323,7 @@ public class AuthViewModel extends ViewModel {
                         mensagemToast.setValue("Falha de conexão com o servidor: " + t.getMessage());
                     }
                 });
-        }
+    }
     /**
      * Valida o e-mail digitado para iniciar o fluxo de recuperação de senha.
      */
@@ -331,5 +348,4 @@ public class AuthViewModel extends ViewModel {
         mensagemToast.setValue("Código validado com sucesso!");
         otpSucesso.setValue(true);
     }
-
-    }
+}

@@ -134,7 +134,7 @@
 
         <!-- BOTÃO FLUTUANTE PARA VOLTAR À MINHA LOCALIZAÇÃO -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnMyLocation"
+            android:id="@+id/btnMinhaLocalizacao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -189,44 +189,6 @@
                     android:layout_marginBottom="12dp"
                     android:scrollbars="none">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/btnModeCarro"
-                            android:layout_width="wrap_content"
-                            android:layout_height="48dp"
-                            android:layout_marginEnd="8dp"
-                            android:backgroundTint="@color/cor_primaria"
-                            android:text="🚗 Carro"
-                            android:textAllCaps="false"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <Button
-                            android:id="@+id/btnModePe"
-                            android:layout_width="wrap_content"
-                            android:layout_height="48dp"
-                            android:layout_marginEnd="8dp"
-                            android:backgroundTint="@color/nav_item_color"
-                            android:text="🚶 A pé"
-                            android:textAllCaps="false"
-                            android:textColor="#94A3B8"
-                            android:textSize="12sp" />
-
-                        <Button
-                            android:id="@+id/btnModeBicicleta"
-                            android:layout_width="wrap_content"
-                            android:layout_height="48dp"
-                            android:layout_marginEnd="8dp"
-                            android:backgroundTint="#334155"
-                            android:text="🚴 Bicicleta"
-                            android:textAllCaps="false"
-                            android:textColor="#94A3B8"
-                            android:textSize="12sp" />
-                    </LinearLayout>
                 </HorizontalScrollView>
 
                 <!-- CABEÇALHO DO CARD (Sempre Visível no Peek) -->
@@ -330,7 +292,7 @@
                         android:layout_marginTop="12dp"
                         android:lineSpacingExtra="6dp"
                         android:text="• Deslize para cima para ver as instruções detalhadas após calcular a rota."
-                        android:textColor="#94A3B8"
+                        android:textColor="#fff"
                         android:textSize="13sp" />
 
                 </LinearLayout>

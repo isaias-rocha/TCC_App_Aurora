@@ -12,6 +12,7 @@ navigationUi = "2.9.8"
 osmdroidAndroid = "6.1.20"
 coreSplashscreen = "1.2.0"
 preference = "1.2.1"
+firebaseAppdistributionGradle = "5.3.0"
 
 
 [libraries]
@@ -27,6 +28,7 @@ navigation-fragment = { group = "androidx.navigation", name = "navigation-fragme
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUi" }
 osmdroid-android = { module = "org.osmdroid:osmdroid-android", version.ref = "osmdroidAndroid" }
 preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
+firebase-appdistribution-gradle = { group = "com.google.firebase", name = "firebase-appdistribution-gradle", version.ref = "firebaseAppdistributionGradle" }
 
 
 [plugins]

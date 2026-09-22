@@ -4,11 +4,15 @@ package com.equipe1.aurora.ui.mapa;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -126,7 +130,6 @@ public class MapaFragment extends Fragment {
         // Chama as funções que preparam os "ouvintes" (cliques na tela)
         configurarCliqueNoMapa();
         configurarOuvinteBarraPesquisa();
-        configurarOuvintesModosTransporte();
         configurarOuvintesBotoes();
 
         // Verifica se a tela foi aberta a partir de uma pesquisa de outro lugar
@@ -171,41 +174,12 @@ public class MapaFragment extends Fragment {
      */
     private void configurarOuvintesBotoes() {
         // Centraliza a câmera no usuário ao clicar no botão de mira
-        vinculacaoLayout.btnMyLocation.setOnClickListener(v -> centralizarNaLocalizacaoAtual());
+        vinculacaoLayout.btnMinhaLocalizacao.setOnClickListener(v -> centralizarNaLocalizacaoAtual());
 
         // Inicia o cálculo do trajeto ao clicar em "Navegar"
         vinculacaoLayout.btnNavigate.setOnClickListener(v -> executarCalculoDeRota());
     }
 
-    /**
-     * Configura a escolha do veículo de transporte (Carro, A pé, Bicicleta).
-     */
-    private void configurarOuvintesModosTransporte() {
-        View.OnClickListener ouvinteBotoes = viewClicada -> {
-            int id = viewClicada.getId();
-
-            // Define o tipo de transporte com base no botão clicado
-            if (id == R.id.btnModeCarro) {
-                perfilTransporteAtual = "driving";
-                atualizarVisualBotoesTransporte(vinculacaoLayout.btnModeCarro, vinculacaoLayout.btnModePe, vinculacaoLayout.btnModeBicicleta);
-            } else if (id == R.id.btnModePe) {
-                perfilTransporteAtual = "walking";
-                atualizarVisualBotoesTransporte(vinculacaoLayout.btnModePe, vinculacaoLayout.btnModeCarro, vinculacaoLayout.btnModeBicicleta);
-            } else if (id == R.id.btnModeBicicleta) {
-                perfilTransporteAtual = "bike";
-                atualizarVisualBotoesTransporte(vinculacaoLayout.btnModeBicicleta, vinculacaoLayout.btnModeCarro, vinculacaoLayout.btnModePe);
-            }
-
-            // Se o usuário já tiver escolhido um destino, recalcula a rota automaticamente
-            if (marcadorDestinoSelecionado != null) {
-                executarCalculoDeRota();
-            }
-        };
-
-        vinculacaoLayout.btnModeCarro.setOnClickListener(ouvinteBotoes);
-        vinculacaoLayout.btnModePe.setOnClickListener(ouvinteBotoes);
-        vinculacaoLayout.btnModeBicicleta.setOnClickListener(ouvinteBotoes);
-    }
 
     /**
      * Intercepta quando o usuário toca na tela do mapa
@@ -638,7 +612,8 @@ public class MapaFragment extends Fragment {
      */
     private void escreverPassosDaNavegacaoNaTela(JSONObject jsonCompletoRota) {
         try {
-            StringBuilder textoComOsPassos = new StringBuilder();
+            // Usa SpannableStringBuilder em vez de StringBuilder para suportar as imagens
+            SpannableStringBuilder textoComOsPassos = new SpannableStringBuilder();
             JSONArray blocosDaRota = jsonCompletoRota.getJSONArray("legs");
 
             if (blocosDaRota.length() > 0) {
@@ -652,26 +627,47 @@ public class MapaFragment extends Fragment {
 
                     JSONObject manobraDestePasso = informacaoDoPasso.optJSONObject("maneuver");
                     String direcaoManobra = (manobraDestePasso != null) ? manobraDestePasso.optString("modifier", "") : "";
-                    String tipoDeManobra = (manobraDestePasso != null) ? manobraDestePasso.optString("type", "") : "";
 
-                    // Traduz os termos em inglês do OSRM para ícones
-                    String emojiDaManobra = gerarEmojiDeDirecao(tipoDeManobra, direcaoManobra);
-                    textoComOsPassos.append(emojiDaManobra).append(" ");
+                    // 1. Pegamos o ID do Ícone (int) e o Texto descritivo (String)
+                    int idIcone = obterIconeDeDirecao(direcaoManobra);
+                    String textoDaManobra = obterTextoDeDirecao(direcaoManobra);
+
+                    // 2. Coloca a imagem (Drawable) dentro do texto
+                    Drawable icone = ContextCompat.getDrawable(requireContext(), idIcone);
+                    if (icone != null) {
+                        // Define a largura e altura do ícone no texto (ex: 50x50 pixels)
+                        icone.setBounds(0, 0, 50, 50);
+                        int posicaoInicial = textoComOsPassos.length();
+
+                        textoComOsPassos.append("  "); // Adiciona um espaço que será substituído pela imagem
+
+                        textoComOsPassos.setSpan(
+                                new ImageSpan(icone, ImageSpan.ALIGN_BOTTOM),
+                                posicaoInicial,
+                                posicaoInicial + 1,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        );
+                    }
+
+                    // 3. Adiciona o texto ao lado do ícone
+                    textoComOsPassos.append(textoDaManobra).append(" ");
 
                     if (!nomeDaRua.isEmpty()) {
-                        textoComOsPassos.append("Siga por ").append(nomeDaRua);
+                        textoComOsPassos.append("por ").append(nomeDaRua);
                     } else {
-                        textoComOsPassos.append("Continue no trajeto");
+                        textoComOsPassos.append("no trajeto");
                     }
 
                     if (distanciaDoPasso > 0) {
-                        textoComOsPassos.append(" (").append((int) distanciaDoPasso).append(" m)");
+                        textoComOsPassos.append(" (").append((char) distanciaDoPasso).append(" m)");
                     }
                     textoComOsPassos.append("\n\n");
                 }
 
                 textoComOsPassos.append("📍 Chegada ao Destino");
-                vinculacaoLayout.tvEtapasDetalhes.setText(textoComOsPassos.toString());
+
+                // Passa o resultado final para a tela
+                vinculacaoLayout.tvEtapasDetalhes.setText(textoComOsPassos);
                 vinculacaoLayout.layoutEtapasExpandido.setVisibility(View.VISIBLE);
             }
         } catch (Exception e) {
@@ -680,17 +676,37 @@ public class MapaFragment extends Fragment {
     }
 
     /**
-     * Retorna uma seta visual que corresponde à direção que a API em inglês enviou
+     * Retorna o ID do ícone SVG correspondente
      */
-    private String gerarEmojiDeDirecao(String tipoMovimento, String direcaoSeta) {
-        if (direcaoSeta.contains("right")) return "↗️ Virar à direita";
-        if (direcaoSeta.contains("left")) return "↖️ Virar à esquerda";
-        if (direcaoSeta.contains("slight right")) return "↗️ Mantenha-se à direita";
-        if (direcaoSeta.contains("slight left")) return "↖️ Mantenha-se à esquerda";
-        if (direcaoSeta.contains("sharp right")) return "↪️ Curva acentuada à direita";
-        if (direcaoSeta.contains("sharp left")) return "↩️ Curva acentuada à esquerda";
-        if (direcaoSeta.contains("uturn")) return "🔄 Faça o retorno";
-        return "⬆️ Siga em frente";
+    private int obterIconeDeDirecao(String direcaoSeta) {
+        if (direcaoSeta == null) return R.drawable.ic_seta_cima;
+
+        if (direcaoSeta.contains("sharp right")) return R.drawable.ic_circulo_curva_acentuada_direita;
+        if (direcaoSeta.contains("sharp left"))  return R.drawable.ic_circulo_curva_acentuada_esquerda;
+        if (direcaoSeta.contains("slight right")) return R.drawable.ic_seta_direita;
+        if (direcaoSeta.contains("slight left"))  return R.drawable.ic_seta_esquerda;
+        if (direcaoSeta.contains("right"))        return R.drawable.ic_seta_direita;
+        if (direcaoSeta.contains("left"))         return R.drawable.ic_seta_esquerda;
+        if (direcaoSeta.contains("uturn") || direcaoSeta.contains("return")) return R.drawable.ic_seta_retorno;
+
+        return R.drawable.ic_seta_cima;
+    }
+
+    /**
+     * Retorna o texto explicativo da manobra
+     */
+    private String obterTextoDeDirecao(String direcaoSeta) {
+        if (direcaoSeta == null) return "Siga em frente";
+
+        if (direcaoSeta.contains("sharp right")) return "Curva acentuada à direita";
+        if (direcaoSeta.contains("sharp left"))  return "Curva acentuada à esquerda";
+        if (direcaoSeta.contains("slight right")) return "Mantenha-se à direita";
+        if (direcaoSeta.contains("slight left"))  return "Mantenha-se à esquerda";
+        if (direcaoSeta.contains("right"))        return "Vire à direita";
+        if (direcaoSeta.contains("left"))         return "Vire à esquerda";
+        if (direcaoSeta.contains("uturn") || direcaoSeta.contains("return")) return "Faça o retorno";
+
+        return "Siga em frente";
     }
 
     /**
