@@ -100,13 +100,13 @@
                 app:layout_constraintTop_toBottomOf="@id/container_sos" />
 
 
-            <!-- Botão Fixo de Emergência (Ligar 190) -->
+            <!-- Botão Fixo de Emergência (Ligar 190, 192, 193) -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_ligar_emergencia"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_margin="24dp"
-                android:text="Ligar para emergência 190"
+                android:text="Ligar para emergência"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"

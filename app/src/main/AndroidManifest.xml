@@ -83,7 +83,7 @@
         <activity
             android:name=".ui.perfil.InfoPessoaisActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.solicitacao.SolicitacaoAmizadeActivity"
             android:exported="false"
@@ -94,6 +94,10 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".DispositivoEmbarcadoActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".SeletorEmergencia"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
     </application>
