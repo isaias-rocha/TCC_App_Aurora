@@ -3,7 +3,8 @@
     <!-- Cores Globais / Design System -->
     <color name="cor_primaria">#1F51E6</color>
     <color name="cor_segundaria">#2ECC71</color>
-    <color name="vermelho_alerta">#E74C3C</color>
+    <color name="cor_terciaria">#E6A132</color>
+    <color name="vermelho_alerta">#E93D2C</color>
     <color name="texto">#000000</color>
 
     <!-- Mapeamento MODO CLARO -->

@@ -43,11 +43,11 @@
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/ic_search"
+                    android:src="@drawable/ic_pesquisa"
                     app:tint="#ffff"/>
 
                 <EditText
-                    android:id="@+id/etSearch"
+                    android:id="@+id/et_pesquisa"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -63,7 +63,7 @@
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/ic_circle_voice"
+                    android:src="@drawable/ic_circulo_voz"
                     app:tint="@color/cor_primaria"/>
 
             </LinearLayout>

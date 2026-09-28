@@ -46,6 +46,7 @@
 
         <!-- SUBTÍTULO -->
         <TextView
+            style="@style/TextAppearance.Aurora.Subtitle"
             android:id="@+id/tv_subtitulo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -60,11 +61,12 @@
         <!-- BOTÃO POLÍCIA (190) -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_policia"
+            style="@style/TextAppearance.Aurora.Subtitle"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginTop="24dp"
-            android:backgroundTint="#E74C3C"
-            android:text="Polícia Militar — 190"
+            android:backgroundTint="@color/vermelho_alerta"
+            android:text="Polícia — 190"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="16sp"
@@ -83,8 +85,8 @@
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginTop="12dp"
-            android:backgroundTint="#E74C3C"
-            android:text="Ambulância / SAMU — 192"
+            android:backgroundTint="@color/vermelho_alerta"
+            android:text="SAMU — 192"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="16sp"
@@ -104,7 +106,7 @@
             android:layout_height="56dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
-            android:backgroundTint="#E74C3C"
+            android:backgroundTint="@color/vermelho_alerta"
             android:text="Bombeiros — 193"
             android:textAllCaps="false"
             android:textColor="@android:color/white"

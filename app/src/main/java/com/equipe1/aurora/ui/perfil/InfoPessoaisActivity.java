@@ -56,11 +56,6 @@ public class InfoPessoaisActivity extends AppCompatActivity {
         // Botão Voltar
         binding.btnVoltar.setOnClickListener(v -> finish());
 
-        // Botão Alterar Foto de Capa
-        binding.cardAlterarFotoBg.setOnClickListener(v -> {
-            Toast.makeText(this, "Alterar foto de capa", Toast.LENGTH_SHORT).show();
-        });
-
         // Botão Alterar Foto de Perfil
         binding.cardAlterarFotoPerfil.setOnClickListener(v -> {
             Toast.makeText(this, "Alterar foto de perfil", Toast.LENGTH_SHORT).show();

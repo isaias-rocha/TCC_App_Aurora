@@ -21,6 +21,7 @@ import androidx.preference.PreferenceManager;
 
 import com.equipe1.aurora.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.card.MaterialCardView;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -29,13 +30,15 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 public class HomeFragment extends Fragment {
-
     private MapView mapPreview;
     private View mapOverlay;
     private EditText etSearch;
     private ImageView imgProfile;
     private TextView tvFriendsSeeAll;
     private LinearLayout llShortcuts;
+    private MaterialCardView btnShortcutCasa;
+    private MaterialCardView btnShortcutTrabalho;
+    private MaterialCardView btnShortcutAdicionar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,12 +59,16 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mapPreview = view.findViewById(R.id.map_preview);
-        mapOverlay = view.findViewById(R.id.view_map_click_overlay);
-        etSearch = view.findViewById(R.id.etSearch);
-        imgProfile = view.findViewById(R.id.img_profile);
-        tvFriendsSeeAll = view.findViewById(R.id.tv_friends_see_all);
-        llShortcuts = view.findViewById(R.id.ll_shortcuts);
+        mapPreview = view.findViewById(R.id.mapa_preview);
+        mapOverlay = view.findViewById(R.id.view_mapa_clique_sobreposicao);
+        etSearch = view.findViewById(R.id.et_pesquisa);
+        imgProfile = view.findViewById(R.id.img_foto_perfil);
+        tvFriendsSeeAll = view.findViewById(R.id.tv_ver_todos);
+        llShortcuts = view.findViewById(R.id.ll_atalhos);
+
+        btnShortcutCasa = view.findViewById(R.id.btn_acesso_casa);
+        btnShortcutTrabalho = view.findViewById(R.id.btn_acesso_trabalho);
+        btnShortcutAdicionar = view.findViewById(R.id.btn_acesso_adicionar);
 
         setupMapPreview();
         setupListeners(view);
@@ -82,7 +89,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupListeners(View view) {
-        // A. Clique no Mapa -> Vai para a tela de Mapa na BottomNav
+        // A. Clique no Mapa
         if (mapOverlay != null) {
             mapOverlay.setOnClickListener(v -> abrirTelaMapa());
         }
@@ -124,13 +131,24 @@ public class HomeFragment extends Fragment {
         }
 
         // E. Atalho Casa
-        if (llShortcuts != null && llShortcuts.getChildCount() > 0) {
-            View shortcutCasa = llShortcuts.getChildAt(0);
-            if (shortcutCasa != null) {
-                shortcutCasa.setOnClickListener(v ->
-                        Toast.makeText(getContext(), "Iniciando rota para Casa...", Toast.LENGTH_SHORT).show()
-                );
-            }
+        if (btnShortcutCasa != null) {
+            btnShortcutCasa.setOnClickListener(v ->
+                    Toast.makeText(getContext(), "Iniciando rota para Casa...", Toast.LENGTH_SHORT).show()
+            );
+        }
+
+        // F. Atalho Trabalho
+        if (btnShortcutTrabalho != null) {
+            btnShortcutTrabalho.setOnClickListener(v ->
+                    Toast.makeText(getContext(), "Iniciando rota para Trabalho...", Toast.LENGTH_SHORT).show()
+            );
+        }
+
+        // G. Atalho Adicionar
+        if (btnShortcutAdicionar != null) {
+            btnShortcutAdicionar.setOnClickListener(v ->
+                    Toast.makeText(getContext(), "Adicionar novo atalho...", Toast.LENGTH_SHORT).show()
+            );
         }
     }
 

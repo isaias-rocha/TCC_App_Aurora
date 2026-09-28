@@ -4,10 +4,12 @@
     <style name="Base.Theme.Aurora" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Cores Primárias e de Destaque -->
         <item name="colorPrimary">@color/cor_primaria</item>
+        <item name="colorPrimaryVariant">@color/cor_primaria</item>
         <item name="colorOnPrimary">@color/texto</item>
         <item name="colorSecondary">@color/cor_segundaria</item>
+        <item name="colorTertiary">@color/cor_terciaria</item>
 
-        <!-- Fundos e Superfícies no Modo Escuro -->
+        <!-- Fundos e Superfícies (O Card assumirá @color/surface_escuro) -->
         <item name="android:windowBackground">@color/bg_escuro</item>
         <item name="colorSurface">@color/surface_escuro</item>
         <item name="colorOnSurface">@color/on_surface_escuro</item>
@@ -22,28 +24,4 @@
         <item name="android:fontFamily">@font/inter</item>
     </style>
 
-
-    <!-- Estilos de Tipografia do Design System Aurora -->
-
-    <!-- Título Principal (Poppins Bold) -->
-    <style name="TextAppearance.Aurora.Title" parent="TextAppearance.MaterialComponents.Headline5">
-        <item name="fontFamily">@font/poppins</item>
-        <item name="android:fontFamily">@font/poppins</item>
-        <item name="android:textFontWeight">700</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <!-- Subtítulo / Título de Cards (Poppins SemiBold) -->
-    <style name="TextAppearance.Aurora.Subtitle" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="fontFamily">@font/poppins</item>
-        <item name="android:fontFamily">@font/poppins</item>
-        <item name="android:textFontWeight">600</item>
-    </style>
-
-    <!-- Corpo de Texto / Inputs / Rótulos (Inter Regular) -->
-    <style name="TextAppearance.Aurora.Body" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="fontFamily">@font/inter</item>
-        <item name="android:fontFamily">@font/inter</item>
-        <item name="android:textFontWeight">400</item>
-    </style>
 </resources>

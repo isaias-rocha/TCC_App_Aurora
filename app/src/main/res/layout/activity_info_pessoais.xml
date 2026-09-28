@@ -46,7 +46,7 @@
 
         <!-- SUBTÍTULO -->
         <TextView
-            android:id="@+id/tv_subtitulo_pessoal"
+            android:id="@+id/tv_subtitulo"
             style="@style/TextAppearance.Aurora.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -60,56 +60,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_titulo_pessoal" />
 
-        <!-- IMAGEM DE CAPA DA AURORA -->
-        <ImageView
-            android:id="@+id/img_header_aurora"
-            android:layout_width="0dp"
-            android:layout_height="180dp"
-            android:layout_marginTop="24dp"
-            android:contentDescription="Foto de capa do perfil"
-            android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_subtitulo_pessoal"
-            tools:background="@color/on_surface_claro" />
 
-        <!-- BOTÃO ALTERAR FOTO DE CAPA -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_alterar_foto_bg"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:clickable="true"
-            android:contentDescription="Botão para alterar a foto de capa"
-            android:focusable="true"
-            app:cardBackgroundColor="?attr/colorPrimary"
-            app:cardCornerRadius="18dp"
-            app:cardElevation="4dp"
-            app:strokeWidth="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/img_header_aurora"
-            app:layout_constraintEnd_toEndOf="@id/img_header_aurora">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_camera"
-                app:tint="@android:color/white" />
-        </com.google.android.material.card.MaterialCardView>
 
         <!-- FOTO DE PERFIL -->
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/img_foto_perfil"
             android:layout_width="152dp"
             android:layout_height="152dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="36dp"
             android:contentDescription="Sua foto de perfil atual"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_header_aurora"
+            app:layout_constraintTop_toBottomOf="@id/tv_subtitulo"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
             tools:srcCompat="@tools:sample/avatars" />
 

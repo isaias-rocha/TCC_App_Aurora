@@ -1,160 +1,214 @@
-    package com.equipe1.aurora.ui.config;
+package com.equipe1.aurora.ui.config;
 
-    import android.content.Context;
-    import android.content.SharedPreferences;
-    import android.os.Build;
-    import android.os.Bundle;
-    import android.os.VibrationEffect;
-    import android.os.Vibrator;
-    import android.view.View;
-    import android.widget.ImageButton;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.os.VibratorManager;
+import android.view.View;
+import android.view.accessibility.AccessibilityManager;
 
-    import androidx.activity.EdgeToEdge;
-    import androidx.appcompat.app.AppCompatActivity;
-    import androidx.core.graphics.Insets;
-    import androidx.core.view.ViewCompat;
-    import androidx.core.view.WindowInsetsCompat;
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
-    import com.equipe1.aurora.R;
-    import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.equipe1.aurora.databinding.ActivityAccessibilidadeBinding;
 
-    public class AccessibilidadeActivity extends AppCompatActivity {
+/**
+ * Activity responsável por gerenciar e aplicar os ajustes de acessibilidade e feedback visual/tátil.
+ */
+public class AccessibilidadeActivity extends AppCompatActivity {
 
-        // Constantes para persistência local via SharedPreferences
-        private static final String PREFS_NAME = "AuroraAccessibilityPrefs";
-        public static final String KEY_ALTO_CONTRASTE = "key_alto_contraste";
-        public static final String KEY_REDUZIR_ANIMACOES = "key_reduzir_animacoes";
-        public static final String KEY_FEEDBACK_TATIL = "key_feedback_tatil";
-        public static final String KEY_LEITOR_TELA = "key_leitor_tela";
+    // CHAVES DE ARMAZENAMENTO (SharedPreferences)
+    private static final String PREFS_NAME = "AuroraAccessibilityPrefs";
+    public static final String KEY_ALTO_CONTRASTE = "key_alto_contraste";
+    public static final String KEY_REDUZIR_ANIMACOES = "key_reduzir_animacoes";
+    public static final String KEY_TAMANHO_FONTE = "key_tamanho_fonte"; // Armazena o valor (0.0f a 3.0f)
+    public static final String KEY_FEEDBACK_TATIL = "key_feedback_tatil";
+    public static final String KEY_LEITOR_TELA = "key_leitor_tela";
 
-        // Componentes visuais
-        private ImageButton btnVoltar;
-        private View rowAltoContraste, rowReduzirAnimacoes, rowFeedbackTatil, rowLeitorTela;
-        private SwitchMaterial switchAltoContraste, switchReduzirAnimacoes, switchFeedbackTatil, switchLeitorTela;
-        private SharedPreferences preferences;
+    // View Binding
+    private ActivityAccessibilidadeBinding binding;
+    private SharedPreferences preferences;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+    /**
+     * Sobrescreve o contexto para aplicar o fator de escala da fonte configurado.
+     */
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        SharedPreferences prefs = newBase.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        float valorSlider = prefs.getFloat(KEY_TAMANHO_FONTE, 1.0f); // Padrão: nível 1 (1.0x)
 
-            // Ativa exibição sem bordas (Edge-to-Edge) para Android 10+
-            EdgeToEdge.enable(this);
-            setContentView(R.layout.activity_accessibilidade);
+        float fontScale = obterEscalaFonte(valorSlider);
 
-            // Inicializa o gerenciador de preferências
-            preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        Configuration overrideConfig = newBase.getResources().getConfiguration();
+        overrideConfig.fontScale = fontScale;
 
-            // Mapeia views e configura o estado dos componentes
-            initComponents();
-            carregarEstadosIniciais();
-            configurarListeners();
+        Context context = newBase.createConfigurationContext(overrideConfig);
+        super.attachBaseContext(context);
+    }
 
-            // Ajusta os espaçamentos internos (padding) para evitar sobreposição com as barras de sistema (Status/Navigation)
-            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.accessibility), (v, insets) -> {
-                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-                return insets;
-            });
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Ativa exibição tela cheia (Edge-to-Edge)
+        EdgeToEdge.enable(this);
+        binding = ActivityAccessibilidadeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        // Inicializa SharedPreferences
+        preferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+
+        // MÉTODOS DE INICIALIZAÇÃO DA TELA
+        carregarEstadosIniciais();
+        configurarListeners();
+
+        // Ajusta o padding dinâmico de acordo com as barras de sistema do Android
+        ViewCompat.setOnApplyWindowInsetsListener(binding.accessibility, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+    }
+
+    /**
+     * Carrega as configurações previamente salvas no dispositivo.
+     */
+    private void carregarEstadosIniciais() {
+        binding.switchAltoContraste.setChecked(preferences.getBoolean(KEY_ALTO_CONTRASTE, false));
+        binding.switchReduzirAnimacoes.setChecked(preferences.getBoolean(KEY_REDUZIR_ANIMACOES, false));
+        binding.sliderTamanhoFonte.setValue(preferences.getFloat(KEY_TAMANHO_FONTE, 1.0f));
+        binding.switchFeedbackTatil.setChecked(preferences.getBoolean(KEY_FEEDBACK_TATIL, true));
+
+        // Se o TalkBack do sistema estiver ativo, forçamos o valor para true
+        boolean talkBackSistemaAtivo = verificarTalkBackSistema();
+        boolean leitorPref = preferences.getBoolean(KEY_LEITOR_TELA, talkBackSistemaAtivo);
+        binding.switchLeitorTela.setChecked(leitorPref);
+    }
+
+    /**
+     * Define a lógica e o comportamento disparado ao interagir com cada opção.
+     */
+    private void configurarListeners() {
+        // Voltar
+        binding.btnVoltarAcessibilidade.setOnClickListener(v -> finish());
+
+        // 1. Modo de Alto Contraste
+        binding.rowAltoContraste.setOnClickListener(v -> {
+            boolean novoEstado = !binding.switchAltoContraste.isChecked();
+            binding.switchAltoContraste.setChecked(novoEstado);
+            salvarPreferencia(KEY_ALTO_CONTRASTE, novoEstado);
+
+            anunciarParaTalkBack(v, "Modo de alto contraste " + (novoEstado ? "ativado" : "desativado"));
+            recreate(); // Recarrega a atividade para aplicar a mudança de estilo/tema
+        });
+
+        // 2. Reduzir Animações
+        binding.rowReduzirAnimacoes.setOnClickListener(v -> {
+            boolean novoEstado = !binding.switchReduzirAnimacoes.isChecked();
+            binding.switchReduzirAnimacoes.setChecked(novoEstado);
+            salvarPreferencia(KEY_REDUZIR_ANIMACOES, novoEstado);
+
+            anunciarParaTalkBack(v, "Redução de animações " + (novoEstado ? "ativada" : "desativada"));
+        });
+
+        // 3. Tamanho da Fonte (Slider)
+        binding.sliderTamanhoFonte.addOnChangeListener((slider, value, fromUser) -> {
+            if (fromUser) {
+                preferences.edit().putFloat(KEY_TAMANHO_FONTE, value).apply();
+
+                String[] niveis = {"Pequeno", "Padrão", "Grande", "Muito Grande"};
+                int index = Math.min((int) value, niveis.length - 1);
+
+                anunciarParaTalkBack(slider, "Tamanho da fonte alterado para " + niveis[index]);
+                recreate(); // Recarrega a tela para recalcular os tamanhos com base no fontScale
+            }
+        });
+
+        // 4. Feedback Tátil (Vibração)
+        binding.rowFeedbackTatil.setOnClickListener(v -> {
+            boolean novoEstado = !binding.switchFeedbackTatil.isChecked();
+            binding.switchFeedbackTatil.setChecked(novoEstado);
+            salvarPreferencia(KEY_FEEDBACK_TATIL, novoEstado);
+
+            anunciarParaTalkBack(v, "Vibração " + (novoEstado ? "ativada" : "desativada"));
+
+            if (novoEstado) {
+                executarVibracaoTeste();
+            }
+        });
+
+        // 5. Suporte a Leitor de Tela (TalkBack)
+        binding.rowLeitorTela.setOnClickListener(v -> {
+            boolean novoEstado = !binding.switchLeitorTela.isChecked();
+            binding.switchLeitorTela.setChecked(novoEstado);
+            salvarPreferencia(KEY_LEITOR_TELA, novoEstado);
+
+            anunciarParaTalkBack(v, "Suporte a TalkBack " + (novoEstado ? "ativado" : "desativado"));
+        });
+    }
+
+    /**
+     * Mapeia os índices do Slider (0, 1, 2, 3) para fatores reais de escala de fonte (fontScale).
+     */
+    private static float obterEscalaFonte(float valorSlider) {
+        int index = Math.round(valorSlider);
+        switch (index) {
+            case 0:
+                return 0.85f; // Pequeno
+            case 2:
+                return 1.15f; // Grande
+            case 3:
+                return 1.30f; // Muito Grande
+            case 1:
+            default:
+                return 1.00f; // Padrão
         }
+    }
 
+    /**
+     * Grava uma preferência booleana no arquivo SharedPreferences.
+     */
+    private void salvarPreferencia(String chave, boolean valor) {
+        preferences.edit().putBoolean(chave, valor).apply();
+    }
 
-         // Vincula as variáveis Java aos elementos definidos no XML.
-
-        private void initComponents() {
-            btnVoltar = findViewById(R.id.btn_voltar_acessibilidade);
-
-            // Linhas inteiras clicáveis (ConstraintLayouts contêineres)
-            rowAltoContraste = findViewById(R.id.row_alto_contraste);
-            rowReduzirAnimacoes = findViewById(R.id.row_reduzir_animacoes);
-            rowFeedbackTatil = findViewById(R.id.row_feedback_tatil);
-            rowLeitorTela = findViewById(R.id.row_leitor_tela);
-
-            // Chaves de seleção
-            switchAltoContraste = findViewById(R.id.switch_alto_contraste);
-            switchReduzirAnimacoes = findViewById(R.id.switch_reduzir_animacoes);
-            switchFeedbackTatil = findViewById(R.id.switch_feedback_tatil);
-            switchLeitorTela = findViewById(R.id.switch_leitor_tela);
-        }
-
-         // Recupera os valores previamente salvos no SharedPreferences para restaurar o estado da tela.
-
-        private void carregarEstadosIniciais() {
-            switchAltoContraste.setChecked(preferences.getBoolean(KEY_ALTO_CONTRASTE, false));
-            switchReduzirAnimacoes.setChecked(preferences.getBoolean(KEY_REDUZIR_ANIMACOES, false));
-            switchFeedbackTatil.setChecked(preferences.getBoolean(KEY_FEEDBACK_TATIL, true));
-            switchLeitorTela.setChecked(preferences.getBoolean(KEY_LEITOR_TELA, true));
-        }
-
-
-        //Configura os eventos de clique estendendo a área de toque para o contêiner completo de cada opção.
-
-        private void configurarListeners() {
-            // Encerra a Activity ao clicar no botão voltar
-            btnVoltar.setOnClickListener(v -> finish());
-
-            // Alternância: Modo de Alto Contraste
-            rowAltoContraste.setOnClickListener(v -> {
-                boolean novoEstado = !switchAltoContraste.isChecked();
-                switchAltoContraste.setChecked(novoEstado);
-                salvarPreferencia(KEY_ALTO_CONTRASTE, novoEstado);
-
-                anunciarParaTalkBack(v, "Modo de alto contraste " + (novoEstado ? "ativado" : "desativado"));
-
-                // Recarrega a tela para recriar o tema com alto contraste
-                recreate();
-            });
-
-            // Alternância: Reduzir Animações
-            rowReduzirAnimacoes.setOnClickListener(v -> {
-                boolean novoEstado = !switchReduzirAnimacoes.isChecked();
-                switchReduzirAnimacoes.setChecked(novoEstado);
-                salvarPreferencia(KEY_REDUZIR_ANIMACOES, novoEstado);
-
-                anunciarParaTalkBack(v, "Redução de animações " + (novoEstado ? "ativada" : "desativada"));
-            });
-
-            // Alternância: Feedback Tátil (Vibração)
-            rowFeedbackTatil.setOnClickListener(v -> {
-                boolean novoEstado = !switchFeedbackTatil.isChecked();
-                switchFeedbackTatil.setChecked(novoEstado);
-                salvarPreferencia(KEY_FEEDBACK_TATIL, novoEstado);
-
-                anunciarParaTalkBack(v, "Vibração " + (novoEstado ? "ativada" : "desativada"));
-
-                // Executa vibração imediata de teste caso ativado
-                if (novoEstado) {
-                    executarVibracaoTeste();
-                }
-            });
-
-            // Alternância: Suporte a Leitor de Tela (TalkBack)
-            rowLeitorTela.setOnClickListener(v -> {
-                boolean novoEstado = !switchLeitorTela.isChecked();
-                switchLeitorTela.setChecked(novoEstado);
-                salvarPreferencia(KEY_LEITOR_TELA, novoEstado);
-
-                anunciarParaTalkBack(v, "Suporte a TalkBack " + (novoEstado ? "ativado" : "desativado"));
-            });
-        }
-
-
-         // Escreve e persiste a preferência em background.
-
-        private void salvarPreferencia(String chave, boolean valor) {
-            preferences.edit().putBoolean(chave, valor).apply();
-        }
-
-
-         // Força uma notificação por voz para leitores de tela como o TalkBack.
-
-        private void anunciarParaTalkBack(View view, String mensagem) {
+    /**
+     * Envia uma mensagem em áudio para o leitor de tela (TalkBack).
+     */
+    private void anunciarParaTalkBack(View view, String mensagem) {
+        if (view != null) {
             view.announceForAccessibility(mensagem);
         }
+    }
 
+    /**
+     * Verifica se algum serviço de acessibilidade/TalkBack está ativo no sistema Android.
+     */
+    private boolean verificarTalkBackSistema() {
+        AccessibilityManager am = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
+        return am != null && am.isEnabled() && am.isTouchExplorationEnabled();
+    }
 
-         // Emite um pulso tátil direto para confirmação física de ativação do recurso.
-        private void executarVibracaoTeste() {
-            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+    /**
+     * Executa um pulso de vibração curto (100ms) compatível com versões legadas e Android 12+ (API 31+).
+     */
+    private void executarVibracaoTeste() {
+        try {
+            Vibrator vibrator;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                VibratorManager vibratorManager = (VibratorManager) getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
+                vibrator = vibratorManager != null ? vibratorManager.getDefaultVibrator() : null;
+            } else {
+                vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            }
+
             if (vibrator != null && vibrator.hasVibrator()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
@@ -162,5 +216,8 @@
                     vibrator.vibrate(100);
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+}

@@ -12,147 +12,372 @@
         android:layout_height="wrap_content"
         android:padding="24dp">
 
-        <!-- Saudação usuario -->
-        <TextView
-            android:id="@+id/tv_greeting"
-            style="@style/TextAppearance.Aurora.Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Olá, Usuário!"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@id/img_profile"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_subtitle"
-            style="@style/TextAppearance.Aurora.Subtitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Que bom te ver por aqui."
-            android:textColor="#94A3B8"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@id/img_profile"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_greeting" />
-
-        <!-- Foto de Perfil Central -->
-
-        <!-- BARRA DE PESQUISA -->
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/img_profile"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/card"
-            android:padding="4dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_profile"
-            app:layout_constraintBottom_toTopOf="@+id/search_bar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
-
+        <!-- CABEÇALHO DO PERFIL -->
         <LinearLayout
-            android:id="@+id/search_bar"
+            android:id="@+id/ll_header_profile"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:background="@drawable/card"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_subtitle"
-            tools:layout_editor_absoluteX="24dp">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/etSearch"
+            <!-- Foto de Perfil -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/img_foto_perfil"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/card"
+                android:contentDescription="Foto de perfil do usuário"
+                android:padding="4dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_perfil2"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
+
+            <!-- Bloco de Textos (Saudação e Subtítulo) -->
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
                 android:layout_weight="1"
-                android:background="@null"
-                android:hint="Pesquisar lugares, amigos..."
-                android:paddingStart="12dp"
-                android:textColor="?android:attr/textColorPrimary"
-                android:textColorHint="#94A3B8"
-                android:textSize="14sp" />
+                android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_search"
-                app:tint="#94A3B8" />
+                <!-- Linha do Nome ("Olá, " + Nome) -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_ola"
+                        style="@style/TextAppearance.Aurora.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Olá, "
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_nome_usuario"
+                        style="@style/TextAppearance.Aurora.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Usuário"
+                        android:textColor="@color/cor_primaria"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Subtítulo abaixo da saudação -->
+                <TextView
+                    android:id="@+id/tv_subtitulo"
+                    style="@style/TextAppearance.Aurora.Subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Que bom te ver por aqui."
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp" />
+            </LinearLayout>
         </LinearLayout>
+
+        <!-- BARRA DE PESQUISA -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/search_bar"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="36dp"
+            app:cardBackgroundColor="?attr/colorSurface"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_header_profile"
+            app:strokeColor="@color/cor_primaria"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_pesquisa"
+                    app:tint="?android:attr/textColorSecondary" />
+
+                <EditText
+                    android:id="@+id/et_pesquisa"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="Pesquisar lugares, amigos..."
+                    android:inputType="text"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textColorHint="?android:attr/textColorSecondary"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- CARD DO MAPA -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_map_preview"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="200dp"
             android:layout_marginTop="24dp"
-            app:cardBackgroundColor="#1E293B"
+            app:cardBackgroundColor="?attr/colorSurface"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/search_bar">
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <!-- O Mapa ao fundo -->
+                <!-- O Mapa ao fundo (ocultado do TalkBack para não focar partes internas do mapa estático) -->
                 <org.osmdroid.views.MapView
-                    android:id="@+id/map_preview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <!-- Camada invisível por cima para receber o clique -->
-                <View
-                    android:id="@+id/view_map_click_overlay"
+                    android:id="@+id/mapa_preview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:contentDescription="card do mapa"
+                    android:importantForAccessibility="no" />
+
+                <!-- Camada invisível interativa para o leitor de tela -->
+                <View
+                    android:id="@+id/view_mapa_clique_sobreposicao"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
+                    android:contentDescription="Visualização do mapa. Toque duas vezes para abrir em tela cheia."
                     android:focusable="true" />
             </FrameLayout>
-
         </com.google.android.material.card.MaterialCardView>
 
-
-        <!-- ATALHOS: Casa, Trabalho, Adicionar -->
+        <!-- TÍTULO SEÇÃO: ACESSO RÁPIDO -->
         <TextView
             android:id="@+id/tv_acesso_rapido"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="Acesso Rápido"
-            android:textColor="#FFFFFF"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ll_shortcuts" />
+            app:layout_constraintTop_toBottomOf="@id/card_map_preview" />
 
+        <!-- LISTA DE ATALHOS: Casa, Trabalho, Adicionar -->
+        <LinearLayout
+            android:id="@+id/ll_atalhos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_acesso_rapido">
+
+            <!-- Item: Casa -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_acesso_casa"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:contentDescription="Atalho Casa. Toque duas vezes para adicionar endereço residencial."
+                android:focusable="true"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/cor_primaria"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:importantForAccessibility="no"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_home"
+                        app:tint="@color/texto" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Casa"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Adicionar"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="10sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Item: Trabalho -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_acesso_trabalho"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:contentDescription="Atalho Trabalho. Toque duas vezes para adicionar endereço profissional."
+                android:focusable="true"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/cor_primaria"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:importantForAccessibility="no"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_trabalho"
+                        app:tint="@color/texto" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Trabalho"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Adicionar"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="10sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Item: Adicionar -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_acesso_adicionar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:contentDescription="Adicionar novo atalho de local personalizado."
+                android:focusable="true"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/cor_primaria"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:importantForAccessibility="no"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_circulo_adicionar"
+                        app:tint="@color/texto" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Adicionar"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Novo atalho"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="10sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
 
         <!-- SEÇÃO: AMIGOS PRÓXIMOS -->
         <TextView
-            android:id="@+id/tv_friends_see_all"
+            android:id="@+id/tv_friends_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Amigos Próximos"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_atalhos" />
+
+        <TextView
+            android:id="@+id/tv_ver_todos"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:contentDescription="Ver lista completa de amigos próximos"
+            android:focusable="true"
             android:text="Ver todos"
-            android:textColor="#6C5CE7"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@id/tv_acesso_rapido"
+            android:textColor="@color/cor_primaria"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_friends_title"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_acesso_rapido" />
+            app:layout_constraintTop_toTopOf="@id/tv_friends_title" />
 
         <HorizontalScrollView
-            android:layout_width="match_parent"
+            android:id="@+id/hsv_friends"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:scrollbars="none"
-            app:layout_constraintTop_toBottomOf="@id/tv_acesso_rapido">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_friends_title">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -164,160 +389,41 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="24dp"
+                    android:clickable="true"
+                    android:contentDescription="Contato, localizado a 321 metros de distância."
+                    android:focusable="true"
                     android:gravity="center"
                     android:orientation="vertical">
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:layout_width="56dp"
                         android:layout_height="56dp"
+                        android:importantForAccessibility="no"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_profile_user"
-                        android:tint="@color/texto"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
+                        android:src="@drawable/ic_perfil2"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                        app:tint="@color/texto" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="contato"
-                        android:textColor="#FFFFFF"
+                        android:importantForAccessibility="no"
+                        android:text="Contato"
+                        android:textColor="?android:attr/textColorPrimary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
-                    <!-- distância -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:importantForAccessibility="no"
                         android:text="321 m"
-                        android:textColor="#94A3B8"
+                        android:textColor="?android:attr/textColorSecondary"
                         android:textSize="10sp" />
                 </LinearLayout>
-
             </LinearLayout>
         </HorizontalScrollView>
-
-        <!-- Lista de atalhos -->
-        <LinearLayout
-            android:id="@+id/ll_shortcuts"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:weightSum="3"
-            app:layout_constraintTop_toBottomOf="@id/card_map_preview">
-
-
-            <!-- Item: Casa -->
-            <LinearLayout
-                android:id="@+id/btn_shortcut_casa"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"
-                android:background="@color/on_bg_claro"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="12dp">
-
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_home"
-                    app:tint="@color/texto" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Casa"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Adicionar"
-                    android:textColor="#94A3B8"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-
-            <!-- Item: Trabalho -->
-            <LinearLayout
-                android:id="@+id/btn_shortcut_trabalho"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"
-                android:background="@color/on_bg_claro"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="12dp">
-
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_work"
-                    app:tint="@color/texto" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Trabalho"
-                    android:textColor="#ffff"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Adicionar"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-            <!-- Item: Adicionar -->
-            <LinearLayout
-                android:id="@+id/btn_shortcut_adicionar"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"
-                android:background="@color/on_bg_claro"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="12dp">
-
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_circle_add"
-                    app:tint="@color/texto" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Trabalho"
-                    android:textColor="#ffff"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Adicionar"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

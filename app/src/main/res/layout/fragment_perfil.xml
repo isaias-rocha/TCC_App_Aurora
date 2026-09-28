@@ -2,12 +2,12 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_perfil"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:id="@+id/layout_perfil"
+    android:padding="24dp"
     tools:context=".ui.perfil.PerfilFragment">
-
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,48 +15,65 @@
         android:layout_height="wrap_content"
         android:paddingBottom="32dp">
 
-        <!-- Imagem de Fundo (Aurora) -->
-        <ImageView
-            android:id="@+id/img_header_aurora"
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:scaleType="center"
+        <!-- TÍTULO -->
+        <TextView
+            android:id="@+id/tv_titulo"
+            style="@style/TextAppearance.Aurora.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Perfil"
+            android:textColor="@color/cor_primaria"
+            android:textSize="28sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:background="@color/cor_primaria" /> <!-- Placeholder se não tiver a imagem ainda -->
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Foto de Perfil Centralizada na interseção -->
+        <!-- SUBTÍULO -->
+        <TextView
+            android:id="@+id/tv_subtitulo"
+            style="@style/TextAppearance.Aurora.Subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Gerencie sua conta e acesse seus serviços"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_titulo" />
+
+        <!-- FOTO DE PERFIL -->
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/img_perfil_avatar"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:layout_marginTop="36dp"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="@id/img_header_aurora"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_header_aurora"
+            app:layout_constraintTop_toBottomOf="@id/tv_subtitulo"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
             tools:srcCompat="@tools:sample/avatars" />
 
-        <!-- Botão/Ícone de Editar Foto -->
 
-        <!-- Nome da Usuária -->
+        <!-- NOME DO USUARIO -->
         <TextView
             android:id="@+id/tv_nome_usuario"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif-medium"
             android:text="Usuario"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:fontFamily="sans-serif-medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/img_perfil_avatar" />
 
-        <!-- Status -->
+        <!-- STATUS -->
         <TextView
             android:id="@+id/tv_email_usuario"
             android:layout_width="wrap_content"
@@ -70,121 +87,135 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_nome_usuario" />
 
-        <!-- Lista de Opções do Perfil -->
-        <LinearLayout
-            android:id="@+id/ll_menu_opcoes"
-            android:layout_width="match_parent"
+        <!-- CARTÃO DO MENU DE OPÇÕES (ÚNICO) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_container_menu"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            android:orientation="vertical"
+            android:layout_marginTop="32dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="1dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_email_usuario">
+            app:layout_constraintTop_toBottomOf="@id/tv_email_usuario"
+            app:strokeWidth="0dp">
 
-
-            <!-- 1. Informações Pessoais -->
-            <TextView
-                android:id="@+id/menu_info_pessoais"
+            <LinearLayout
+                android:id="@+id/ll_menu_opcoes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/card"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="18dp"
-                android:text="Informações pessoais"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="16sp"
-                android:drawablePadding="16dp"
-                app:drawableStartCompat="@drawable/ic_circle_info"
-                app:drawableTint="#94A3B8" />
+                android:orientation="vertical"
+                android:paddingVertical="8dp">
 
-            <!-- 2. Dispositivo Embarcado -->
-            <TextView
-                android:id="@+id/menu_dispositivo_embarcado"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="18dp"
-                android:text="Dispositivo Embarcado"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="16sp"
-                android:drawablePadding="16dp"
-                app:drawableStartCompat="@drawable/ic_hardware"
-                app:drawableTint="#94A3B8" />
+                <!-- 1. Informações Pessoais -->
+                <TextView
+                    android:id="@+id/menu_info_pessoais"
+                    style="@style/TextAppearance.Aurora.Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:drawablePadding="16dp"
+                    android:focusable="true"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="18dp"
+                    android:text="Informações pessoais"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/ic_circle_informacoes"
+                    app:drawableTint="#94A3B8" />
 
-            <!-- 3. Contatos -->
-            <TextView
-                android:id="@+id/menu_contatos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="18dp"
-                android:text="Contatos"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="16sp"
-                android:drawablePadding="16dp"
-                app:drawableStartCompat="@drawable/ic_contatos"
-                app:drawableTint="#94A3B8" />
+                <!-- 2. Dispositivo Embarcado -->
+                <TextView
+                    android:id="@+id/menu_dispositivo_embarcado"
+                    style="@style/TextAppearance.Aurora.Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:drawablePadding="16dp"
+                    android:focusable="true"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="18dp"
+                    android:text="Dispositivo Embarcado"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/ic_hardware"
+                    app:drawableTint="#94A3B8" />
 
-            <!-- 4. Histórico -->
-            <TextView
-                android:id="@+id/menu_historico"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="18dp"
-                android:text="Histórico"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="16sp"
-                android:drawablePadding="16dp"
-                app:drawableStartCompat="@drawable/ic_historico"
-                app:drawableTint="#94A3B8" />
+                <!-- 3. Contatos -->
+                <TextView
+                    android:id="@+id/menu_contatos"
+                    style="@style/TextAppearance.Aurora.Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:drawablePadding="16dp"
+                    android:focusable="true"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="18dp"
+                    android:text="Contatos"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/ic_contatos"
+                    app:drawableTint="#94A3B8" />
 
-            <!-- 5. Planos de Assinatura -->
-            <TextView
-                android:id="@+id/menu_plano_assinatura"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="18dp"
-                android:text="Planos de assinatura"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="16sp"
-                android:drawablePadding="16dp"
-                app:drawableStartCompat="@drawable/ic_cash"
-                app:drawableTint="#94A3B8" />
+                <!-- 4. Histórico -->
+                <TextView
+                    android:id="@+id/menu_historico"
+                    style="@style/TextAppearance.Aurora.Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:drawablePadding="16dp"
+                    android:focusable="true"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="18dp"
+                    android:text="Histórico"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/ic_historico"
+                    app:drawableTint="#94A3B8" />
 
-            <!-- 6. Configurações -->
-            <TextView
-                android:id="@+id/menu_configuracoes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="18dp"
-                android:text="Configurações"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="16sp"
-                android:drawablePadding="16dp"
-                app:drawableStartCompat="@drawable/ic_config"
-                app:drawableTint="#94A3B8" />
+                <!-- 5. Planos de assinaatura -->
+                <TextView
+                    android:id="@+id/menu_plano_assinatura"
+                    style="@style/TextAppearance.Aurora.Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:drawablePadding="16dp"
+                    android:focusable="true"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="18dp"
+                    android:text="Planos de assinatura"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/ic_dinheiro"
+                    app:drawableTint="#94A3B8" />
 
-        </LinearLayout>
+                <!-- 6. Configurações -->
+                <TextView
+                    android:id="@+id/menu_configuracoes"
+                    style="@style/TextAppearance.Aurora.Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:drawablePadding="16dp"
+                    android:focusable="true"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="18dp"
+                    android:text="Configurações"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/ic_config"
+                    app:drawableTint="#94A3B8" />
 
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

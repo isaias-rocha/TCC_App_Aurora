@@ -6,39 +6,56 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.equipe1.aurora.R;
+import com.equipe1.aurora.databinding.ActivitySplashBinding;
 import com.equipe1.aurora.ui.auth.LoginActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static final int SPLASH_DURATION = 3000; // 3 segundos de exibição
+    private static final int DURACAO_SPLASH = 3000; // 3 segundos
+    private ActivitySplashBinding vinculo;
+    private Handler manipulador;
+    private Runnable acaoNavegacao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
 
-        ImageView logo = findViewById(R.id.imgLogo);
+        vinculo = ActivitySplashBinding.inflate(getLayoutInflater());
+        setContentView(vinculo.getRoot());
 
-        // Carrega a animação XML e executa no ImageView
-        Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-        logo.startAnimation(fadeIn);
+        iniciarAnimacaoLogo();
+        agendarTransicaoParaLogin();
+    }
 
-        // Aguarda o tempo estipulado para abrir a MainActivity
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                startActivity(intent);
+    private void iniciarAnimacaoLogo() {
+        Animation animacaoEntrada = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        vinculo.ivLogo.startAnimation(animacaoEntrada);
+    }
 
-                // Aplica transição suave de fade entre a Splash e o LoginActivity
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    private void agendarTransicaoParaLogin() {
+        manipulador = new Handler(Looper.getMainLooper());
+        acaoNavegacao = this::abrirTelaDeLogin;
 
-                finish(); // Encerra a SplashActivity para impedir o retorno com o botão Voltar
-            }
-        }, SPLASH_DURATION);
+        manipulador.postDelayed(acaoNavegacao, DURACAO_SPLASH);
+    }
+
+    private void abrirTelaDeLogin() {
+        Intent intencao = new Intent(SplashActivity.this, LoginActivity.class);
+        startActivity(intencao);
+
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (manipulador != null && acaoNavegacao != null) {
+            manipulador.removeCallbacks(acaoNavegacao);
+        }
     }
 }

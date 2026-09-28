@@ -2,112 +2,198 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/config"
+    android:id="@+id/layout_config"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:padding="24dp"
     tools:context=".ui.config.ConfigActivity">
 
-
+    <!-- CONTÊINER INTERNO: Organiza todos os elementos verticalmente -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- BOTÃO VOLTAR -->
+        <ImageButton
+            android:id="@+id/btn_voltar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="Voltar para a tela anterior"
+            android:focusable="true"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?android:attr/textColorPrimary" />
+
+        <!-- TÍTULO DA PÁGINA -->
         <TextView
+            android:id="@+id/tv_titulo"
+            style="@style/TextAppearance.Aurora.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Configurações"
-            android:textColor="?android:attr/textColorPrimary"
-            style="@style/TextAppearance.Aurora.Title"
-            android:textSize="22sp"
+            android:textColor="@color/cor_primaria"
+            android:textSize="28sp"
             android:textStyle="bold" />
 
+        <!-- SUBTÍTULO / DESCRIÇÃO -->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ajuste o app do seu jeito."
-            android:textColor="?android:attr/textColorSecondary"
+            android:id="@+id/tv_subtitulo"
             style="@style/TextAppearance.Aurora.Subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Gerencie suas preferências e ajustes do aplicativo"
+            android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp" />
 
-        <!-- Card Opções -->
+        <!-- CARTÃO DE OPÇÕES -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_opcoes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingVertical="8dp">
+
+                <!-- 1. NOTIFICAÇÕES -->
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switchNotificacoes"
+                    style="@style/TextAppearance.Aurora.Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:drawablePadding="16dp"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="12dp"
+                    android:text="Notificações"
+                    android:textAppearance="@style/TextAppearance.Aurora.Subtitle"
+                    android:textColor="?android:attr/textColorSecondary"
+                    app:drawableStartCompat="@drawable/ic_notificacao"
+                    app:drawableTint="#94A3B8" />
+
+                <!-- 2. LOCALIZAÇÃO -->
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switchLocalizacao"
+                    style="@style/TextAppearance.Aurora.Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:drawablePadding="16dp"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="12dp"
+                    android:text="Compartilhamento de localização"
+                    android:textAppearance="@style/TextAppearance.Aurora.Subtitle"
+                    android:textColor="?android:attr/textColorSecondary"
+                    app:drawableStartCompat="@drawable/ic_localizacao"
+                    app:drawableTint="#94A3B8" />
+
+                <!-- 3. PLANOS DE ASSINATURA -->
+                <TextView
+                    android:id="@+id/menu_plano_assinatura"
+                    style="@style/TextAppearance.Aurora.Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:drawablePadding="16dp"
+                    android:focusable="true"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="18dp"
+                    android:text="Planos de assinatura"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/ic_dinheiro"
+                    app:drawableTint="#94A3B8" />
+
+                <!-- 4. ACESSIBILIDADE -->
+                <TextView
+                    android:id="@+id/menu_acessibilidade"
+                    style="@style/TextAppearance.Aurora.Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:drawablePadding="16dp"
+                    android:focusable="true"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="18dp"
+                    android:text="Acessibilidade"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/ic_acessibilidade"
+                    app:drawableTint="#94A3B8" />
+
+                <!-- 5. IDIOMA -->
+                <TextView
+                    android:id="@+id/menu_idioma"
+                    style="@style/TextAppearance.Aurora.Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:drawablePadding="16dp"
+                    android:focusable="true"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="18dp"
+                    android:text="Idioma"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/ic_idioma"
+                    app:drawableTint="#94A3B8" />
+
+                <!-- 6. SOBRE O APLICATIVO -->
+                <TextView
+                    android:id="@+id/menu_sobre"
+                    style="@style/TextAppearance.Aurora.Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:drawablePadding="16dp"
+                    android:focusable="true"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="18dp"
+                    android:text="Sobre o aplicativo"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/ic_circle_informacoes"
+                    app:drawableTint="#94A3B8" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- AÇÃO DE DESCONEXÃO (LOGOUT) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingVertical="8dp">
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/switchNotificacoes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="Notificações"
-                android:textColor="?android:attr/textColorPrimary"
+            <TextView
+                android:id="@+id/tv_sair_conta"
                 style="@style/TextAppearance.Aurora.Body"
-                />
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/switchLocalizacao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:checked="false"
-                android:text="Compartilhamento de localização"
-                android:textColor="?android:attr/textColorPrimary"
-                style="@style/TextAppearance.Aurora.Body"
-                />
-
-            <TextView
-                android:id="@+id/btnSeguranca"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="12dp"
-                android:text="Segurança ›"
-                android:textColor="?android:attr/textColorPrimary"
-                style="@style/TextAppearance.Aurora.Body"
-                />
-
-            <TextView
-                android:id="@+id/btnTema"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="12dp"
-                android:text="Tema: Escuro"
-                android:textColor="?android:attr/textColorPrimary"
-                style="@style/TextAppearance.Aurora.Body"/>
-
-            <TextView
-                android:id="@+id/btnIdioma"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="12dp"
-                android:text="Idioma: Português ›"
-                android:textColor="?android:attr/textColorPrimary"
-                style="@style/TextAppearance.Aurora.Body"/>
-
-            <TextView
-                android:id="@+id/btnSobre"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="12dp"
-                android:text="Sobre o aplicativo (v1.0.0) ›"
-                android:textColor="?android:attr/textColorPrimary"
-                style="@style/TextAppearance.Aurora.Body"/>
+                android:layout_marginTop="120dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:padding="12dp"
+                android:text="Sair da conta"
+                android:textColor="@color/vermelho_alerta" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/btnSair"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="24dp"
-            android:text="Sair da conta"
-            android:textColor="@color/vermelho_alerta"
-            style="@style/TextAppearance.Aurora.Body"
-            android:textStyle="bold" />
     </LinearLayout>
-
 </ScrollView>

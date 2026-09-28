@@ -10,13 +10,13 @@
 
     <!-- TÍTULO -->
     <TextView
-        android:id="@+id/tv_titulo"
         style="@style/TextAppearance.Aurora.Title"
+        android:id="@+id/tv_titulo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Contatos"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textColor="@color/cor_primaria"
         android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +58,6 @@
         style="@style/TextAppearance.Aurora.Body"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginBottom="100dp"
         android:backgroundTint="?attr/colorPrimary"
         android:text="Adicionar contato"
         android:textAllCaps="false"

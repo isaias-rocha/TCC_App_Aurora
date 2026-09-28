@@ -226,10 +226,10 @@ public class MapaFragment extends Fragment {
      * Ação disparada quando o usuário aperta o botão de 'lupa/enter' no teclado virtual
      */
     private void configurarOuvinteBarraPesquisa() {
-        vinculacaoLayout.etSearch.setOnEditorActionListener((view, acaoId, evento) -> {
+        vinculacaoLayout.etPesquisa.setOnEditorActionListener((view, acaoId, evento) -> {
             // Verifica se foi apertado o botão de pesquisar
             if (acaoId == EditorInfo.IME_ACTION_SEARCH || (evento != null && evento.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                buscarLocalizacaoPeloTexto(vinculacaoLayout.etSearch.getText().toString());
+                buscarLocalizacaoPeloTexto(vinculacaoLayout.etPesquisa.getText().toString());
                 return true;
             }
             return false;
@@ -375,7 +375,7 @@ public class MapaFragment extends Fragment {
         if (getArguments() != null && getArguments().containsKey("search_query")) {
             String textoRecebido = getArguments().getString("search_query");
             if (textoRecebido != null && !textoRecebido.isEmpty()) {
-                vinculacaoLayout.etSearch.setText(textoRecebido);
+                vinculacaoLayout.etPesquisa.setText(textoRecebido);
                 buscarLocalizacaoPeloTexto(textoRecebido);
             }
         }

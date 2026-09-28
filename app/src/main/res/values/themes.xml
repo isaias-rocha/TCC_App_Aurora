@@ -7,11 +7,12 @@
         <item name="colorPrimaryVariant">@color/cor_primaria</item>
         <item name="colorOnPrimary">@color/texto</item>
         <item name="colorSecondary">@color/cor_segundaria</item>
+        <item name="colorTertiary">@color/cor_terciaria</item>
 
-        <!-- Fundos e Superfícies no Modo Claro -->
+        <!-- Fundos e Superfícies (colorSurface define a cor padrão dos Cards) -->
         <item name="android:windowBackground">@color/bg_claro</item>
         <item name="colorSurface">@color/surface_claro</item>
-        <item name="colorOnSurface">@color/on_surface_claro</item>         <!-- Fundos e Superfícies no Modo Claro -->
+        <item name="colorOnSurface">@color/on_surface_claro</item>
         <item name="colorOnBackground">@color/on_bg_claro</item>
 
         <!-- Cores de Texto -->
@@ -25,8 +26,7 @@
 
     <style name="Theme.Aurora" parent="Base.Theme.Aurora" />
 
-
-    <!-- Estilos de Tipografia do Design System Aurora -->
+    <!-- Estilos de Tipografia do Design System Aurora (Globais) -->
 
     <!-- Título Principal (Poppins Bold) -->
     <style name="TextAppearance.Aurora.Title" parent="TextAppearance.MaterialComponents.Headline5">

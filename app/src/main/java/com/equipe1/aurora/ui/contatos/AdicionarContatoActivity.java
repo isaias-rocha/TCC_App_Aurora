@@ -1,4 +1,4 @@
-package com.equipe1.aurora;
+package com.equipe1.aurora.ui.contatos;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.equipe1.aurora.R;
 
 public class AdicionarContatoActivity extends AppCompatActivity {
 

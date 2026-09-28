@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tema_do_aplicativo_alternar_entre_tema_claro_e_escuro">Tema do Aplicativo. Alternar entre tema claro e escuro.</string>
+    <string name="app_name">App Aurora</string>
+    <string name="menu_home">Comenzar</string>
+    <string name="menu_mapa">Mapa</string>
+    <string name="menu_contatos">Contactos</string>
+    <string name="menu_perfil">Perfil</string>
+</resources>

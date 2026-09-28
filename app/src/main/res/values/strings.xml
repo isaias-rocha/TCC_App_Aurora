@@ -3,9 +3,9 @@
 
 
     <!-- Textos do Menu de Navegação Inferior -->
-    <string name="menu_home">Home</string>
+    <string name="menu_home">Início</string>
     <string name="menu_mapa">Mapa</string>
     <string name="menu_contatos">Contatos</string>
     <string name="menu_perfil">Perfil</string>
-    <string name="cd_btn_sos">Emergência SOS</string>
+    <string name="tema_do_aplicativo_alternar_entre_tema_claro_e_escuro">Tema do Aplicativo. Alternar entre tema claro e escuro.</string>
 </resources>
