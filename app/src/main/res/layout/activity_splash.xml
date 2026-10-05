@@ -21,7 +21,7 @@
             android:id="@+id/iv_logo"
             android:layout_width="260dp"
             android:layout_height="260dp"
-            android:contentDescription="Logotipo do aplicativo Aurora"
+            android:contentDescription="@string/logotipo_aurora"
             android:src="@drawable/logo_aurora" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
@@ -52,14 +52,14 @@
             style="@style/TextAppearance.Aurora.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Desenvolvido por" />
+            android:text="@string/desenvolvido_por" />
 
         <ImageView
             android:id="@+id/iv_empresa"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="8dp"
-            android:contentDescription="Logotipo da empresa Eagle"
+            android:contentDescription="@string/logotipo_empresa_eagle"
             android:src="@drawable/empresa_eagle" />
 
     </LinearLayout>

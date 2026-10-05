@@ -7,21 +7,20 @@
     android:fillViewport="true"
     tools:context=".ui.auth.LoginActivity">
 
-
-    <!-- espaçamento externo na tela -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="24dp">
 
         <!-- BOTÃO VOLTAR -->
-        <ImageButton android:id="@+id/btn_voltar"
+        <ImageButton
+            android:id="@+id/btn_voltar"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginTop="16dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="Voltar para a tela anterior"
+            android:contentDescription="@string/common_voltar_tela_anterior"
             android:focusable="true"
             android:src="@drawable/ic_back"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,23 +28,25 @@
             app:tint="?android:attr/textColorPrimary" />
 
         <!-- LOGO -->
-        <ImageView android:id="@+id/iv_logoAurora"
+        <ImageView
+            android:id="@+id/iv_logoAurora"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_marginTop="36dp"
-            android:contentDescription="Logo Aurora"
+            android:contentDescription="@string/logotipo_aurora"
             android:src="@drawable/logo_aurora"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_voltar" />
 
         <!-- TÍTULOS -->
-        <TextView android:id="@+id/tv_titulo_login"
+        <TextView
+            android:id="@+id/tv_titulo_login"
             style="@style/TextAppearance.Aurora.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="Bem-vindo de volta!"
+            android:text="@string/login_titulo"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -53,12 +54,13 @@
             app:layout_constraintTop_toBottomOf="@id/iv_logoAurora" />
 
         <!-- SUBTÍTULOS -->
-        <TextView android:id="@+id/tv_subtitulo_login"
+        <TextView
+            android:id="@+id/tv_subtitulo_login"
             style="@style/TextAppearance.Aurora.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Faça login para continuar"
+            android:text="@string/login_subtitulo"
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -66,41 +68,46 @@
             app:layout_constraintTop_toBottomOf="@id/tv_titulo_login" />
 
         <!-- CAMPO EMAIL -->
-        <com.google.android.material.textfield.TextInputLayout android:id="@+id/til_email"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_email"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
-            android:hint="E-mail"
+            android:hint="@string/login_hint_email"
             android:textColorHint="?android:attr/textColorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_subtitulo_login">
 
-            <com.google.android.material.textfield.TextInputEditText android:id="@+id/et_email"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_email"
                 style="@style/TextAppearance.Aurora.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
                 android:drawableEnd="@drawable/ic_email"
                 android:drawableTint="?android:attr/textColorSecondary"
+                android:inputType="textEmailAddress"
                 android:textColor="?android:attr/textColorPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- CAMPO EMAIL -->
-        <com.google.android.material.textfield.TextInputLayout android:id="@+id/til_senha"
+        <!-- CAMPO SENHA -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_senha"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Senha"
+            android:hint="@string/login_hint_senha"
             android:textColorHint="?android:attr/textColorSecondary"
+            app:endIconContentDescription="@string/common_desc_alternar_senha"
             app:endIconMode="password_toggle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/til_email">
 
-            <com.google.android.material.textfield.TextInputEditText android:id="@+id/et_senha"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_senha"
                 style="@style/TextAppearance.Aurora.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -108,12 +115,14 @@
                 android:textColor="?android:attr/textColorPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- CHECK - guardar e lembrar os dados na pasta do dispositivo -->
-        <CheckBox android:id="@+id/check_lembrarCredenciais"
+        <!-- CHECK - Lembrar Credenciais -->
+        <CheckBox
+            android:id="@+id/check_lembrarCredenciais"
             style="@style/TextAppearance.Aurora.Body"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lembrar Credenciais"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:text="@string/login_lembrar_credenciais"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@id/btn_logar"
             app:layout_constraintEnd_toStartOf="@id/tv_ir_para_esqueceuSenha"
@@ -122,31 +131,34 @@
             app:layout_constraintTop_toBottomOf="@id/til_senha"
             app:layout_constraintVertical_bias="0.0" />
 
-
         <!-- ESQUECEU A SENHA -->
-        <TextView android:id="@+id/tv_ir_para_esqueceuSenha"
+        <TextView
+            android:id="@+id/tv_ir_para_esqueceuSenha"
             style="@style/TextAppearance.Aurora.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:text="Esqueceu a senha?"
+            android:minHeight="48dp"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/login_esqueceu_senha"
             android:textColor="?attr/colorPrimary"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/til_senha"
             app:layout_constraintBottom_toTopOf="@id/btn_logar"
-            />
-
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/til_senha" />
 
         <!-- BOTÕES -->
-            <com.google.android.material.button.MaterialButton android:id="@+id/btn_logar"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_logar"
             style="@style/TextAppearance.Aurora.Body"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginTop="36dp"
             android:backgroundTint="?attr/colorPrimary"
-            android:text="Entrar"
+            android:contentDescription="@string/login_desc_btn_entrar"
+            android:text="@string/login_btn_entrar"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="16sp"
@@ -155,13 +167,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_ir_para_esqueceuSenha" />
 
-        <com.google.android.material.button.MaterialButton android:id="@+id/btn_logar_google"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_logar_google"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginTop="16dp"
             android:backgroundTint="?attr/colorSurface"
-            android:text="Entrar com Google"
+            android:contentDescription="@string/login_desc_btn_google"
+            android:text="@string/login_btn_google"
             android:textAllCaps="false"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="16sp"
@@ -175,12 +189,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_logar" />
 
-
-    <!-- LINK PARA REGISTRO -->
+        <!-- LINK PARA CADASTRO -->
         <LinearLayout
+            android:id="@+id/container_criar_conta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:gravity="center"
             android:layout_marginTop="32dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="@string/login_desc_container_criar_conta"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -193,7 +212,8 @@
                 style="@style/TextAppearance.Aurora.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Não tem uma conta? "
+                android:importantForAccessibility="no"
+                android:text="@string/login_nao_tem_conta"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="14sp" />
 
@@ -202,7 +222,9 @@
                 style="@style/TextAppearance.Aurora.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Criar conta"
+                android:layout_marginStart="10dp"
+                android:importantForAccessibility="no"
+                android:text="@string/login_criar_conta"
                 android:textColor="?attr/colorPrimary"
                 android:textSize="14sp"
                 android:textStyle="bold" />

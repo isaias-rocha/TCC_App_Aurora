@@ -1,4 +1,4 @@
-package com.equipe1.aurora.ui.config;
+package com.equipe1.aurora.ui.acessibilidade;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,17 +12,19 @@ import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.equipe1.aurora.databinding.ActivityAccessibilidadeBinding;
+import com.google.android.material.slider.Slider;
 
 /**
  * Activity responsável por gerenciar e aplicar os ajustes de acessibilidade e feedback visual/tátil.
  */
-public class AccessibilidadeActivity extends AppCompatActivity {
+public class AcessibilidadeActivity extends AppCompatActivity {
 
     // CHAVES DE ARMAZENAMENTO (SharedPreferences)
     private static final String PREFS_NAME = "AuroraAccessibilityPrefs";
@@ -46,7 +48,7 @@ public class AccessibilidadeActivity extends AppCompatActivity {
 
         float fontScale = obterEscalaFonte(valorSlider);
 
-        Configuration overrideConfig = newBase.getResources().getConfiguration();
+        Configuration overrideConfig = new Configuration(newBase.getResources().getConfiguration());
         overrideConfig.fontScale = fontScale;
 
         Context context = newBase.createConfigurationContext(overrideConfig);
@@ -68,11 +70,26 @@ public class AccessibilidadeActivity extends AppCompatActivity {
         // MÉTODOS DE INICIALIZAÇÃO DA TELA
         carregarEstadosIniciais();
         configurarListeners();
+        configurarWindowInsets();
+    }
 
-        // Ajusta o padding dinâmico de acordo com as barras de sistema do Android
+    /**
+     * Ajusta o padding dinâmico sem sobrescrever o padding original do layout XML.
+     */
+    private void configurarWindowInsets() {
+        int initialPaddingLeft = binding.accessibility.getPaddingLeft();
+        int initialPaddingTop = binding.accessibility.getPaddingTop();
+        int initialPaddingRight = binding.accessibility.getPaddingRight();
+        int initialPaddingBottom = binding.accessibility.getPaddingBottom();
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.accessibility, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(
+                    initialPaddingLeft + systemBars.left,
+                    initialPaddingTop + systemBars.top,
+                    initialPaddingRight + systemBars.right,
+                    initialPaddingBottom + systemBars.bottom
+            );
             return insets;
         });
     }
@@ -106,7 +123,7 @@ public class AccessibilidadeActivity extends AppCompatActivity {
             salvarPreferencia(KEY_ALTO_CONTRASTE, novoEstado);
 
             anunciarParaTalkBack(v, "Modo de alto contraste " + (novoEstado ? "ativado" : "desativado"));
-            recreate(); // Recarrega a atividade para aplicar a mudança de estilo/tema
+            recreate();
         });
 
         // 2. Reduzir Animações
@@ -119,15 +136,22 @@ public class AccessibilidadeActivity extends AppCompatActivity {
         });
 
         // 3. Tamanho da Fonte (Slider)
-        binding.sliderTamanhoFonte.addOnChangeListener((slider, value, fromUser) -> {
-            if (fromUser) {
+        binding.sliderTamanhoFonte.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
+            @Override
+            public void onStartTrackingTouch(@NonNull Slider slider) {
+                // Nenhuma ação necessária ao iniciar o toque
+            }
+
+            @Override
+            public void onStopTrackingTouch(@NonNull Slider slider) {
+                float value = slider.getValue();
                 preferences.edit().putFloat(KEY_TAMANHO_FONTE, value).apply();
 
                 String[] niveis = {"Pequeno", "Padrão", "Grande", "Muito Grande"};
                 int index = Math.min((int) value, niveis.length - 1);
 
                 anunciarParaTalkBack(slider, "Tamanho da fonte alterado para " + niveis[index]);
-                recreate(); // Recarrega a tela para recalcular os tamanhos com base no fontScale
+                recreate();
             }
         });
 

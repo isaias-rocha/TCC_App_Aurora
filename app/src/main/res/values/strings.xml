@@ -1,11 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- =================================================================== -->
+    <!-- GERAL & NAVEGAÇÃO                                                   -->
+    <!-- =================================================================== -->
     <string name="app_name">App Aurora</string>
+    <string name="desenvolvido_por">Desenvolvido por</string>
+    <string name="logotipo_aurora">Logotipo do aplicativo aurora</string>
+    <string name="logotipo_empresa_eagle">Logotipo empresa eagle</string>
 
 
-    <!-- Textos do Menu de Navegação Inferior -->
+    <!-- Menu de Navegação Inferior -->
     <string name="menu_home">Início</string>
     <string name="menu_mapa">Mapa</string>
     <string name="menu_contatos">Contatos</string>
     <string name="menu_perfil">Perfil</string>
-    <string name="tema_do_aplicativo_alternar_entre_tema_claro_e_escuro">Tema do Aplicativo. Alternar entre tema claro e escuro.</string>
+
+    <!-- Comum / Compartilhado -->
+    <string name="common_voltar_tela_anterior">Voltar para a tela anterior</string>
+    <string name="common_desc_alternar_senha">Alternar visibilidade da senha</string>
+
+    <!-- =================================================================== -->
+    <!-- TELA SPLASH                                                         -->
+    <!-- =================================================================== -->
+    <string name="splash_logotipo_empresa_eagle">Logotipo da empresa Eagle</string>
+
+    <!-- =================================================================== -->
+    <!-- TELA DE LOGIN                                                       -->
+    <!-- =================================================================== -->
+    <!-- Títulos e Textos -->
+    <string name="login_titulo">Bem-vindo de volta!</string>
+    <string name="login_subtitulo">Faça o login para continuar</string>
+
+    <!-- Campos de Entrada (Hints) -->
+    <string name="login_hint_email">Digite o e-mail</string>
+    <string name="login_hint_senha">Digite sua senha</string>
+
+    <!-- Opções e Ações -->
+    <string name="login_lembrar_credenciais">Lembrar credenciais</string>
+    <string name="login_esqueceu_senha">Esqueceu a senha?</string>
+    <string name="login_btn_entrar">Entrar</string>
+    <string name="login_btn_google">Entrar com Google</string>
+
+    <!-- Link Cadastro -->
+    <string name="login_nao_tem_conta">Não tem uma conta?</string>
+    <string name="login_criar_conta">Criar conta</string>
+
+    <!-- Acessibilidade (TalkBack) - Login -->
+    <string name="login_desc_lembrar_credenciais">Opção para lembrar credenciais de acesso</string>
+    <string name="login_desc_esqueceu_senha">Clique aqui para recuperar a sua senha</string>
+    <string name="login_desc_btn_entrar">Botão para fazer login</string>
+    <string name="login_desc_btn_google">Botão para fazer login usando conta do Google</string>
+    <string name="login_desc_container_criar_conta">Ainda não tem uma conta? Clique aqui para criar</string>
+
+    <!-- =================================================================== -->
+    <!-- TELA DE CADASTRO                                                    -->
+    <!-- =================================================================== -->
+    <!-- Títulos e Textos -->
+    <string name="cadastro_titulo">Criar Conta</string>
+    <string name="cadastro_subtitulo">Preencha os dados abaixo</string>
+
+    <!-- Campos de Entrada (Hints) -->
+    <string name="cadastro_hint_nome">Nome Completo</string>
+    <string name="cadastro_hint_email">E-mail</string>
+    <string name="cadastro_hint_telefone">Telefone</string>
+    <string name="cadastro_hint_senha">Senha</string>
+    <string name="cadastro_hint_confirmar_senha">Confirmar senha</string>
+
+    <!-- Botões e Links -->
+    <string name="cadastro_btn_cadastrar">Cadastrar</string>
+    <string name="cadastro_ja_tem_conta">Já tem uma conta?</string>
+    <string name="cadastro_logar">Logar</string>
+
+    <!-- Acessibilidade (TalkBack) - Cadastro -->
+    <string name="cadastro_desc_nome">Campo para digitação do nome completo</string>
+    <string name="cadastro_desc_email">Campo para digitação do e-mail</string>
+    <string name="cadastro_desc_telefone">Campo para digitação do número de telefone com DDD</string>
+    <string name="cadastro_desc_criar_senha">Campo para criação da senha</string>
+    <string name="cadastro_desc_alternar_confirmar_senha">Alternar visibilidade da confirmação de senha</string>
+    <string name="cadastro_desc_confirmar_senha">Campo para confirmação da senha digitada acima</string>
+    <string name="cadastro_desc_btn_cadastrar">Botão para concluir o cadastro</string>
+    <string name="cadastro_desc_container_ir_para_login">Já tem uma conta? Clique aqui para fazer login</string>
+
 </resources>

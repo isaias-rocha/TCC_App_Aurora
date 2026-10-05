@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- GERAL & NAVEGAÇÃO -->
+    <string name="app_name">Приложение Aurora</string>
+    <string name="desenvolvido_por">Разработано</string>
+    <string name="logotipo_aurora">Логотип приложения Aurora</string>
+
+    <string name="menu_home">Главная</string>
+    <string name="menu_mapa">Карта</string>
+    <string name="menu_contatos">Контакты</string>
+    <string name="menu_perfil">Профиль</string>
+
+    <string name="common_voltar_tela_anterior">Вернуться на предыдущий экран</string>
+    <string name="common_desc_alternar_senha">Переключить видимость пароля</string>
+
+    <!-- SPLASH -->
+    <string name="splash_logotipo_empresa_eagle">Логотип компании Eagle</string>
+
+    <!-- LOGIN -->
+    <string name="login_titulo">С возвращением!</string>
+    <string name="login_subtitulo">Войдите, чтобы продолжить</string>
+
+    <string name="login_hint_email">Введите e-mail</string>
+    <string name="login_hint_senha">Введите пароль</string>
+
+    <string name="login_lembrar_credenciais">Запомнить данные</string>
+    <string name="login_esqueceu_senha">Забыли пароль?</string>
+    <string name="login_btn_entrar">Войти</string>
+    <string name="login_btn_google">Войти через Google</string>
+
+    <string name="login_nao_tem_conta">Нет аккаунта?</string>
+    <string name="login_criar_conta">Создать аккаунт</string>
+
+    <string name="login_desc_lembrar_credenciais">Параметр для сохранения учетных данных</string>
+    <string name="login_desc_esqueceu_senha">Нажмите здесь, чтобы восстановить пароль</string>
+    <string name="login_desc_btn_entrar">Кнопка для входа в систему</string>
+    <string name="login_desc_btn_google">Кнопка для входа через аккаунт Google</string>
+    <string name="login_desc_container_criar_conta">Ещё нет аккаунта? Нажмите здесь, чтобы создать</string>
+
+    <!-- CADASTRO -->
+    <string name="cadastro_titulo">Создать аккаунт</string>
+    <string name="cadastro_subtitulo">Заполните данные ниже</string>
+
+    <string name="cadastro_hint_nome">Полное имя</string>
+    <string name="cadastro_hint_email">E-mail</string>
+    <string name="cadastro_hint_telefone">Телефон</string>
+    <string name="cadastro_hint_senha">Пароль</string>
+    <string name="cadastro_hint_confirmar_senha">Подтвердите пароль</string>
+
+    <string name="cadastro_btn_cadastrar">Зарегистрироваться</string>
+    <string name="cadastro_ja_tem_conta">Уже есть аккаунт?</string>
+    <string name="cadastro_logar">Войти</string>
+
+    <string name="cadastro_desc_nome">Поле для ввода полного имени</string>
+    <string name="cadastro_desc_email">Поле для ввода электронной почты</string>
+    <string name="cadastro_desc_telefone">Поле для ввода номера телефона с кодом</string>
+    <string name="cadastro_desc_criar_senha">Поле для создания пароля</string>
+    <string name="cadastro_desc_alternar_confirmar_senha">Переключить видимость подтверждения пароля</string>
+    <string name="cadastro_desc_confirmar_senha">Поле для подтверждения введенного выше пароля</string>
+    <string name="cadastro_desc_btn_cadastrar">Кнопка для завершения регистрации</string>
+    <string name="cadastro_desc_container_ir_para_login">Уже есть аккаунт? Нажмите здесь, чтобы войти</string>
+    <string name="logotipo_empresa_eagle">Logotipo empresa eagle</string>
+
+</resources>

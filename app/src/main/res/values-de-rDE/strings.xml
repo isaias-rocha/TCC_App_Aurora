@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- GERAL & NAVEGAÇÃO -->
+    <string name="app_name">Aurora App</string>
+    <string name="desenvolvido_por">Entwickelt von</string>
+    <string name="logotipo_aurora">Logo der Aurora-App</string>
+
+    <string name="menu_home">Startseite</string>
+    <string name="menu_mapa">Karte</string>
+    <string name="menu_contatos">Kontakte</string>
+    <string name="menu_perfil">Profil</string>
+
+    <string name="common_voltar_tela_anterior">Zurück zum vorherigen Bildschirm</string>
+    <string name="common_desc_alternar_senha">Passwortsichtbarkeit umschalten</string>
+
+    <!-- SPLASH -->
+    <string name="splash_logotipo_empresa_eagle">Logo der Firma Eagle</string>
+
+    <!-- LOGIN -->
+    <string name="login_titulo">Willkommen zurück!</string>
+    <string name="login_subtitulo">Melden Sie sich an, um fortzufahren</string>
+
+    <string name="login_hint_email">E-Mail eingeben</string>
+    <string name="login_hint_senha">Passwort eingeben</string>
+
+    <string name="login_lembrar_credenciais">Anmeldedaten merken</string>
+    <string name="login_esqueceu_senha">Passwort vergessen?</string>
+    <string name="login_btn_entrar">Anmelden</string>
+    <string name="login_btn_google">Mit Google anmelden</string>
+
+    <string name="login_nao_tem_conta">Noch kein Konto?</string>
+    <string name="login_criar_conta">Konto erstellen</string>
+
+    <string name="login_desc_lembrar_credenciais">Option zum Speichern der Zugangsdaten</string>
+    <string name="login_desc_esqueceu_senha">Hier klicken, um Ihr Passwort wiederherzustellen</string>
+    <string name="login_desc_btn_entrar">Schaltfläche zum Anmelden</string>
+    <string name="login_desc_btn_google">Schaltfläche zur Anmeldung mit einem Google-Konto</string>
+    <string name="login_desc_container_criar_conta">Noch kein Konto? Hier klicken, um eines zu erstellen</string>
+
+    <!-- CADASTRO -->
+    <string name="cadastro_titulo">Konto erstellen</string>
+    <string name="cadastro_subtitulo">Füllen Sie die folgenden Daten aus</string>
+
+    <string name="cadastro_hint_nome">Vollständiger Name</string>
+    <string name="cadastro_hint_email">E-Mail-Adresse</string>
+    <string name="cadastro_hint_telefone">Telefonnummer</string>
+    <string name="cadastro_hint_senha">Passwort</string>
+    <string name="cadastro_hint_confirmar_senha">Passwort bestätigen</string>
+
+    <string name="cadastro_btn_cadastrar">Registrieren</string>
+    <string name="cadastro_ja_tem_conta">Bereits ein Konto vorhanden?</string>
+    <string name="cadastro_logar">Anmelden</string>
+
+    <string name="cadastro_desc_nome">Feld zur Eingabe des vollständigen Namens</string>
+    <string name="cadastro_desc_email">Feld zur Eingabe der E-Mail-Adresse</string>
+    <string name="cadastro_desc_telefone">Feld zur Eingabe der Telefonnummer mit Vorwahl</string>
+    <string name="cadastro_desc_criar_senha">Feld zur Erstellung des Passworts</string>
+    <string name="cadastro_desc_alternar_confirmar_senha">Umschalten der Passworteingabebestätigung</string>
+    <string name="cadastro_desc_confirmar_senha">Feld zur Bestätigung des oben eingegebenen Passworts</string>
+    <string name="cadastro_desc_btn_cadastrar">Schaltfläche zum Abschluss der Registrierung</string>
+    <string name="cadastro_desc_container_ir_para_login">Bereits ein Konto? Hier klicken zum Anmelden</string>
+    <string name="logotipo_empresa_eagle">Logotipo empresa eagle</string>
+
+</resources>

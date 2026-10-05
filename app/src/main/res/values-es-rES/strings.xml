@@ -1,9 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tema_do_aplicativo_alternar_entre_tema_claro_e_escuro">Tema do Aplicativo. Alternar entre tema claro e escuro.</string>
+
+    <!-- GERAL & NAVEGAÇÃO -->
     <string name="app_name">App Aurora</string>
-    <string name="menu_home">Comenzar</string>
+    <string name="desenvolvido_por">Desarrollado por</string>
+    <string name="logotipo_aurora">Logotipo de la aplicación Aurora</string>
+
+    <string name="menu_home">Inicio</string>
     <string name="menu_mapa">Mapa</string>
     <string name="menu_contatos">Contactos</string>
     <string name="menu_perfil">Perfil</string>
+
+    <string name="common_voltar_tela_anterior">Volver a la pantalla anterior</string>
+    <string name="common_desc_alternar_senha">Alternar visibilidad de la contraseña</string>
+
+    <!-- SPLASH -->
+    <string name="splash_logotipo_empresa_eagle">Logotipo de la empresa Eagle</string>
+
+    <!-- LOGIN -->
+    <string name="login_titulo">¡De nuevo por aquí!</string>
+    <string name="login_subtitulo">Inicia sesión para continuar</string>
+
+    <string name="login_hint_email">Introduce tu correo electrónico</string>
+    <string name="login_hint_senha">Introduce tu contraseña</string>
+
+    <string name="login_lembrar_credenciais">Recordar credenciales</string>
+    <string name="login_esqueceu_senha">¿Has olvidado la contraseña?</string>
+    <string name="login_btn_entrar">Entrar</string>
+    <string name="login_btn_google">Iniciar sesión con Google</string>
+
+    <string name="login_nao_tem_conta">¿No tienes una cuenta?</string>
+    <string name="login_criar_conta">Crear cuenta</string>
+
+    <string name="login_desc_lembrar_credenciais">Opción para recordar las credenciales de acceso</string>
+    <string name="login_desc_esqueceu_senha">Haz clic aquí para recuperar tu contraseña</string>
+    <string name="login_desc_btn_entrar">Botón para iniciar sesión</string>
+    <string name="login_desc_btn_google">Botón para iniciar sesión con una cuenta de Google</string>
+    <string name="login_desc_container_criar_conta">¿Aún no tienes una cuenta? Haz clic aquí para crear una</string>
+
+    <!-- CADASTRO -->
+    <string name="cadastro_titulo">Crear cuenta</string>
+    <string name="cadastro_subtitulo">Completa los datos a continuación</string>
+
+    <string name="cadastro_hint_nome">Nombre completo</string>
+    <string name="cadastro_hint_email">Correo electrónico</string>
+    <string name="cadastro_hint_telefone">Teléfono</string>
+    <string name="cadastro_hint_senha">Contraseña</string>
+    <string name="cadastro_hint_confirmar_senha">Confirmar contraseña</string>
+
+    <string name="cadastro_btn_cadastrar">Registrarse</string>
+    <string name="cadastro_ja_tem_conta">¿Ya tienes una cuenta?</string>
+    <string name="cadastro_logar">Iniciar sesión</string>
+
+    <string name="cadastro_desc_nome">Campo para escribir el nombre completo</string>
+    <string name="cadastro_desc_email">Campo para escribir el correo electrónico</string>
+    <string name="cadastro_desc_telefone">Campo para escribir el número de teléfono con prefijo</string>
+    <string name="cadastro_desc_criar_senha">Campo para crear la contraseña</string>
+    <string name="cadastro_desc_alternar_confirmar_senha">Alternar visibilidad de la confirmación de contraseña</string>
+    <string name="cadastro_desc_confirmar_senha">Campo para confirmar la contraseña escrita arriba</string>
+    <string name="cadastro_desc_btn_cadastrar">Botón para completar el registro</string>
+    <string name="cadastro_desc_container_ir_para_login">¿Ya tienes una cuenta? Haz clic aquí para iniciar sesión</string>
+    <string name="logotipo_empresa_eagle">Logotipo empresa eagle</string>
+
 </resources>

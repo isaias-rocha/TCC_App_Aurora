@@ -1,9 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tema_do_aplicativo_alternar_entre_tema_claro_e_escuro">Tema do Aplicativo. Alternar entre tema claro e escuro.</string>
-    <string name="app_name">App Aurora</string>
+
+    <!-- GERAL & NAVEGAÇÃO -->
+    <string name="app_name">Aurora App</string>
+    <string name="desenvolvido_por">Developed by</string>
+    <string name="logotipo_aurora">Aurora app logo</string>
+
     <string name="menu_home">Home</string>
     <string name="menu_mapa">Map</string>
     <string name="menu_contatos">Contacts</string>
     <string name="menu_perfil">Profile</string>
+
+    <string name="common_voltar_tela_anterior">Go back to the previous screen</string>
+    <string name="common_desc_alternar_senha">Toggle password visibility</string>
+
+    <!-- SPLASH -->
+    <string name="splash_logotipo_empresa_eagle">Eagle company logo</string>
+
+    <!-- LOGIN -->
+    <string name="login_titulo">Welcome back!</string>
+    <string name="login_subtitulo">Log in to continue</string>
+
+    <string name="login_hint_email">Enter your email</string>
+    <string name="login_hint_senha">Enter your password</string>
+
+    <string name="login_lembrar_credenciais">Remember credentials</string>
+    <string name="login_esqueceu_senha">Forgot password?</string>
+    <string name="login_btn_entrar">Log In</string>
+    <string name="login_btn_google">Sign in with Google</string>
+
+    <string name="login_nao_tem_conta">Don\'t have an account?</string>
+    <string name="login_criar_conta">Create account</string>
+
+    <string name="login_desc_lembrar_credenciais">Option to remember access credentials</string>
+    <string name="login_desc_esqueceu_senha">Click here to recover your password</string>
+    <string name="login_desc_btn_entrar">Button to log in</string>
+    <string name="login_desc_btn_google">Button to sign in using a Google account</string>
+    <string name="login_desc_container_criar_conta">Don\'t have an account yet? Click here to create one</string>
+
+    <!-- CADASTRO -->
+    <string name="cadastro_titulo">Create Account</string>
+    <string name="cadastro_subtitulo">Fill in the details below</string>
+
+    <string name="cadastro_hint_nome">Full Name</string>
+    <string name="cadastro_hint_email">Email</string>
+    <string name="cadastro_hint_telefone">Phone</string>
+    <string name="cadastro_hint_senha">Password</string>
+    <string name="cadastro_hint_confirmar_senha">Confirm password</string>
+
+    <string name="cadastro_btn_cadastrar">Register</string>
+    <string name="cadastro_ja_tem_conta">Already have an account?</string>
+    <string name="cadastro_logar">Log in</string>
+
+    <string name="cadastro_desc_nome">Field for typing full name</string>
+    <string name="cadastro_desc_email">Field for typing email</string>
+    <string name="cadastro_desc_telefone">Field for typing phone number with area code</string>
+    <string name="cadastro_desc_criar_senha">Field for creating password</string>
+    <string name="cadastro_desc_alternar_confirmar_senha">Toggle password confirmation visibility</string>
+    <string name="cadastro_desc_confirmar_senha">Field for confirming the password typed above</string>
+    <string name="cadastro_desc_btn_cadastrar">Button to complete registration</string>
+    <string name="cadastro_desc_container_ir_para_login">Already have an account? Click here to log in</string>
+    <string name="logotipo_empresa_eagle">Logotipo empresa eagle</string>
+
 </resources>

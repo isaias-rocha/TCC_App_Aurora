@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -18,6 +19,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.equipe1.aurora.databinding.ActivityConfiguracoesBinding;
 import com.equipe1.aurora.ui.planos.PlanosAssinaturaActivity;
+
+// Certifique-se de importar a sua AcessibilidadeActivity real abaixo:
+import com.equipe1.aurora.ui.acessibilidade.AcessibilidadeActivity;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 /**
@@ -50,11 +55,26 @@ public class ConfigActivity extends AppCompatActivity {
         // Mapeamento e inicialização de estados e eventos
         carregarEstadosIniciais();
         configurarListeners();
+        configurarWindowInsets();
+    }
 
-        // Ajuste de padding para as barras do sistema
+    /**
+     * Ajusta os insets do sistema (status bar e navigation bar) preservando o padding original do layout.
+     */
+    private void configurarWindowInsets() {
+        int initialPaddingLeft = binding.layoutConfig.getPaddingLeft();
+        int initialPaddingTop = binding.layoutConfig.getPaddingTop();
+        int initialPaddingRight = binding.layoutConfig.getPaddingRight();
+        int initialPaddingBottom = binding.layoutConfig.getPaddingBottom();
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.layoutConfig, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(
+                    initialPaddingLeft + systemBars.left,
+                    initialPaddingTop + systemBars.top,
+                    initialPaddingRight + systemBars.right,
+                    initialPaddingBottom + systemBars.bottom
+            );
             return insets;
         });
     }
@@ -75,11 +95,17 @@ public class ConfigActivity extends AppCompatActivity {
         binding.btnVoltar.setOnClickListener(v -> finish());
 
         // Switches de Notificação e Localização
-        binding.switchNotificacoes.setOnCheckedChangeListener((buttonView, isChecked) ->
-                preferences.edit().putBoolean(KEY_NOTIFICACOES, isChecked).apply());
+        binding.switchNotificacoes.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            preferences.edit().putBoolean(KEY_NOTIFICACOES, isChecked).apply();
+            String status = isChecked ? "Notificações ativadas" : "Notificações desativadas";
+            buttonView.announceForAccessibility(status);
+        });
 
-        binding.switchLocalizacao.setOnCheckedChangeListener((buttonView, isChecked) ->
-                preferences.edit().putBoolean(KEY_LOCALIZACAO, isChecked).apply());
+        binding.switchLocalizacao.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            preferences.edit().putBoolean(KEY_LOCALIZACAO, isChecked).apply();
+            String status = isChecked ? "Compartilhamento de localização ativado" : "Compartilhamento de localização desativado";
+            buttonView.announceForAccessibility(status);
+        });
 
         // 1. PLANO DE ASSINATURA
         binding.menuPlanoAssinatura.setOnClickListener(v -> {
@@ -87,9 +113,9 @@ public class ConfigActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // 2. ACESSIBILIDADE
+        // 2. ACESSIBILIDADE (CORRIGIDO)
         binding.menuAcessibilidade.setOnClickListener(v -> {
-            Intent intent = new Intent(ConfigActivity.this, AccessibilidadeActivity.class);
+            Intent intent = new Intent(ConfigActivity.this, AcessibilidadeActivity.class);
             startActivity(intent);
         });
 
@@ -108,8 +134,22 @@ public class ConfigActivity extends AppCompatActivity {
        ============================================================================================ */
 
     private void abrirDialogoIdioma() {
-        String[] idiomas = {"Português (Brasil)", "English", "Español"};
-        String[] tagsLinguagem = {"pt-BR", "en", "es"};
+        // Mapeamento dos 5 idiomas suportados nas suas pastas res/values-xx-rXX
+        String[] idiomas = {
+                "Português (Brasil)",
+                "English (US)",
+                "Español (España)",
+                "Deutsch (Deutschland)",
+                "Русский (Россия)"
+        };
+
+        String[] tagsLinguagem = {
+                "pt-BR",
+                "en-US",
+                "es-ES",
+                "de-DE",
+                "ru-RU"
+        };
 
         new MaterialAlertDialogBuilder(this)
                 .setTitle("Selecionar Idioma")
@@ -118,6 +158,7 @@ public class ConfigActivity extends AppCompatActivity {
 
                     preferences.edit().putString(KEY_IDIOMA, tagSelecionada).apply();
 
+                    // Aplica o novo idioma globalmente no app via AppCompatDelegate
                     LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(tagSelecionada);
                     AppCompatDelegate.setApplicationLocales(appLocale);
 
@@ -150,10 +191,17 @@ public class ConfigActivity extends AppCompatActivity {
 
     private String obterVersaoDoApp() {
         try {
-            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            return pInfo.versionName;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                PackageInfo pInfo = getPackageManager().getPackageInfo(
+                        getPackageName(),
+                        PackageManager.PackageInfoFlags.of(0)
+                );
+                return pInfo.versionName;
+            } else {
+                PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                return pInfo.versionName;
+            }
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
             return "1.0.0";
         }
     }
