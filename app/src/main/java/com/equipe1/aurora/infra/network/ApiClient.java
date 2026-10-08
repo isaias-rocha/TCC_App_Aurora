@@ -1,4 +1,4 @@
-package com.equipe1.aurora.domain.model;
+package com.equipe1.aurora.infra.network;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

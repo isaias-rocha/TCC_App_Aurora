@@ -99,7 +99,6 @@ public class AcessibilidadeActivity extends AppCompatActivity {
      */
     private void carregarEstadosIniciais() {
         binding.switchAltoContraste.setChecked(preferences.getBoolean(KEY_ALTO_CONTRASTE, false));
-        binding.switchReduzirAnimacoes.setChecked(preferences.getBoolean(KEY_REDUZIR_ANIMACOES, false));
         binding.sliderTamanhoFonte.setValue(preferences.getFloat(KEY_TAMANHO_FONTE, 1.0f));
         binding.switchFeedbackTatil.setChecked(preferences.getBoolean(KEY_FEEDBACK_TATIL, true));
 
@@ -126,14 +125,6 @@ public class AcessibilidadeActivity extends AppCompatActivity {
             recreate();
         });
 
-        // 2. Reduzir Animações
-        binding.rowReduzirAnimacoes.setOnClickListener(v -> {
-            boolean novoEstado = !binding.switchReduzirAnimacoes.isChecked();
-            binding.switchReduzirAnimacoes.setChecked(novoEstado);
-            salvarPreferencia(KEY_REDUZIR_ANIMACOES, novoEstado);
-
-            anunciarParaTalkBack(v, "Redução de animações " + (novoEstado ? "ativada" : "desativada"));
-        });
 
         // 3. Tamanho da Fonte (Slider)
         binding.sliderTamanhoFonte.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {

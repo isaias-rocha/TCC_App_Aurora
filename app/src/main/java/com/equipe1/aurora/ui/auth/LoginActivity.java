@@ -17,16 +17,13 @@ import com.equipe1.aurora.R;
 import com.equipe1.aurora.ui.main.MainActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
 public class LoginActivity extends AppCompatActivity {
 
-    // --- Componentes de UI ---
     private ImageButton btnVoltar;
     private TextInputEditText etEmail, etSenha;
     private CheckBox checkLembrar;
@@ -35,9 +32,9 @@ public class LoginActivity extends AppCompatActivity {
 
     // --- MVVM e Google Auth ---
     private AuthViewModel viewModel;
-    private GoogleSignInClient googleSignInClient;
+   // private GoogleSignInClient googleSignInClient;
     private SharedPreferences preferences;
-
+/*
     // Launcher para capturar o resultado do Google Sign-In
     private final ActivityResultLauncher<Intent> googleSignInLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -53,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
             });
-
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         iniciarComponentes();
-        configurarGoogleSignIn();
+      //configurarGoogleSignIn();
         configurarObservadores();
         configurarCliques();
     }
@@ -103,12 +100,12 @@ public class LoginActivity extends AppCompatActivity {
 
             viewModel.realizarLogin(email, senha, checkLembrar.isChecked(), preferences);
         });
-
+/*
         btnLogarGoogle.setOnClickListener(v -> {
             Intent signInIntent = googleSignInClient.getSignInIntent();
             googleSignInLauncher.launch(signInIntent);
         });
-
+*/
         tvEsqueceuSenha.setOnClickListener(v ->
                 startActivity(new Intent(LoginActivity.this, EsqueceuSenhaActivity.class))
         );
@@ -117,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this, CadastroActivity.class))
         );
     }
-
+/*
     private void configurarGoogleSignIn() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("SEU_WEB_CLIENT_ID_AQUI")
@@ -125,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
     }
+ */
 
     private void iniciarComponentes() {
         btnVoltar = findViewById(R.id.btn_voltar);

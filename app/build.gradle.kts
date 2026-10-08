@@ -1,23 +1,12 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
 }
 
 android {
     namespace = "com.equipe1.aurora"
-    compileSdk {
-        version = release(37)
-
-        packaging {
-            resources.excludes.add("META-INF/INDEX.LIST")
-            resources.excludes.add("META-INF/DEPENDENCIES")
-            resources.excludes.add("META-INF/io.netty.versions.properties")
-        }
-
-
-        buildFeatures {
-            viewBinding = true
-        }
-    }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.equipe1.aurora"
@@ -29,42 +18,55 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
-        release {
-            optimization {
-                enable = false
-            }
+    packaging {
+        resources {
+            excludes.add("META-INF/INDEX.LIST")
+            excludes.add("META-INF/DEPENDENCIES")
+            excludes.add("META-INF/io.netty.versions.properties")
         }
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
-
 
 dependencies {
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
-    implementation(libs.firebase.appdistribution.gradle)
     implementation(libs.material)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation(libs.preference)
+    implementation(libs.core.splashscreen)
+
+    // Retrofit e Gson para comunicação com o backend
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+    // Serviços externos e Mapas
+    implementation(libs.osmdroid.android)
+    implementation(libs.play.services.auth)
+
+
+    // Testes
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-
-    // Retrofit e Gson para comunicação com o backend
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
-
-    implementation(libs.osmdroid.android)
-    implementation(libs.core.splashscreen)
-
-    implementation("com.google.android.gms:play-services-auth:21.0.0")
-    implementation("androidx.navigation:navigation-fragment:2.7.7")
-    implementation("androidx.navigation:navigation-ui:2.7.7")
 }

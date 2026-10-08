@@ -1,6 +1,6 @@
-package com.equipe1.aurora.domain.model;
+package com.equipe1.aurora.infra.network;
 
-import com.equipe1.aurora.domain.model.UsuarioDto;
+import com.equipe1.aurora.infra.dto.UsuarioDto;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;

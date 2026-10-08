@@ -6,13 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 1. MAPA (Fundo ocupando a tela inteira) -->
+    <!-- 1. COMPONENTE PRINCIPAL DO MAPA (OSMDROID) -->
     <org.osmdroid.views.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:contentDescription="Mapa interativo. Toque em um ponto para ver endereço, distância, tempo e coordenadas." />
 
-    <!-- 2. CAMADA SUPERIOR (Pesquisa + Filtros) -->
+    <!-- 2. CAMADA SUPERIOR (Barra de pesquisa e Filtros horizontais) -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,15 +21,16 @@
         android:focusable="false">
 
         <!-- BARRA DE PESQUISA -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardSearch"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_pesquisa"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="48dp"
-            app:cardBackgroundColor="#1E293B"
+            app:cardBackgroundColor="?attr/colorSurface"
             app:cardCornerRadius="24dp"
             app:cardElevation="6dp"
+            app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -38,38 +40,47 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="16dp">
+                android:paddingStart="16dp"
+                android:paddingEnd="4dp">
 
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
+                    android:importantForAccessibility="no"
                     android:src="@drawable/ic_pesquisa"
-                    app:tint="#ffff"/>
+                    app:tint="?android:attr/textColorPrimary" />
 
                 <EditText
                     android:id="@+id/et_pesquisa"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:autofillHints="postalAddress"
                     android:background="@null"
                     android:hint="Pesquisar no mapa..."
                     android:imeOptions="actionSearch"
+                    android:importantForAutofill="no"
                     android:inputType="text"
+                    android:minHeight="48dp"
                     android:paddingStart="12dp"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#94A3B8"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textColorHint="?android:attr/textColorHint"
                     android:textSize="14sp" />
 
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                <ImageButton
+                    android:id="@+id/btnVoz"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Pesquisar por voz"
+                    android:padding="10dp"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/ic_circulo_voz"
-                    app:tint="@color/cor_primaria"/>
-
+                    app:tint="@color/cor_segundaria" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <!-- Menu - FILTROS DE CATEGORIA -->
+        <!-- CARROSSEL DE FILTROS -->
         <HorizontalScrollView
             android:id="@+id/scrollFiltros"
             android:layout_width="0dp"
@@ -79,227 +90,330 @@
             android:scrollbars="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardSearch">
+            app:layout_constraintTop_toBottomOf="@id/card_pesquisa">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginStart="0dp"
                 android:orientation="horizontal"
                 android:paddingHorizontal="16dp">
 
-                <Button android:id="@+id/btn_filtro_todos"
+                <Button
+                    android:id="@+id/btn_filtro_todos"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:layout_marginEnd="8dp"
-                    android:backgroundTint="@color/cor_primaria"
+                    android:backgroundTint="@color/cor_segundaria"
                     android:text="Todos"
                     android:textAllCaps="false"
                     android:textColor="#FFFFFF"
                     android:textSize="12sp" />
 
-                <Button android:id="@+id/btn_filtro_rotas"
+                <Button
+                    android:id="@+id/btn_filtro_rotas"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:layout_marginEnd="8dp"
-                    android:backgroundTint="@color/on_surface_claro"
                     android:text="Rotas"
                     android:textAllCaps="false"
-                    android:textColor="#94A3B8"
+                    android:textColor="?android:attr/textColorPrimary"
                     android:textSize="12sp" />
 
-                <Button android:id="@+id/btn_filtro_amigos"
+                <Button
+                    android:id="@+id/btn_filtro_amigos"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:layout_marginEnd="8dp"
-                    android:backgroundTint="@color/on_surface_claro"
                     android:text="Amigos"
                     android:textAllCaps="false"
-                    android:textColor="#94A3B8"
+                    android:textColor="?android:attr/textColorPrimary"
                     android:textSize="12sp" />
 
-                <Button android:id="@+id/btn_filtro_grupos"
+                <Button
+                    android:id="@+id/btn_filtro_grupos"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:layout_marginEnd="8dp"
-                    android:backgroundTint="@color/on_surface_claro"
                     android:text="Grupos"
                     android:textAllCaps="false"
-                    android:textColor="#94A3B8"
+                    android:textColor="?android:attr/textColorPrimary"
                     android:textSize="12sp" />
             </LinearLayout>
         </HorizontalScrollView>
-
-
-        <!-- BOTÃO FLUTUANTE PARA VOLTAR À MINHA LOCALIZAÇÃO -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnMinhaLocalizacao"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="180dp"
-            android:contentDescription="Centralizar na Minha Localização"
-            app:backgroundTint="#1E293B"
-            app:fabCustomSize="48dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_myplaces"
-            app:tint="@color/cor_primaria" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- 3. EXPANDABLE BOTTOM SHEET (Painel Deslizante estilo Google Maps) -->
-    <androidx.cardview.widget.CardView
+    <!-- 3. BOTÃO MINHA LOCALIZAÇÃO -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnMinhaLocalizacao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:contentDescription="Centralizar na minha localização"
+        app:backgroundTint="?attr/colorSurface"
+        app:fabCustomSize="48dp"
+        app:layout_anchor="@id/bottomSheet"
+        app:layout_anchorGravity="top|end"
+        app:srcCompat="@drawable/ic_minha_localizacao"
+        app:tint="@color/cor_segundaria" />
+
+    <!-- 4. PAINEL INFERIOR DESLIZANTE (BOTTOM SHEET) -->
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:behavior_hideable="true"
-        app:behavior_peekHeight="170dp"
-        app:cardBackgroundColor="@color/on_bg_claro"
-        app:cardCornerRadius="8dp"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="200dp"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:cardCornerRadius="16dp"
         app:cardElevation="12dp"
+        app:strokeWidth="0dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:fillViewport="false"
+            android:overScrollMode="never">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingHorizontal="16dp"
-                android:paddingTop="8dp"
                 android:paddingBottom="24dp">
 
-                <!-- Barra de Arraste Superior (Pill Drag Handle) -->
-                <View
-                    android:layout_width="40dp"
-                    android:layout_height="5dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="12dp"
-                    android:background="#475569" />
-
-                <!-- FILTROS DE TRANSPORTE (Carro, A pé, Bicicleta) -->
-                <HorizontalScrollView
-                    android:id="@+id/scrollTransportModes"
+                <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+                    android:id="@+id/dragHandle"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:scrollbars="none">
+                    android:layout_height="wrap_content" />
 
-                </HorizontalScrollView>
-
-                <!-- CABEÇALHO DO CARD (Sempre Visível no Peek) -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/imgPin"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:src="@android:drawable/ic_menu_mapmode"
-                        app:tint="@color/cor_primaria" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="12dp"
-                        android:layout_toStartOf="@id/btnNavigate"
-                        android:layout_toEndOf="@id/imgPin"
-                        android:orientation="vertical">
-
-                        <!-- Nome do Local / Tempo e Distância ex: "1 min (70 m)" -->
-                        <TextView
-                            android:id="@+id/tv_nomeDoLocal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Toque em um ponto no mapa"
-                            android:textColor="#FFFFFF"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <!-- Bairro / Endereço / Status -->
-                        <TextView
-                            android:id="@+id/tv_localizacaoEstado"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Selecione um destino para navegar"
-                            android:textColor="#94A3B8"
-                            android:textSize="12sp" />
-
-                        <!-- Coordenadas Geográficas -->
-                        <TextView
-                            android:id="@+id/tv_coordenadas"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:fontFamily="sans-serif-medium"
-                            android:text="Lat: -- | Lon: --"
-                            android:textColor="#64748B"
-                            android:textSize="11sp" />
-
-                    </LinearLayout>
-
-                    <!-- Botão Flutuante de Rota -->
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/btnNavigate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:contentDescription="Calcular Rota"
-                        app:backgroundTint="@color/cor_primaria"
-                        app:fabCustomSize="48dp"
-                        app:srcCompat="@android:drawable/ic_menu_directions"
-                        app:tint="#FFFFFF" />
-
-                </RelativeLayout>
-
-                <!-- CONTEÚDO EXPANDIDO (Aparece quando o usuário arrasta o BottomSheet para cima) -->
+                <!-- SEÇÃO 1: CÍRCULOS DE CONTATOS -->
                 <LinearLayout
-                    android:id="@+id/layoutEtapasExpandido"
+                    android:id="@+id/layoutCirculos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:orientation="vertical"
                     android:visibility="visible">
 
-                    <View
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginBottom="16dp"
-                        android:background="#334155" />
+                        android:layout_height="wrap_content">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/tvTituloCirculos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:accessibilityHeading="true"
+                            android:text="Meus círculos"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnGerenciarCirculos"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:layout_alignParentEnd="true"
+                            android:contentDescription="Gerenciar círculos"
+                            android:text="Gerenciar"
+                            android:textAllCaps="false"
+                            android:textColor="@color/cor_segundaria" />
+                    </RelativeLayout>
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Etapas do Percurso"
-                        android:textColor="#FFFFFF"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.chip.ChipGroup
+                                android:id="@+id/chipGroupCirculos"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:selectionRequired="true"
+                                app:singleLine="true"
+                                app:singleSelection="true" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipNovoCirculo"
+                                style="@style/Widget.MaterialComponents.Chip.Action"
+                                android:layout_width="wrap_content"
+                                android:layout_height="48dp"
+                                android:text="Novo círculo"
+                                android:textColor="?android:attr/textColorPrimary"
+                                app:chipBackgroundColor="?attr/colorSurface"
+                                app:chipIcon="@android:drawable/ic_input_add"
+                                app:chipIconTint="?android:attr/textColorPrimary" />
+                        </LinearLayout>
+                    </HorizontalScrollView>
 
                     <TextView
-                        android:id="@+id/tvEtapasDetalhes"
+                        android:id="@+id/tvCirculoVazio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:lineSpacingExtra="6dp"
-                        android:text="• Deslize para cima para ver as instruções detalhadas após calcular a rota."
-                        android:textColor="#fff"
-                        android:textSize="13sp" />
+                        android:text="Nenhum membro neste círculo ainda."
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="13sp"
+                        android:visibility="gone" />
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvMembros"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:nestedScrollingEnabled="false"
+                        tools:itemCount="3"
+                        tools:listitem="@layout/item_membro" />
+                </LinearLayout>
+
+                <!-- SEÇÃO 2: INFORMAÇÕES DO LOCAL SELECIONADO -->
+                <LinearLayout
+                    android:id="@+id/layoutLocal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imgPin"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:importantForAccessibility="no"
+                            android:src="@android:drawable/ic_menu_mapmode"
+                            app:tint="@color/cor_segundaria" />
+
+                        <LinearLayout
+                            android:id="@+id/blocoInfoLocal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_toStartOf="@id/btnNavigate"
+                            android:layout_toEndOf="@id/imgPin"
+                            android:accessibilityLiveRegion="polite"
+                            android:focusable="true"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_nomeDoLocal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Toque em um ponto no mapa"
+                                android:textColor="?android:attr/textColorPrimary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tv_localizacaoEstado"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="Selecione um destino para navegar"
+                                android:textColor="?android:attr/textColorSecondary"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/tv_distanciaTempo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="-- min (-- km)"
+                                android:textColor="@color/cor_segundaria"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tv_coordenadas"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="Lat: -- | Lon: --"
+                                android:textColor="?android:attr/textColorSecondary"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/btnNavigate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:contentDescription="Calcular rota até o local selecionado"
+                            app:backgroundTint="@color/cor_segundaria"
+                            app:fabCustomSize="48dp"
+                            app:srcCompat="@drawable/ic_seguir_destino"
+                            app:tint="#FFFFFF" />
+                    </RelativeLayout>
+
+                    <!-- DETALHES DAS ETAPAS E MODOS DE TRANSPORTE -->
+                    <LinearLayout
+                        android:id="@+id/layoutEtapasExpandido"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginBottom="16dp"
+                            android:background="?android:attr/listDivider"
+                            android:importantForAccessibility="no" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:accessibilityHeading="true"
+                            android:text="Etapas do Percurso"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvEtapasDetalhes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:lineSpacingExtra="6dp"
+                            android:text="• Toque no botão de rota para ver as instruções detalhadas."
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textSize="13sp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnVoltarCirculos"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:minHeight="48dp"
+                            android:text="Voltar aos círculos"
+                            android:textAllCaps="false"
+                            android:textColor="?android:attr/textColorPrimary" />
+                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
-
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

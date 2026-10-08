@@ -8,8 +8,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.equipe1.aurora.domain.model.ApiClient;
-import com.equipe1.aurora.domain.model.UsuarioDto;
+import com.equipe1.aurora.infra.network.ApiClient;
+import com.equipe1.aurora.infra.dto.UsuarioDto;
 
 
 /**
@@ -288,7 +288,7 @@ public class AuthViewModel extends ViewModel {
         UsuarioDto novoUsuario = new UsuarioDto(nome, email, senha, numerosTelefone, "mock_firebase_uid");
 
         // Dispara a requisição assíncrona usando o Retrofit
-        com.equipe1.aurora.domain.model.ApiClient.getApiService().cadastrarUsuario(novoUsuario)
+        ApiClient.getApiService().cadastrarUsuario(novoUsuario)
                 .enqueue(new retrofit2.Callback<UsuarioDto>() {
                     @Override
                     public void onResponse(retrofit2.Call<UsuarioDto> call, retrofit2.Response<UsuarioDto> response) {

@@ -1,7 +1,7 @@
 package com.equipe1.aurora.ui.mapa;
 
-// --- IMPORTS DO ANDROID E MATERIAL DESIGN ---
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -18,23 +18,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.equipe1.aurora.domain.model.Circulo;
+import com.equipe1.aurora.domain.model.Membro;
+import com.equipe1.aurora.ui.circulos.MembroAdapter;
 import com.equipe1.aurora.R;
-// Importação da classe gerada automaticamente a partir do layout XML
 import com.equipe1.aurora.databinding.FragmentMapaBinding;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.chip.Chip;
 
-// --- IMPORTS DO MAPA (OSMDROID) ---
+import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -46,7 +52,6 @@ import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-// --- IMPORTS DE REDE E MANIPULAÇÃO DE JSON ---
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -58,84 +63,100 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Fragment responsável pela exibição e interação com o mapa OSMDroid,
+ * cálculo de rotas via OSRM e visualização de membros do círculo.
+ */
 public class MapaFragment extends Fragment {
-    // =========================================================================
-    // 1. ATRIBUTOS E VARIÁVEIS DE ESTADO
-    // =========================================================================
 
-    // Objeto que conecta o código Java diretamente aos elementos da tela (XML)
+    // --- ATRIBUTOS E GERENCIAMENTO DE ESTADO ---
     private FragmentMapaBinding vinculacaoLayout;
-
-    // Componentes principais do mapa
+    private MapaViewModel viewModel;
     private MapView mapa;
-    private MyLocationNewOverlay marcadorMinhaLocalizacao; // Ponto indicando onde o usuário está
-    private Marker marcadorDestinoSelecionado; // Alfinete indicando o destino
 
-    // Listas para armazenar os dados do trajeto (OSRM)
-    private final List<Polyline> linhasDesenhadasDaRota = new ArrayList<>(); // Desenhos das linhas no mapa
-    private final List<JSONObject> listaDadosRotasJson = new ArrayList<>(); // Dados brutos recebidos da internet
+    private MyLocationNewOverlay marcadorMinhaLocalizacao;
+    private Marker marcadorDestinoSelecionado;
 
-    // Controles de estado da navegação
-    private boolean estaNavegandoAtivamente = false; // Verifica se o usuário já apertou para iniciar a rota
-    private String perfilTransporteAtual = "walking"; // Pode ser "driving" (carro), "walking" (pé) ou "bike" (bicicleta)
-
-    // Controlador do painel inferior (BottomSheet) que sobe na tela
+    private final List<Polyline> linhasDesenhadasDaRota = new ArrayList<>();
+    private final List<JSONObject> listaDadosRotasJson = new ArrayList<>();
+    private boolean estaNavegandoAtivamente = false;
     private BottomSheetBehavior<View> comportamentoPainelInferior;
 
-    // Gerenciador responsável por pedir permissão de GPS para o usuário
+    // Gerenciador de threads secundárias para não travar a interface gráfica (UI Thread)
+    private ExecutorService executor;
+    private final Handler handlerPrincipal = new Handler(Looper.getMainLooper());
+
+    // Controle de concorrência em buscas de endereço por geocodificação
+    private long idRequisicaoEndereco = 0;
+
+    // Callback para interceptar o botão de voltar do dispositivo
+    private OnBackPressedCallback voltarParaCirculosCallback;
+
+    // Adaptador e listas do sistema de círculos
+    private MembroAdapter adaptadorMembros;
+    private final List<Circulo> listaCirculos = new ArrayList<>();
+    private final List<Marker> marcadoresMembros = new ArrayList<>();
+
+    // Gerenciador de solicitação de permissões de localização em tempo de execução
     private final ActivityResultLauncher<String[]> lancadorDePermissaoLocalizacao =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), resultado -> {
-                // Verifica se a permissão precisa ou aproximada foi aceita
                 Boolean permissaoPrecisaAceita = resultado.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false);
                 Boolean permissaoAproximadaAceita = resultado.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false);
 
                 if ((permissaoPrecisaAceita != null && permissaoPrecisaAceita) ||
                         (permissaoAproximadaAceita != null && permissaoAproximadaAceita)) {
                     ativarLocalizacaoUsuario();
-                    Toast.makeText(getContext(), "Permissão de localização aceita.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Permissão de localização concedida.", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "Permissão de localização negada.", Toast.LENGTH_SHORT).show();
                 }
             });
 
-    // =========================================================================
-    // 2. CICLO DE VIDA DO FRAGMENT (MÉTODOS PADRÃO DO ANDROID)
-    // =========================================================================
+    // --- CICLO DE VIDA ---
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Prepara as configurações de armazenamento (cache) do mapa no dispositivo
+        // Carrega as configurações de cache do OSMDroid com o contexto da aplicação
         Configuration.getInstance().load(requireContext(), PreferenceManager.getDefaultSharedPreferences(requireContext()));
         Configuration.getInstance().setUserAgentValue(requireContext().getPackageName());
 
-        // Vincula a interface gráfica (XML) com o Java
+        // Inicializa o ViewModel e o Executor
+        viewModel = new ViewModelProvider(this).get(MapaViewModel.class);
+        executor = Executors.newSingleThreadExecutor();
+
         vinculacaoLayout = FragmentMapaBinding.inflate(inflater, container, false);
         View raiz = vinculacaoLayout.getRoot();
-
-        // Associa a variável 'mapa' ao mapa do XML
         mapa = vinculacaoLayout.map;
 
-        // Configura a lógica de esconder ou mostrar o painel inferior (BottomSheet)
+        // Configura o painel inferior (BottomSheet)
         comportamentoPainelInferior = BottomSheetBehavior.from(vinculacaoLayout.bottomSheet);
-        comportamentoPainelInferior.setState(BottomSheetBehavior.STATE_HIDDEN); // Oculto inicialmente
+        comportamentoPainelInferior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
-        // Configurações básicas de navegação no mapa (zoom, servidor de imagens)
+        // Trata o botão "Voltar" do Android para alternar entre visualizações do painel
+        voltarParaCirculosCallback = new OnBackPressedCallback(false) {
+            @Override
+            public void handleOnBackPressed() {
+                voltarParaCirculos();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), voltarParaCirculosCallback);
+
+        // Configuração inicial do Mapa
         mapa.setTileSource(TileSourceFactory.MAPNIK);
-        mapa.setMultiTouchControls(true); // Permite usar dois dedos para dar zoom
+        mapa.setMultiTouchControls(true);
         mapa.getController().setZoom(17.0);
 
-        // Chama as funções que preparam os "ouvintes" (cliques na tela)
+        // Inicialização de ouvintes e funcionalidades
         configurarCliqueNoMapa();
         configurarOuvinteBarraPesquisa();
         configurarOuvintesBotoes();
-
-        // Verifica se a tela foi aberta a partir de uma pesquisa de outro lugar
+        configurarCirculos();
+        configurarAcessibilidade();
         processarBuscaRecebida();
-
-        // Confere se o app tem permissão para usar o GPS e inicia
         checarPermissoesELocalizar();
 
         return raiz;
@@ -144,7 +165,6 @@ public class MapaFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // Volta a exibir o mapa e o GPS quando a tela volta para o primeiro plano
         if (mapa != null) mapa.onResume();
         if (marcadorMinhaLocalizacao != null) marcadorMinhaLocalizacao.enableMyLocation();
     }
@@ -152,7 +172,6 @@ public class MapaFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        // Pausa os processos visuais e o GPS quando o app vai para o fundo (economiza bateria)
         if (mapa != null) mapa.onPause();
         if (marcadorMinhaLocalizacao != null) marcadorMinhaLocalizacao.disableMyLocation();
     }
@@ -160,74 +179,72 @@ public class MapaFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // Limpa a memória para evitar travamentos (Memory Leak)
-        if (mapa != null) mapa.onDetach();
+
+        // Encerra adequadamente as threads para evitar memory leaks
+        if (executor != null && !executor.isShutdown()) {
+            executor.shutdownNow();
+        }
+
+        // Desativa a localização e limpa a view do mapa
+        if (marcadorMinhaLocalizacao != null) {
+            marcadorMinhaLocalizacao.disableMyLocation();
+        }
+
+        if (mapa != null) {
+            mapa.onDetach();
+        }
+
         vinculacaoLayout = null;
     }
 
-    // =========================================================================
-    // 3. LISTENERS (AÇÕES DE INTERFACE)
-    // =========================================================================
+    // --- CONFIGURAÇÃO DE EVENTOS E LISTENERS ---
 
-    /**
-     * Prepara os cliques dos botões flutuantes.
-     */
     private void configurarOuvintesBotoes() {
-        // Centraliza a câmera no usuário ao clicar no botão de mira
         vinculacaoLayout.btnMinhaLocalizacao.setOnClickListener(v -> centralizarNaLocalizacaoAtual());
-
-        // Inicia o cálculo do trajeto ao clicar em "Navegar"
         vinculacaoLayout.btnNavigate.setOnClickListener(v -> executarCalculoDeRota());
+        vinculacaoLayout.btnVoltarCirculos.setOnClickListener(v -> voltarParaCirculos());
     }
 
-
-    /**
-     * Intercepta quando o usuário toca na tela do mapa
-     */
     private void configurarCliqueNoMapa() {
         MapEventsReceiver receptorEventosMapa = new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint pontoTocado) {
-                // 1. Desliga navegações anteriores
-                estaNavegandoAtivamente = false;
-                limparLinhasDesenhadasNoMapa();
-
-                if (marcadorMinhaLocalizacao != null) {
-                    marcadorMinhaLocalizacao.disableFollowLocation();
-                }
-
-                // 2. Coloca o alfinete onde o usuário tocou
-                adicionarOuMoverMarcadorDeDestino(pontoTocado);
-
-                // 3. Busca qual é o nome da rua/local
-                obterEnderecoGeocodificado(pontoTocado);
-
-                // 4. Já começa a calcular o trajeto automaticamente
-                executarCalculoDeRota();
-
-                // 5. Mostra as informações subindo a aba inferior levemente
-                if (comportamentoPainelInferior != null) {
-                    comportamentoPainelInferior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
+                selecionarLocal(pontoTocado);
                 return true;
             }
 
             @Override
             public boolean longPressHelper(GeoPoint pontoTocado) {
-                return false; // Ignora o toque longo
+                return false;
             }
         };
-
-        // Adiciona a camada invisível que escuta toques no mapa
         mapa.getOverlays().add(new MapEventsOverlay(receptorEventosMapa));
     }
 
     /**
-     * Ação disparada quando o usuário aperta o botão de 'lupa/enter' no teclado virtual
+     * Define o destino selecionado no mapa, limpa rotas anteriores e busca o endereço.
      */
+    private void selecionarLocal(GeoPoint ponto) {
+        estaNavegandoAtivamente = false;
+        viewModel.setEstaNavegando(false);
+        viewModel.setPontoSelecionado(ponto);
+
+        limparLinhasDesenhadasNoMapa();
+
+        if (marcadorMinhaLocalizacao != null) {
+            marcadorMinhaLocalizacao.disableFollowLocation();
+        }
+
+        adicionarOuMoverMarcadorDeDestino(ponto);
+        mostrarModoLocal();
+        obterEnderecoGeocodificado(ponto);
+        executarCalculoDeRota();
+
+        comportamentoPainelInferior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
     private void configurarOuvinteBarraPesquisa() {
         vinculacaoLayout.etPesquisa.setOnEditorActionListener((view, acaoId, evento) -> {
-            // Verifica se foi apertado o botão de pesquisar
             if (acaoId == EditorInfo.IME_ACTION_SEARCH || (evento != null && evento.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
                 buscarLocalizacaoPeloTexto(vinculacaoLayout.etPesquisa.getText().toString());
                 return true;
@@ -236,18 +253,127 @@ public class MapaFragment extends Fragment {
         });
     }
 
-    // =========================================================================
-    // 4. GPS E LOCALIZAÇÃO DO USUÁRIO
-    // =========================================================================
+    // --- NAVEGAÇÃO INTERNA DO BOTTOM SHEET ---
 
-    /**
-     * Inicia o fluxo de verificar se temos permissão, e liga o GPS se tiver.
-     */
+    private void mostrarModoLocal() {
+        vinculacaoLayout.layoutCirculos.setVisibility(View.GONE);
+        vinculacaoLayout.layoutLocal.setVisibility(View.VISIBLE);
+        vinculacaoLayout.tvDistanciaTempo.setText("Calculando rota...");
+        voltarParaCirculosCallback.setEnabled(true);
+    }
+
+    private void voltarParaCirculos() {
+        estaNavegandoAtivamente = false;
+        viewModel.setEstaNavegando(false);
+        idRequisicaoEndereco++;
+        voltarParaCirculosCallback.setEnabled(false);
+        limparLinhasDesenhadasNoMapa();
+
+        if (marcadorDestinoSelecionado != null) {
+            mapa.getOverlays().remove(marcadorDestinoSelecionado);
+            marcadorDestinoSelecionado = null;
+            mapa.invalidate();
+        }
+
+        vinculacaoLayout.layoutLocal.setVisibility(View.GONE);
+        vinculacaoLayout.layoutCirculos.setVisibility(View.VISIBLE);
+        comportamentoPainelInferior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+    // --- CÍRCULOS DE CONTATOS ---
+
+    private void configurarCirculos() {
+        adaptadorMembros = new MembroAdapter(membro -> {
+            if (marcadorMinhaLocalizacao != null) marcadorMinhaLocalizacao.disableFollowLocation();
+            mapa.getController().animateTo(new GeoPoint(membro.lat, membro.lon));
+            comportamentoPainelInferior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        });
+        vinculacaoLayout.rvMembros.setLayoutManager(new LinearLayoutManager(requireContext()));
+        vinculacaoLayout.rvMembros.setAdapter(adaptadorMembros);
+
+        carregarCirculosDeExemplo();
+
+        float densidade = getResources().getDisplayMetrics().density;
+        for (Circulo c : listaCirculos) {
+            Chip chip = new Chip(requireContext());
+            chip.setId(View.generateViewId());
+            chip.setText(c.nome);
+            chip.setCheckable(true);
+            chip.setTag(c);
+            chip.setMinHeight((int) (48 * densidade));
+
+            vinculacaoLayout.chipGroupCirculos.addView(chip);
+        }
+
+        vinculacaoLayout.chipGroupCirculos.setOnCheckedStateChangeListener((grupo, ids) -> {
+            if (ids.isEmpty()) return;
+            Chip chip = grupo.findViewById(ids.get(0));
+            selecionarCirculo((Circulo) chip.getTag());
+        });
+
+        if (vinculacaoLayout.chipGroupCirculos.getChildCount() > 0) {
+            ((Chip) vinculacaoLayout.chipGroupCirculos.getChildAt(0)).setChecked(true);
+        }
+    }
+
+    private void selecionarCirculo(Circulo c) {
+        adaptadorMembros.submit(c.membros);
+        vinculacaoLayout.tvCirculoVazio.setVisibility(c.membros.isEmpty() ? View.VISIBLE : View.GONE);
+
+        for (Marker m : marcadoresMembros) mapa.getOverlays().remove(m);
+        marcadoresMembros.clear();
+
+        for (Membro mb : c.membros) {
+            Marker m = new Marker(mapa);
+            m.setPosition(new GeoPoint(mb.lat, mb.lon));
+            m.setTitle(mb.nome);
+            m.setSubDescription(mb.status);
+            marcadoresMembros.add(m);
+            mapa.getOverlays().add(m);
+        }
+        mapa.invalidate();
+
+        vinculacaoLayout.rvMembros.announceForAccessibility(
+                "Círculo " + c.nome + ", " + c.membros.size() + " membros");
+    }
+
+    private void carregarCirculosDeExemplo() {
+        Circulo familia = new Circulo("1", "Família");
+        familia.membros.add(new Membro("Maria Souza", "Em casa · há 2 min", 85, -23.5489, -46.6388));
+        familia.membros.add(new Membro("João Souza", "A caminho · há 1 min", 52, -23.5614, -46.6559));
+        Circulo amigos = new Circulo("2", "Amigos da escola");
+        amigos.membros.add(new Membro("Ana Lima", "Na Etec · há 5 min", 40, -23.5329, -46.6395));
+        listaCirculos.add(familia);
+        listaCirculos.add(amigos);
+        viewModel.setListaCirculos(listaCirculos);
+    }
+
+    // --- ACESSIBILIDADE ---
+
+    private void configurarAcessibilidade() {
+        ViewCompat.addAccessibilityAction(mapa, "Selecionar o ponto no centro do mapa", (v, args) -> {
+            IGeoPoint centro = mapa.getMapCenter();
+            selecionarLocal(new GeoPoint(centro.getLatitude(), centro.getLongitude()));
+            return true;
+        });
+    }
+
+    private void atualizarDescricaoAcessivel() {
+        if (vinculacaoLayout == null || marcadorDestinoSelecionado == null) return;
+        GeoPoint p = marcadorDestinoSelecionado.getPosition();
+        String desc = vinculacaoLayout.tvNomeDoLocal.getText() + ". "
+                + vinculacaoLayout.tvLocalizacaoEstado.getText() + ". "
+                + vinculacaoLayout.tvDistanciaTempo.getText().toString().replace("(", ", ").replace(")", "") + ". "
+                + String.format(new Locale("pt", "BR"), "Latitude %.5f, longitude %.5f", p.getLatitude(), p.getLongitude());
+        vinculacaoLayout.blocoInfoLocal.setContentDescription(desc);
+    }
+
+    // --- SERVIÇOS DE LOCALIZAÇÃO (GPS) ---
+
     private void checarPermissoesELocalizar() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             ativarLocalizacaoUsuario();
         } else {
-            // Mostra o pop-up pedindo acesso à localização
             lancadorDePermissaoLocalizacao.launch(new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION
@@ -255,9 +381,6 @@ public class MapaFragment extends Fragment {
         }
     }
 
-    /**
-     * Liga o "ponto azul" que segue o usuário no mapa
-     */
     private void ativarLocalizacaoUsuario() {
         if (getContext() == null || mapa == null) return;
 
@@ -267,13 +390,13 @@ public class MapaFragment extends Fragment {
             public void onLocationChanged(android.location.Location novaLocalizacao, org.osmdroid.views.overlay.mylocation.IMyLocationProvider fonte) {
                 super.onLocationChanged(novaLocalizacao, fonte);
 
-                // Quando estiver no meio da viagem guiada, vai atualizando a distância na tela
                 if (novaLocalizacao != null && estaNavegandoAtivamente && marcadorDestinoSelecionado != null) {
                     GeoPoint coordenadaAtual = new GeoPoint(novaLocalizacao.getLatitude(), novaLocalizacao.getLongitude());
                     GeoPoint coordenadaDestino = marcadorDestinoSelecionado.getPosition();
 
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(() -> {
+                            if (vinculacaoLayout == null || marcadorDestinoSelecionado == null) return;
                             mapa.getController().animateTo(coordenadaAtual);
                             atualizarInformacoesDeTrajetoEmTempoReal(coordenadaAtual, coordenadaDestino);
                         });
@@ -283,17 +406,16 @@ public class MapaFragment extends Fragment {
         };
 
         marcadorMinhaLocalizacao.enableMyLocation();
-        marcadorMinhaLocalizacao.enableFollowLocation(); // O mapa segue o movimento do celular
+        marcadorMinhaLocalizacao.enableFollowLocation();
 
-        // Assim que achar o satélite pela primeira vez, dá um zoom onde o usuário está
         marcadorMinhaLocalizacao.runOnFirstFix(() -> {
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
+                    if (mapa == null) return;
                     if (getArguments() == null || !getArguments().containsKey("search_query")) {
                         GeoPoint posicaoCapturada = marcadorMinhaLocalizacao.getMyLocation();
                         if (posicaoCapturada != null) {
                             mapa.getController().animateTo(posicaoCapturada);
-                            obterEnderecoGeocodificado(posicaoCapturada);
                         }
                     }
                 });
@@ -304,40 +426,28 @@ public class MapaFragment extends Fragment {
         mapa.invalidate();
     }
 
-    /**
-     * Puxa a câmera manualmente de volta para o ponto onde o usuário está
-     */
     private void centralizarNaLocalizacaoAtual() {
         if (marcadorMinhaLocalizacao != null && marcadorMinhaLocalizacao.getMyLocation() != null) {
             GeoPoint posicaoUsuario = marcadorMinhaLocalizacao.getMyLocation();
             mapa.getController().animateTo(posicaoUsuario);
             marcadorMinhaLocalizacao.enableFollowLocation();
-            obterEnderecoGeocodificado(posicaoUsuario);
-
-            if (comportamentoPainelInferior != null) {
-                comportamentoPainelInferior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            }
+            voltarParaCirculos();
         } else {
             Toast.makeText(getContext(), "Buscando sinal de GPS...", Toast.LENGTH_SHORT).show();
         }
     }
 
-    /**
-     * Pega o texto digitado (Ex: "Avenida Brasil") e converte em coordenadas (Lat, Long)
-     */
     private void buscarLocalizacaoPeloTexto(String textoPesquisado) {
         if (textoPesquisado.isEmpty()) return;
 
-        // Roda em segundo plano para não travar a tela
-        Executors.newSingleThreadExecutor().execute(() -> {
-            Geocoder conversorTextoParaMapa = new Geocoder(requireContext(), Locale.getDefault());
+        final Context ctx = requireContext();
+        executor.execute(() -> {
+            Geocoder conversorTextoParaMapa = new Geocoder(ctx, Locale.getDefault());
             try {
-                // Tenta achar apenas 1 resultado relevante
                 List<Address> enderecosEncontrados = conversorTextoParaMapa.getFromLocationName(textoPesquisado, 1);
 
-                // Retorna os dados para a "Thread Principal" (A que desenha as coisas na tela)
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    if (!isAdded()) return;
+                handlerPrincipal.post(() -> {
+                    if (!isAdded() || vinculacaoLayout == null) return;
 
                     if (enderecosEncontrados != null && !enderecosEncontrados.isEmpty()) {
                         Address melhorEndereco = enderecosEncontrados.get(0);
@@ -348,29 +458,23 @@ public class MapaFragment extends Fragment {
                         }
 
                         adicionarOuMoverMarcadorDeDestino(coordenada);
-                        vinculacaoLayout.tvNomeDoLocal.setText(melhorEndereco.getFeatureName());
-                        vinculacaoLayout.tvLocalizacaoEstado.setText(melhorEndereco.getLocality() + ", " + melhorEndereco.getAdminArea());
+                        mostrarModoLocal();
+                        idRequisicaoEndereco++;
+                        aplicarEnderecoNaTela(extrairEndereco(melhorEndereco), coordenada);
 
-                        executarCalculoDeRota(); // Calcula como chegar lá
-
-                        if (comportamentoPainelInferior != null) {
-                            comportamentoPainelInferior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                        }
+                        executarCalculoDeRota();
+                        comportamentoPainelInferior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                     } else {
                         Toast.makeText(getContext(), "Local não encontrado", Toast.LENGTH_SHORT).show();
                     }
                 });
             } catch (IOException e) {
-                new Handler(Looper.getMainLooper()).post(() ->
-                        Toast.makeText(getContext(), "Erro ao buscar local", Toast.LENGTH_SHORT).show()
-                );
+                handlerPrincipal.post(() ->
+                        Toast.makeText(getContext(), "Erro ao buscar local", Toast.LENGTH_SHORT).show());
             }
         });
     }
 
-    /**
-     * Recebe informações de texto que vieram de uma tela anterior (se houver)
-     */
     private void processarBuscaRecebida() {
         if (getArguments() != null && getArguments().containsKey("search_query")) {
             String textoRecebido = getArguments().getString("search_query");
@@ -381,13 +485,8 @@ public class MapaFragment extends Fragment {
         }
     }
 
-    // =========================================================================
-    // 5. CONEXÃO COM OSRM E CÁLCULO DE ROTAS
-    // =========================================================================
+    // --- CÁLCULO DE ROTA (API OSRM) ---
 
-    /**
-     * Prepara os dados do ponto A (GPS) e Ponto B (Marcador) para traçar o caminho
-     */
     private void executarCalculoDeRota() {
         if (marcadorDestinoSelecionado == null) {
             Toast.makeText(getContext(), "Selecione um ponto no mapa primeiro.", Toast.LENGTH_SHORT).show();
@@ -398,80 +497,83 @@ public class MapaFragment extends Fragment {
         GeoPoint coordenadaOrigem = (marcadorMinhaLocalizacao != null) ? marcadorMinhaLocalizacao.getMyLocation() : null;
 
         if (coordenadaOrigem == null) {
+            vinculacaoLayout.tvDistanciaTempo.setText("Aguardando sinal do GPS...");
             Toast.makeText(getContext(), "Aguardando sinal do GPS...", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Toast.makeText(getContext(), "Calculando rota...", Toast.LENGTH_SHORT).show();
-        baixarETracarRotaInternet(coordenadaOrigem, coordenadaDestino, perfilTransporteAtual);
+        vinculacaoLayout.tvDistanciaTempo.setText("Calculando rota...");
+        baixarETracarRotaInternet(coordenadaOrigem, coordenadaDestino);
     }
 
-    /**
-     * Faz a requisição na internet (API OSRM) para pedir as ruas do trajeto
-     */
-    private void baixarETracarRotaInternet(GeoPoint origem, GeoPoint destino, String perfil) {
-        Executors.newSingleThreadExecutor().execute(() -> {
-            listaDadosRotasJson.clear(); // Limpa as rotas antigas
+    private void baixarETracarRotaInternet(GeoPoint origem, GeoPoint destino) {
+        executor.execute(() -> {
+            final List<JSONObject> rotasRecebidas = new ArrayList<>();
 
             try {
-                // Criação do Link da API
                 String enderecoRequisicao = String.format(Locale.US,
                         "https://router.project-osrm.org/route/v1/%s/%.6f,%.6f;%.6f,%.6f?overview=full&geometries=geojson&alternatives=true&steps=true",
-                        perfil,
+                        "driving",
                         origem.getLongitude(), origem.getLatitude(),
                         destino.getLongitude(), destino.getLatitude());
 
-                // Abre a conexão
                 URL linkUrl = new URL(enderecoRequisicao);
                 HttpURLConnection conexao = (HttpURLConnection) linkUrl.openConnection();
                 conexao.setRequestMethod("GET");
                 conexao.setRequestProperty("User-Agent", Configuration.getInstance().getUserAgentValue());
                 conexao.setConnectTimeout(8000);
 
-                // Se o servidor respondeu 'OK' (Código 200)
                 if (conexao.getResponseCode() == 200) {
                     BufferedReader leitorTextos = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
                     StringBuilder respostaServidor = new StringBuilder();
                     String linhaTexto;
-
-                    // Lê o JSON linha por linha
                     while ((linhaTexto = leitorTextos.readLine()) != null) {
                         respostaServidor.append(linhaTexto);
                     }
                     leitorTextos.close();
 
-                    // Converte o texto recebido para um Objeto Manipulável (JSON)
                     JSONObject objetoJsonCompleto = new JSONObject(respostaServidor.toString());
                     JSONArray conjuntoRotas = objetoJsonCompleto.getJSONArray("routes");
-
                     for (int i = 0; i < conjuntoRotas.length(); i++) {
-                        listaDadosRotasJson.add(conjuntoRotas.getJSONObject(i));
+                        rotasRecebidas.add(conjuntoRotas.getJSONObject(i));
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace(); // Registra o erro no Log do Android Studio
+                e.printStackTrace();
             }
 
-            // Volta para a tela para desenhar
-            new Handler(Looper.getMainLooper()).post(() -> {
-                if (!isAdded()) return;
+            handlerPrincipal.post(() -> {
+                if (!isAdded() || vinculacaoLayout == null) return;
+
+                listaDadosRotasJson.clear();
+                listaDadosRotasJson.addAll(rotasRecebidas);
 
                 if (!listaDadosRotasJson.isEmpty()) {
-                    desenharRotasRecebidasNoMapa(0); // A rota 0 é a mais rápida (oficial)
+                    desenharRotasRecebidasNoMapa(0);
                     estaNavegandoAtivamente = true;
+                    viewModel.setEstaNavegando(true);
 
                     if (marcadorMinhaLocalizacao != null) {
                         marcadorMinhaLocalizacao.enableFollowLocation();
                     }
                 } else {
+                    vinculacaoLayout.tvDistanciaTempo.setText("Rota indisponível");
                     Toast.makeText(getContext(), "Não foi possível encontrar rotas.", Toast.LENGTH_SHORT).show();
                 }
             });
         });
     }
 
+    private void limparLinhasDesenhadasNoMapa() {
+        for (Polyline linha : linhasDesenhadasDaRota) {
+            mapa.getOverlays().remove(linha);
+        }
+        linhasDesenhadasDaRota.clear();
+        mapa.invalidate();
+    }
+
     /**
-     * Pega os dados recebidos da internet, transforma em linhas, pinta, e coloca no mapa
+     * Desenha as linhas das rotas no mapa OSMDroid sem quebrar a ordem dos overlays do mapa.
      */
     private void desenharRotasRecebidasNoMapa(int indiceRotaSelecionada) {
         limparLinhasDesenhadasNoMapa();
@@ -481,14 +583,12 @@ public class MapaFragment extends Fragment {
                 JSONObject informacaoRota = listaDadosRotasJson.get(i);
                 JSONArray coordenadasRota = informacaoRota.getJSONObject("geometry").getJSONArray("coordinates");
 
-                // Converte as coordenadas do formato do JSON [Long, Lat] para o formato do Mapa [Lat, Long]
                 List<GeoPoint> pontosDaLinha = new ArrayList<>();
                 for (int j = 0; j < coordenadasRota.length(); j++) {
                     JSONArray parDePontos = coordenadasRota.getJSONArray(j);
                     pontosDaLinha.add(new GeoPoint(parDePontos.getDouble(1), parDePontos.getDouble(0)));
                 }
 
-                // Cria o objeto "Caminho" visual (Polyline)
                 Polyline linhaColorida = new Polyline(mapa);
                 linhaColorida.setPoints(pontosDaLinha);
 
@@ -496,27 +596,21 @@ public class MapaFragment extends Fragment {
                 boolean ehARotaPrincipal = (i == indiceRotaSelecionada);
 
                 if (ehARotaPrincipal) {
-                    // Pinta de Roxo a rota que o usuário escolheu
                     linhaColorida.getOutlinePaint().setColor(Color.parseColor("#6C5CE7"));
                     linhaColorida.getOutlinePaint().setStrokeWidth(16f);
 
                     double distanciaEmMetros = informacaoRota.getDouble("distance");
                     double duracaoEmSegundos = informacaoRota.getDouble("duration");
 
-                    // Atualiza a telinha debaixo com as estimativas
-                    vinculacaoLayout.tvNomeDoLocal.setText(formatarTextoTempoEDistancia(duracaoEmSegundos, distanciaEmMetros));
-                    vinculacaoLayout.tvLocalizacaoEstado.setText(listaDadosRotasJson.size() > 1 ?
-                            "Rota " + (indiceRotaSelecionada + 1) + " ativa (Navegando...)" : "Em navegação...");
+                    vinculacaoLayout.tvDistanciaTempo.setText(formatarTextoTempoEDistancia(duracaoEmSegundos, distanciaEmMetros));
+                    atualizarDescricaoAcessivel();
 
                     escreverPassosDaNavegacaoNaTela(informacaoRota);
-
                 } else {
-                    // Pinta as rotas "opcionais" de cinza
                     linhaColorida.getOutlinePaint().setColor(Color.parseColor("#64748B"));
                     linhaColorida.getOutlinePaint().setStrokeWidth(10f);
                 }
 
-                // Permite o usuário trocar para uma rota cinza apenas clicando nela
                 linhaColorida.setOnClickListener((linhaTrocada, vistaDoMapa, eventoPosicao) -> {
                     desenharRotasRecebidasNoMapa(indiceDestaRota);
                     Toast.makeText(getContext(), "Rota " + (indiceDestaRota + 1) + " selecionada", Toast.LENGTH_SHORT).show();
@@ -524,50 +618,37 @@ public class MapaFragment extends Fragment {
                 });
 
                 linhasDesenhadasDaRota.add(linhaColorida);
-
-                // Coloca as rotas cinzas para baixo e a Rota roxa por cima
-                if (ehARotaPrincipal) {
-                    mapa.getOverlays().add(linhaColorida);
-                } else {
-                    mapa.getOverlays().add(0, linhaColorida);
-                }
+                mapa.getOverlays().add(linhaColorida);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
-        mapa.invalidate(); // Pede para a placa de vídeo redesenhar o mapa atualizado
+        mapa.invalidate();
     }
 
-    /**
-     * Calcula se o usuário está mais próximo de chegar com o movimento do GPS
-     */
     private void atualizarInformacoesDeTrajetoEmTempoReal(GeoPoint coordenadaAtual, GeoPoint coordenadaDestino) {
         double distanciaQueFalta = coordenadaAtual.distanceToAsDouble(coordenadaDestino);
-        double tempoEstimadoRestante = distanciaQueFalta / 8.3; // Velocidade arbitrária de cálculo (30km/h)
+        double tempoEstimadoRestante = distanciaQueFalta / 8.3; // Aproximadamente 30 km/h
 
-        vinculacaoLayout.tvNomeDoLocal.setText(formatarTextoTempoEDistancia(tempoEstimadoRestante, distanciaQueFalta));
+        vinculacaoLayout.tvDistanciaTempo.setText(formatarTextoTempoEDistancia(tempoEstimadoRestante, distanciaQueFalta));
 
-        // Se faltar 15 metros, avisa que chegou
         if (distanciaQueFalta < 15.0) {
             estaNavegandoAtivamente = false;
-            vinculacaoLayout.tvLocalizacaoEstado.setText("Você chegou ao seu destino! 🎉");
+            viewModel.setEstaNavegando(false);
+            vinculacaoLayout.tvDistanciaTempo.setText("Você chegou ao seu destino! 🎉");
             Toast.makeText(getContext(), "Você chegou ao seu destino!", Toast.LENGTH_LONG).show();
         }
+        atualizarDescricaoAcessivel();
     }
 
-    // =========================================================================
-    // 6. FORMATAÇÃO VISUAL E AUXILIARES
-    // =========================================================================
+    // --- FORMATAÇÃO E AUXILIARES ---
 
-    /**
-     * Coloca o pino onde o usuário clicar (ou move se ele já existir)
-     */
     private void adicionarOuMoverMarcadorDeDestino(GeoPoint coordenada) {
         if (marcadorDestinoSelecionado == null) {
             marcadorDestinoSelecionado = new Marker(mapa);
             marcadorDestinoSelecionado.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            marcadorDestinoSelecionado.setInfoWindow(null);
             mapa.getOverlays().add(marcadorDestinoSelecionado);
         }
         marcadorDestinoSelecionado.setPosition(coordenada);
@@ -575,44 +656,87 @@ public class MapaFragment extends Fragment {
         mapa.invalidate();
     }
 
-    /**
-     * Converte Latitude/Longitude em Nome da Rua / Cidade para mostrar ao usuário
-     */
     private void obterEnderecoGeocodificado(GeoPoint coordenada) {
-        vinculacaoLayout.tvCoordenadas.setText(String.format(Locale.getDefault(), "Lat: %.4f | Lon: %.4f", coordenada.getLatitude(), coordenada.getLongitude()));
+        vinculacaoLayout.tvCoordenadas.setText(formatarCoordenadas(coordenada));
+        vinculacaoLayout.tvNomeDoLocal.setText("Buscando endereço...");
+        vinculacaoLayout.tvLocalizacaoEstado.setText("");
+        atualizarDescricaoAcessivel();
 
-        Executors.newSingleThreadExecutor().execute(() -> {
-            Geocoder descodificador = new Geocoder(requireContext(), Locale.getDefault());
-            String ruaEncontrada = "Local Selecionado";
-            String cidadeEncontrada = "";
+        final long id = ++idRequisicaoEndereco;
+        final Context ctx = requireContext();
 
+        executor.execute(() -> {
+            String[] endereco = {"Local selecionado", "Endereço indisponível"};
             try {
+                Geocoder descodificador = new Geocoder(ctx, new Locale("pt", "BR"));
                 List<Address> locais = descodificador.getFromLocation(coordenada.getLatitude(), coordenada.getLongitude(), 1);
                 if (locais != null && !locais.isEmpty()) {
-                    Address endereco = locais.get(0);
-                    ruaEncontrada = endereco.getSubLocality() != null ? endereco.getSubLocality() : endereco.getThoroughfare();
-                    cidadeEncontrada = (endereco.getLocality() != null ? endereco.getLocality() : "") +
-                            (endereco.getAdminArea() != null ? ", " + endereco.getAdminArea() : "");
+                    endereco = extrairEndereco(locais.get(0));
                 }
-            } catch (IOException ignorado) {} // Não faz nada se a internet falhar em buscar o nome da rua
+            } catch (IOException ignorado) {
+                endereco = new String[]{"Local selecionado", "Sem conexão para buscar o endereço"};
+            }
 
-            final String nomeFinalDaRua = ruaEncontrada;
-            final String nomeFinalDaCidade = cidadeEncontrada;
-
-            new Handler(Looper.getMainLooper()).post(() -> {
-                if (!isAdded()) return;
-                if (nomeFinalDaRua != null) vinculacaoLayout.tvNomeDoLocal.setText(nomeFinalDaRua);
-                vinculacaoLayout.tvLocalizacaoEstado.setText(nomeFinalDaCidade);
+            final String[] resultado = endereco;
+            handlerPrincipal.post(() -> {
+                if (!isAdded() || vinculacaoLayout == null || id != idRequisicaoEndereco) return;
+                aplicarEnderecoNaTela(resultado, coordenada);
             });
         });
     }
 
-    /**
-     * Extrai os comandos de navegação ("vire à esquerda", "siga") do JSON da Rota
-     */
+    private void aplicarEnderecoNaTela(String[] endereco, GeoPoint coordenada) {
+        vinculacaoLayout.tvNomeDoLocal.setText(endereco[0]);
+        vinculacaoLayout.tvLocalizacaoEstado.setText(endereco[1]);
+        vinculacaoLayout.tvCoordenadas.setText(formatarCoordenadas(coordenada));
+        atualizarDescricaoAcessivel();
+    }
+
+    private String[] extrairEndereco(Address a) {
+        String rua = a.getThoroughfare();
+        if (rua != null) {
+            if (a.getSubThoroughfare() != null) rua += ", " + a.getSubThoroughfare();
+        } else {
+            rua = a.getFeatureName() != null ? a.getFeatureName() : "Local sem nome";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        if (a.getSubLocality() != null) sb.append(a.getSubLocality()).append(", ");
+        if (a.getLocality() != null) sb.append(a.getLocality());
+        String uf = ufDe(a.getAdminArea());
+        if (!uf.isEmpty()) sb.append(" - ").append(uf);
+
+        return new String[]{rua, sb.length() > 0 ? sb.toString() : "Localização aproximada"};
+    }
+
+    private static final String[][] UFS = {
+            {"Acre","AC"},{"Alagoas","AL"},{"Amapá","AP"},{"Amazonas","AM"},{"Bahia","BA"},{"Ceará","CE"},
+            {"Distrito Federal","DF"},{"Espírito Santo","ES"},{"Goiás","GO"},{"Maranhão","MA"},
+            {"Mato Grosso","MT"},{"Mato Grosso do Sul","MS"},{"Minas Gerais","MG"},{"Pará","PA"},
+            {"Paraíba","PB"},{"Paraná","PR"},{"Pernambuco","PE"},{"Piauí","PI"},{"Rio de Janeiro","RJ"},
+            {"Rio Grande do Norte","RN"},{"Rio Grande do Sul","RS"},{"Rondônia","RO"},{"Roraima","RR"},
+            {"Santa Catarina","SC"},{"São Paulo","SP"},{"Sergipe","SE"},{"Tocantins","TO"}};
+
+    private static String ufDe(String estado) {
+        if (estado == null) return "";
+        if (estado.length() == 2) return estado.toUpperCase();
+        for (String[] par : UFS) if (par[0].equalsIgnoreCase(estado)) return par[1];
+        return estado;
+    }
+
+    private String formatarCoordenadas(GeoPoint p) {
+        return String.format(Locale.US, "Lat: %.5f | Lon: %.5f", p.getLatitude(), p.getLongitude());
+    }
+
+    private String formatarTextoTempoEDistancia(double segundos, double metros) {
+        int minutos = (int) Math.ceil(segundos / 60.0);
+        String textoTempo = minutos < 60 ? minutos + " min" : (minutos / 60) + " h " + (minutos % 60) + " min";
+        String textoDistancia = metros < 1000 ? String.format(Locale.getDefault(), "%.0f m", metros) : String.format(Locale.getDefault(), "%.1f km", metros / 1000.0);
+        return textoTempo + " (" + textoDistancia + ")";
+    }
+
     private void escreverPassosDaNavegacaoNaTela(JSONObject jsonCompletoRota) {
         try {
-            // Usa SpannableStringBuilder em vez de StringBuilder para suportar as imagens
             SpannableStringBuilder textoComOsPassos = new SpannableStringBuilder();
             JSONArray blocosDaRota = jsonCompletoRota.getJSONArray("legs");
 
@@ -620,141 +744,25 @@ public class MapaFragment extends Fragment {
                 JSONArray passos = blocosDaRota.getJSONObject(0).getJSONArray("steps");
                 textoComOsPassos.append("🟢 Ponto de Partida\n\n");
 
+                int tamanhoIconePx = (int) (20 * getResources().getDisplayMetrics().density);
+
                 for (int i = 0; i < passos.length(); i++) {
-                    JSONObject informacaoDoPasso = passos.getJSONObject(i);
-                    String nomeDaRua = informacaoDoPasso.optString("name", "");
-                    double distanciaDoPasso = informacaoDoPasso.optDouble("distance", 0);
+                    JSONObject passo = passos.getJSONObject(i);
+                    String instrucao = passo.has("name") && !passo.getString("name").isEmpty()
+                            ? "Siga por " + passo.getString("name")
+                            : "Continue no percurso";
 
-                    JSONObject manobraDestePasso = informacaoDoPasso.optJSONObject("maneuver");
-                    String direcaoManobra = (manobraDestePasso != null) ? manobraDestePasso.optString("modifier", "") : "";
+                    double metros = passo.getDouble("distance");
+                    String distStr = metros < 1000 ? String.format(Locale.getDefault(), "%.0f m", metros) : String.format(Locale.getDefault(), "%.1f km", metros / 1000.0);
 
-                    // 1. Pegamos o ID do Ícone (int) e o Texto descritivo (String)
-                    int idIcone = obterIconeDeDirecao(direcaoManobra);
-                    String textoDaManobra = obterTextoDeDirecao(direcaoManobra);
-
-                    // 2. Coloca a imagem (Drawable) dentro do texto
-                    Drawable icone = ContextCompat.getDrawable(requireContext(), idIcone);
-                    if (icone != null) {
-                        // Define a largura e altura do ícone no texto (ex: 50x50 pixels)
-                        icone.setBounds(0, 0, 50, 50);
-                        int posicaoInicial = textoComOsPassos.length();
-
-                        textoComOsPassos.append("  "); // Adiciona um espaço que será substituído pela imagem
-
-                        textoComOsPassos.setSpan(
-                                new ImageSpan(icone, ImageSpan.ALIGN_BOTTOM),
-                                posicaoInicial,
-                                posicaoInicial + 1,
-                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        );
-                    }
-
-                    // 3. Adiciona o texto ao lado do ícone
-                    textoComOsPassos.append(textoDaManobra).append(" ");
-
-                    if (!nomeDaRua.isEmpty()) {
-                        textoComOsPassos.append("por ").append(nomeDaRua);
-                    } else {
-                        textoComOsPassos.append("no trajeto");
-                    }
-
-                    if (distanciaDoPasso > 0) {
-                        textoComOsPassos.append(" (").append((char) distanciaDoPasso).append(" m)");
-                    }
-                    textoComOsPassos.append("\n\n");
+                    textoComOsPassos.append("• ").append(instrucao).append(" (").append(distStr).append(")\n");
                 }
-
-                textoComOsPassos.append("📍 Chegada ao Destino");
-
-                // Passa o resultado final para a tela
+                textoComOsPassos.append("\n🔴 Chegada ao Destino");
                 vinculacaoLayout.tvEtapasDetalhes.setText(textoComOsPassos);
-                vinculacaoLayout.layoutEtapasExpandido.setVisibility(View.VISIBLE);
             }
         } catch (Exception e) {
             e.printStackTrace();
+            vinculacaoLayout.tvEtapasDetalhes.setText("• Toque no botão de rota para ver as instruções detalhadas.");
         }
-    }
-
-    /**
-     * Retorna o ID do ícone SVG correspondente
-     */
-    private int obterIconeDeDirecao(String direcaoSeta) {
-        if (direcaoSeta == null) return R.drawable.ic_seta_cima;
-
-        if (direcaoSeta.contains("sharp right")) return R.drawable.ic_circulo_curva_acentuada_direita;
-        if (direcaoSeta.contains("sharp left"))  return R.drawable.ic_circulo_curva_acentuada_esquerda;
-        if (direcaoSeta.contains("slight right")) return R.drawable.ic_seta_direita;
-        if (direcaoSeta.contains("slight left"))  return R.drawable.ic_seta_esquerda;
-        if (direcaoSeta.contains("right"))        return R.drawable.ic_seta_direita;
-        if (direcaoSeta.contains("left"))         return R.drawable.ic_seta_esquerda;
-        if (direcaoSeta.contains("uturn") || direcaoSeta.contains("return")) return R.drawable.ic_seta_retorno;
-
-        return R.drawable.ic_seta_cima;
-    }
-
-    /**
-     * Retorna o texto explicativo da manobra
-     */
-    private String obterTextoDeDirecao(String direcaoSeta) {
-        if (direcaoSeta == null) return "Siga em frente";
-
-        if (direcaoSeta.contains("sharp right")) return "Curva acentuada à direita";
-        if (direcaoSeta.contains("sharp left"))  return "Curva acentuada à esquerda";
-        if (direcaoSeta.contains("slight right")) return "Mantenha-se à direita";
-        if (direcaoSeta.contains("slight left"))  return "Mantenha-se à esquerda";
-        if (direcaoSeta.contains("right"))        return "Vire à direita";
-        if (direcaoSeta.contains("left"))         return "Vire à esquerda";
-        if (direcaoSeta.contains("uturn") || direcaoSeta.contains("return")) return "Faça o retorno";
-
-        return "Siga em frente";
-    }
-
-    /**
-     * Apaga todos os desenhos das ruas do mapa
-     */
-    private void limparLinhasDesenhadasNoMapa() {
-        for (Polyline linha : linhasDesenhadasDaRota) {
-            mapa.getOverlays().remove(linha);
-        }
-        linhasDesenhadasDaRota.clear();
-        vinculacaoLayout.tvEtapasDetalhes.setText("• Deslize para cima para ver as instruções detalhadas após calcular a rota.");
-        mapa.invalidate();
-    }
-
-    /**
-     * Muda a cor do botão que o usuário clicou (Carro, Pé, Bicicleta) para mostrar que ele tá ativo
-     */
-    private void atualizarVisualBotoesTransporte(Button botaoClicadoAtivo, Button botaoDesligado1, Button botaoDesligado2) {
-        if (botaoClicadoAtivo != null) {
-            // Fundo: Cor primária do projeto (definida no colors.xml)
-            botaoClicadoAtivo.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.cor_primaria));
-            // Texto: Branco para dar destaque e contraste contra a cor primária
-            botaoClicadoAtivo.setTextColor(Color.WHITE);
-        }
-        if (botaoDesligado1 != null) {
-            // Fundo: Cor de fundo do projeto (substitua 'cor_de_fundo' pelo nome real no seu colors.xml)
-            botaoDesligado1.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.cor_borda));
-            // Texto: Mantive cinza para indicar que está inativo
-            botaoDesligado1.setTextColor(Color.parseColor("#94A3B8"));
-        }
-        if (botaoDesligado2 != null) {
-            // Fundo: Cor de fundo do projeto
-            botaoDesligado2.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.cor_borda));
-            botaoDesligado2.setTextColor(Color.parseColor("#94A3B8"));
-        }
-    }
-
-    /**
-     * Converte o tempo (em segundos) e a distância (em metros) - ("5 min (1.2 km)")
-     */
-    private String formatarTextoTempoEDistancia(double segundosTotais, double metrosTotais) {
-        int minutosFormatados = (int) Math.round(segundosTotais / 60.0);
-        if (minutosFormatados < 1) minutosFormatados = 1;
-
-        String stringDistanciaFormatada = (metrosTotais >= 1000)
-                ? String.format(Locale.getDefault(), "%.1f km", metrosTotais / 1000.0)
-                : String.format(Locale.getDefault(), "%d m", (int) metrosTotais);
-
-        return String.format(Locale.getDefault(), "%d min (%s)", minutosFormatados, stringDistanciaFormatada);
     }
 }
