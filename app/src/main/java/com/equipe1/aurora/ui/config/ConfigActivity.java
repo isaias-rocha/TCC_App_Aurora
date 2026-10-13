@@ -18,11 +18,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.equipe1.aurora.databinding.ActivityConfiguracoesBinding;
-import com.equipe1.aurora.ui.planos.PlanosAssinaturaActivity;
-
-// Certifique-se de importar a sua AcessibilidadeActivity real abaixo:
 import com.equipe1.aurora.ui.acessibilidade.AcessibilidadeActivity;
-
+import com.equipe1.aurora.ui.auth.LoginActivity;
+import com.equipe1.aurora.ui.planos.PlanosAssinaturaActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 /**
@@ -31,7 +29,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 public class ConfigActivity extends AppCompatActivity {
 
     // Constantes de Persistência (SharedPreferences)
-    private static final String PREFS_NAME = "AuroraConfigPrefs";
+    private static final String PREFS_NAME = "AuroraPrefs";
     private static final String KEY_IDIOMA = "key_idioma";
     private static final String KEY_NOTIFICACOES = "key_notificacoes";
     private static final String KEY_LOCALIZACAO = "key_localizacao";
@@ -113,7 +111,7 @@ public class ConfigActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // 2. ACESSIBILIDADE (CORRIGIDO)
+        // 2. ACESSIBILIDADE
         binding.menuAcessibilidade.setOnClickListener(v -> {
             Intent intent = new Intent(ConfigActivity.this, AcessibilidadeActivity.class);
             startActivity(intent);
@@ -134,7 +132,6 @@ public class ConfigActivity extends AppCompatActivity {
        ============================================================================================ */
 
     private void abrirDialogoIdioma() {
-        // Mapeamento dos 5 idiomas suportados nas suas pastas res/values-xx-rXX
         String[] idiomas = {
                 "Português (Brasil)",
                 "English (US)",
@@ -177,7 +174,8 @@ public class ConfigActivity extends AppCompatActivity {
 
         String mensagemSobre = "Projeto Aurora\n" +
                 "Versão: " + versaoApp + "\n\n" +
-                "Desenvolvido pela Equipe 1 com foco em acessibilidade, segurança e melhor experiência do usuário.";
+                "Integrantes: Gilson Reis, Isaias Rocha De Jesus, Luis Fernando, Matheus Trindade\n\n" +
+                "Desenvolvido pela Equipe 1 do Curso Técnico de Desenvolvimento de Sistemas 2025/2026, com foco em acessibilidade, segurança e melhor experiência do usuário.";
 
         new MaterialAlertDialogBuilder(this)
                 .setTitle("Sobre o Aurora")
@@ -216,6 +214,12 @@ public class ConfigActivity extends AppCompatActivity {
                 .setMessage("Tem certeza de que deseja sair?")
                 .setPositiveButton("Sair", (dialog, which) -> {
                     Toast.makeText(this, "Saindo da conta...", Toast.LENGTH_SHORT).show();
+
+                    // Redireciona para a tela de Login e limpa a pilha de Activities
+                    Intent intent = new Intent(ConfigActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
                 })
                 .setNegativeButton("Cancelar", null)
                 .show();

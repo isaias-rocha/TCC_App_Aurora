@@ -22,8 +22,8 @@
             android:title="@string/menu_contatos" />
 
         <item
-            android:id="@+id/nav_perfil"
-            android:icon="@drawable/ic_perfil"
-            android:title="@string/menu_perfil" />
+            android:id="@+id/nav_menu"
+            android:icon="@drawable/ic_menu"
+            android:title="@string/menu_menu" />
 
 </menu>

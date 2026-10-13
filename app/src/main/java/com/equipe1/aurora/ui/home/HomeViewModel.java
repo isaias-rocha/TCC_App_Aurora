@@ -33,15 +33,15 @@ public class HomeViewModel extends ViewModel {
 
     private void loadUserData() {
         // Simulação de carregamento via Repository / Firebase
-        userName.setValue("Alex");
+        userName.setValue("Visconde");
     }
 
     private void loadUserCircles() {
         // Lista de círculos de segurança ativos do usuário
         List<UserCircle> circles = new ArrayList<>();
         circles.add(new UserCircle("Família", "4 membros ativos"));
-        circles.add(new UserCircle("Faculdade", "6 membros ativos"));
-        circles.add(new UserCircle("Trabalho", "3 membros ativos"));
+        circles.add(new UserCircle("Escola", "3 membros ativos"));
+        circles.add(new UserCircle("Trabalho", "2 membros ativos"));
         userCircles.setValue(circles);
     }
 

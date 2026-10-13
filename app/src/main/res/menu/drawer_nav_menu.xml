@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/drawer_perfil"
+            android:icon="@drawable/ic_perfil"
+            android:title="Perfil" />
+
+
+        <item
+            android:id="@+id/drawer_dispositivo"
+            android:icon="@drawable/ic_hardware"
+            android:title="Dispositivo Aurora" />
+
+        <item
+            android:id="@+id/drawer_mapa"
+            android:icon="@drawable/ic_mapa"
+            android:title="Mapa" />
+
+        <item
+            android:id="@+id/drawer_historico"
+            android:icon="@drawable/ic_historico"
+            android:title="Histórico" />
+
+        <item
+            android:id="@+id/drawer_solicitacoes"
+            android:icon="@drawable/ic_add_contato"
+            android:title="Solicitações de Amizade" />
+
+        <item
+            android:id="@+id/drawer_gerenciar_circulo"
+            android:icon="@drawable/ic_circulo"
+            android:title="Meus Circulos" />
+
+        <item
+            android:id="@+id/drawer_planos"
+            android:icon="@drawable/ic_dinheiro"
+            android:title="Planos de Assinatura" />
+    </group>
+
+    <item android:title="Geral">
+        <menu>
+            <item
+                android:id="@+id/drawer_configuracoes"
+                android:icon="@drawable/ic_config"
+                android:title="Configurações" />
+
+            <item
+                android:id="@+id/drawer_acessibilidade"
+                android:icon="@drawable/ic_acessibilidade"
+                android:title="Acessibilidade" />
+
+            <item
+                android:id="@+id/drawer_idioma"
+                android:icon="@drawable/ic_idioma"
+                android:title="idioma" />
+
+            <item
+                android:id="@+id/drawer_logout"
+                android:icon="@drawable/ic_logout"
+                android:title="Sair da Conta" />
+        </menu>
+    </item>
+
+</menu>

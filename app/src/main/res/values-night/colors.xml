@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Cores Globais / Design System (Ajustada para Modo Escuro) -->
-    <color name="cor_primaria">#E6A132</color>
+    <color name="cor_primaria">#C88A25</color>
     <color name="cor_segundaria">#2ECC71</color>
     <color name="cor_terciaria">#B388FF</color> <!-- Ajustado de #8032E6 para garantir rácio de 8.72:1 -->
     <color name="vermelho_alerta">#FF6B6B</color> <!-- Ajustado de #E74C3C para garantir 6.12:1 -->

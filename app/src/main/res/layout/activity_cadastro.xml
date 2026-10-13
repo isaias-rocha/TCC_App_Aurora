@@ -209,7 +209,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:importantForAccessibility="no"
-                android:text="@string/login_nao_tem_conta"
+                android:text="@string/cadastro_ja_tem_conta"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="14sp" />
 
@@ -220,7 +220,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:importantForAccessibility="no"
-                android:text="@string/login_criar_conta"
+                android:text="@string/cadastro_voltar_login"
                 android:textColor="?attr/colorPrimary"
                 android:textSize="14sp"
                 android:textStyle="bold" />

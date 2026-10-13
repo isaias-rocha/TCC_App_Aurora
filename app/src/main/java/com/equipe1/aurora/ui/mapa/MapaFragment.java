@@ -4,15 +4,12 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.ImageSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +65,7 @@ import java.util.concurrent.Executors;
 
 /**
  * Fragment responsável pela exibição e interação com o mapa OSMDroid,
- * cálculo de rotas via OSRM e visualização de membros do círculo.
+ * cálculo de rotas via OSRM, visualização de membros do círculo e rastreamento do ESP32.
  */
 public class MapaFragment extends Fragment {
 
@@ -85,22 +82,16 @@ public class MapaFragment extends Fragment {
     private boolean estaNavegandoAtivamente = false;
     private BottomSheetBehavior<View> comportamentoPainelInferior;
 
-    // Gerenciador de threads secundárias para não travar a interface gráfica (UI Thread)
     private ExecutorService executor;
     private final Handler handlerPrincipal = new Handler(Looper.getMainLooper());
 
-    // Controle de concorrência em buscas de endereço por geocodificação
     private long idRequisicaoEndereco = 0;
-
-    // Callback para interceptar o botão de voltar do dispositivo
     private OnBackPressedCallback voltarParaCirculosCallback;
 
-    // Adaptador e listas do sistema de círculos
     private MembroAdapter adaptadorMembros;
     private final List<Circulo> listaCirculos = new ArrayList<>();
     private final List<Marker> marcadoresMembros = new ArrayList<>();
 
-    // Gerenciador de solicitação de permissões de localização em tempo de execução
     private final ActivityResultLauncher<String[]> lancadorDePermissaoLocalizacao =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), resultado -> {
                 Boolean permissaoPrecisaAceita = resultado.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false);
@@ -120,23 +111,20 @@ public class MapaFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Carrega as configurações de cache do OSMDroid com o contexto da aplicação
         Configuration.getInstance().load(requireContext(), PreferenceManager.getDefaultSharedPreferences(requireContext()));
         Configuration.getInstance().setUserAgentValue(requireContext().getPackageName());
 
-        // Inicializa o ViewModel e o Executor
-        viewModel = new ViewModelProvider(this).get(MapaViewModel.class);
+        // Escopo do ViewModel vinculado à Activity principal para compartilhar dados entre telas (MVVM)
+        viewModel = new ViewModelProvider(requireActivity()).get(MapaViewModel.class);
         executor = Executors.newSingleThreadExecutor();
 
         vinculacaoLayout = FragmentMapaBinding.inflate(inflater, container, false);
         View raiz = vinculacaoLayout.getRoot();
         mapa = vinculacaoLayout.map;
 
-        // Configura o painel inferior (BottomSheet)
         comportamentoPainelInferior = BottomSheetBehavior.from(vinculacaoLayout.bottomSheet);
         comportamentoPainelInferior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
-        // Trata o botão "Voltar" do Android para alternar entre visualizações do painel
         voltarParaCirculosCallback = new OnBackPressedCallback(false) {
             @Override
             public void handleOnBackPressed() {
@@ -145,21 +133,69 @@ public class MapaFragment extends Fragment {
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), voltarParaCirculosCallback);
 
-        // Configuração inicial do Mapa
         mapa.setTileSource(TileSourceFactory.MAPNIK);
         mapa.setMultiTouchControls(true);
         mapa.getController().setZoom(17.0);
 
-        // Inicialização de ouvintes e funcionalidades
         configurarCliqueNoMapa();
         configurarOuvinteBarraPesquisa();
         configurarOuvintesBotoes();
         configurarCirculos();
         configurarAcessibilidade();
+
+        // MVVM & ESP32: Registra os observadores e processa parâmetros do Bundle
+        configurarObservadoresViewModel();
+        processarArgumentosEsp32();
+
         processarBuscaRecebida();
         checarPermissoesELocalizar();
 
         return raiz;
+    }
+
+    // --- INTEGRAÇÃO MVVM PARA O ESP32 ---
+
+    private void configurarObservadoresViewModel() {
+        // Observa alterações de localização do ESP32 no ViewModel
+        viewModel.getPontoEsp32().observe(getViewLifecycleOwner(), pontoEsp32 -> {
+            if (pontoEsp32 != null && mapa != null) {
+                if (marcadorMinhaLocalizacao != null) {
+                    marcadorMinhaLocalizacao.disableFollowLocation();
+                }
+                selecionarLocalEsp32(pontoEsp32);
+            }
+        });
+    }
+
+    private void processarArgumentosEsp32() {
+        if (getArguments() != null && getArguments().containsKey("LATITUDE_ESP32")) {
+            double lat = getArguments().getDouble("LATITUDE_ESP32", 0.0);
+            double lng = getArguments().getDouble("LONGITUDE_ESP32", 0.0);
+
+            if (lat != 0.0 && lng != 0.0) {
+                GeoPoint pontoEsp32 = new GeoPoint(lat, lng);
+                viewModel.setPontoEsp32(pontoEsp32);
+            }
+        }
+    }
+
+    private void selecionarLocalEsp32(GeoPoint pontoEsp32) {
+        estaNavegandoAtivamente = false;
+        viewModel.setEstaNavegando(false);
+
+        limparLinhasDesenhadasNoMapa();
+        adicionarOuMoverMarcadorDeDestino(pontoEsp32);
+
+        if (marcadorDestinoSelecionado != null) {
+            marcadorDestinoSelecionado.setTitle("Localizador Aurora ESP32");
+        }
+
+        mostrarModoLocal();
+        obterEnderecoGeocodificado(pontoEsp32);
+        executarCalculoDeRota();
+
+        vinculacaoLayout.tvNomeDoLocal.setText("Dispositivo Aurora (ESP32)");
+        comportamentoPainelInferior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
     @Override
@@ -180,12 +216,10 @@ public class MapaFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        // Encerra adequadamente as threads para evitar memory leaks
         if (executor != null && !executor.isShutdown()) {
             executor.shutdownNow();
         }
 
-        // Desativa a localização e limpa a view do mapa
         if (marcadorMinhaLocalizacao != null) {
             marcadorMinhaLocalizacao.disableMyLocation();
         }
@@ -221,9 +255,6 @@ public class MapaFragment extends Fragment {
         mapa.getOverlays().add(new MapEventsOverlay(receptorEventosMapa));
     }
 
-    /**
-     * Define o destino selecionado no mapa, limpa rotas anteriores e busca o endereço.
-     */
     private void selecionarLocal(GeoPoint ponto) {
         estaNavegandoAtivamente = false;
         viewModel.setEstaNavegando(false);
@@ -412,7 +443,8 @@ public class MapaFragment extends Fragment {
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
                     if (mapa == null) return;
-                    if (getArguments() == null || !getArguments().containsKey("search_query")) {
+                    if ((getArguments() == null || !getArguments().containsKey("search_query"))
+                            && viewModel.getPontoEsp32().getValue() == null) {
                         GeoPoint posicaoCapturada = marcadorMinhaLocalizacao.getMyLocation();
                         if (posicaoCapturada != null) {
                             mapa.getController().animateTo(posicaoCapturada);
@@ -572,9 +604,6 @@ public class MapaFragment extends Fragment {
         mapa.invalidate();
     }
 
-    /**
-     * Desenha as linhas das rotas no mapa OSMDroid sem quebrar a ordem dos overlays do mapa.
-     */
     private void desenharRotasRecebidasNoMapa(int indiceRotaSelecionada) {
         limparLinhasDesenhadasNoMapa();
 
@@ -743,8 +772,6 @@ public class MapaFragment extends Fragment {
             if (blocosDaRota.length() > 0) {
                 JSONArray passos = blocosDaRota.getJSONObject(0).getJSONArray("steps");
                 textoComOsPassos.append("🟢 Ponto de Partida\n\n");
-
-                int tamanhoIconePx = (int) (20 * getResources().getDisplayMetrics().density);
 
                 for (int i = 0; i < passos.length(); i++) {
                     JSONObject passo = passos.getJSONObject(i);

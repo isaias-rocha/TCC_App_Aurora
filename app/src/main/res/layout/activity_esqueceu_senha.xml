@@ -20,7 +20,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="16dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Voltar"
+            android:contentDescription="@string/common_voltar_tela_anterior"
             android:src="@drawable/ic_back"
             app:tint="?android:attr/textColorPrimary"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +32,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Esqueceu a Senha?"
+            android:text="@string/esqueceu_senha_titulo"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="28sp"
             android:textStyle="bold"
@@ -45,7 +45,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Insira o seu e-mail cadastrado abaixo para receber o código de verificação."
+            android:text="@string/esqueceu_senha_subtitulo"
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,7 +59,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:hint="E-mail"
+            android:hint="@string/esqueceu_senha_hint_email"
             android:textColorHint="?android:attr/textColorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -76,11 +76,11 @@
         <!-- BOTÃO ENVIAR CÓDIGO -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_enviar_codigo"
-            android:layout_width="0dp"
+            android:layout_width="320dp"
             android:layout_height="56dp"
             android:layout_marginTop="32dp"
             android:backgroundTint="?attr/colorPrimary"
-            android:text="Enviar código"
+            android:text="@string/esqueceu_senha_btn_enviar"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="16sp"
@@ -104,7 +104,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lembrou da senha? "
+                android:text="@string/esqueceu_senha_voltar_login"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="14sp" />
 
@@ -112,7 +112,7 @@
                 android:id="@+id/tv_voltar_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Voltar para login"
+                android:text="@string/esqueceu_senha_desc_voltar_login"
                 android:textColor="?attr/colorPrimary"
                 android:textSize="14sp"
                 android:textStyle="bold" />

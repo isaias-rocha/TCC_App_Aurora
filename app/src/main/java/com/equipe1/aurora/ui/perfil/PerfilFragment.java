@@ -20,6 +20,8 @@ import com.equipe1.aurora.databinding.FragmentPerfilBinding;
 // Importações das Activities de destino
 import com.equipe1.aurora.ui.config.ConfigActivity;
 import com.equipe1.aurora.ui.contatos.ContatosActivity;
+import com.equipe1.aurora.ui.contatos.ContatosFragment;
+import com.equipe1.aurora.ui.dispositivo.DispositivoAuroraActivity;
 import com.equipe1.aurora.ui.historico.HistoricoActivity;
 import com.equipe1.aurora.ui.planos.PlanosAssinaturaActivity;
 
@@ -28,17 +30,7 @@ public class PerfilFragment extends Fragment {
     // Referência do View Binding
     private FragmentPerfilBinding binding;
 
-    // Lançador do seletor de fotos da galeria (Photo Picker)
-    private final ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
-            registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-                if (uri != null && binding != null) {
-                    // Define a foto escolhida na ImageView do perfil
-                    binding.imgPerfilAvatar.setImageURI(uri);
-                    Toast.makeText(requireContext(), "Foto atualizada!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(requireContext(), "Nenhuma foto selecionada", Toast.LENGTH_SHORT).show();
-                }
-            });
+
 
     @Nullable
     @Override
@@ -52,13 +44,6 @@ public class PerfilFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Clique no avatar para trocar a foto de perfil
-        binding.imgPerfilAvatar.setOnClickListener(v -> {
-            pickMedia.launch(new PickVisualMediaRequest.Builder()
-                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                    .build());
-        });
-
         // Inicializa as ações de navegação dos menus
         initMenuListeners();
     }
@@ -71,31 +56,40 @@ public class PerfilFragment extends Fragment {
         // 1. Informações Pessoais -> InfoPessoaisActivity
         binding.menuInfoPessoais.setOnClickListener(v -> {
             startActivity(new Intent(requireContext(), InfoPessoaisActivity.class));
+            Toast.makeText(requireContext(), "Informações Pessoais", Toast.LENGTH_SHORT).show();
         });
 
         // 2. Dispositivo Embarcado (Mensagem temporária)
         binding.menuDispositivoEmbarcado.setOnClickListener(v -> {
-            Toast.makeText(requireContext(), "Em breve: Dispositivo Embarcado", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(requireContext(), DispositivoAuroraActivity.class));
+            Toast.makeText(requireContext(), "Dispositivo Embarcado", Toast.LENGTH_SHORT).show();
         });
 
         // 3. Contatos -> ContatosActivity
         binding.menuContatos.setOnClickListener(v -> {
-            startActivity(new Intent(requireContext(), ContatosActivity.class));
+            startActivity(new Intent(requireContext(), ContatosFragment.class));
+            Toast.makeText(requireContext(), "Contatos", Toast.LENGTH_SHORT).show();
+
         });
 
         // 4. Histórico -> HistoricoActivity
         binding.menuHistorico.setOnClickListener(v -> {
             startActivity(new Intent(requireContext(), HistoricoActivity.class));
+            Toast.makeText(requireContext(), "Histórico", Toast.LENGTH_SHORT).show();
+
         });
 
         // 5. Planos de Assinatura -> PlanosAssinaturaActivity
         binding.menuPlanoAssinatura.setOnClickListener(v -> {
             startActivity(new Intent(requireContext(), PlanosAssinaturaActivity.class));
+            Toast.makeText(requireContext(), "Planos de Assinatura", Toast.LENGTH_SHORT).show();
+
         });
 
         // 6. Configurações -> ConfigActivity
         binding.menuConfiguracoes.setOnClickListener(v -> {
             startActivity(new Intent(requireContext(), ConfigActivity.class));
+            Toast.makeText(requireContext(), "Configurações", Toast.LENGTH_SHORT).show();
         });
     }
 

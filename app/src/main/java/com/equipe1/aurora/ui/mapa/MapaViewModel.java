@@ -10,22 +10,14 @@ import org.osmdroid.util.GeoPoint;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * ViewModel responsável por gerenciar e manter o estado da interface do mapa.
- * Preserva dados na memória durante mudanças de configuração (ex: rotação da tela).
- */
 public class MapaViewModel extends ViewModel {
 
-    // Armazena o ponto/destino selecionado no mapa
     private final MutableLiveData<GeoPoint> pontoSelecionado = new MutableLiveData<>();
-
-    // Armazena a lista de círculos de contatos
+    private final MutableLiveData<GeoPoint> pontoEsp32 = new MutableLiveData<>();
     private final MutableLiveData<List<Circulo>> listaCirculos = new MutableLiveData<>(new ArrayList<>());
-
-    // Controla se o modo de navegação ativa está ligado
     private final MutableLiveData<Boolean> estaNavegando = new MutableLiveData<>(false);
 
-    // --- GETTERS E SETTERS (LIVEDATA) ---
+    // --- GETTERS E SETTERS ---
 
     public LiveData<GeoPoint> getPontoSelecionado() {
         return pontoSelecionado;
@@ -33,6 +25,15 @@ public class MapaViewModel extends ViewModel {
 
     public void setPontoSelecionado(GeoPoint ponto) {
         pontoSelecionado.setValue(ponto);
+    }
+
+    // LiveData para o ESP32
+    public LiveData<GeoPoint> getPontoEsp32() {
+        return pontoEsp32;
+    }
+
+    public void setPontoEsp32(GeoPoint ponto) {
+        pontoEsp32.setValue(ponto);
     }
 
     public LiveData<List<Circulo>> getListaCirculos() {

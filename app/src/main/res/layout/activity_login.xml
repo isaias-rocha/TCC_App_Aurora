@@ -71,7 +71,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_email"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
+            android:layout_width="360dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:hint="@string/login_hint_email"
@@ -83,7 +83,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_email"
                 style="@style/TextAppearance.Aurora.Body"
-                android:layout_width="match_parent"
+                android:layout_width="360dp"
+                android:layout_gravity="center"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_email"
                 android:drawableTint="?android:attr/textColorSecondary"
@@ -95,7 +96,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_senha"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
+            android:layout_width="360dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="@string/login_hint_senha"
@@ -108,8 +109,9 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_senha"
+                android:layout_gravity="center"
                 style="@style/TextAppearance.Aurora.Body"
-                android:layout_width="match_parent"
+                android:layout_width="360dp"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:textColor="?android:attr/textColorPrimary" />
@@ -153,8 +155,8 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_logar"
             style="@style/TextAppearance.Aurora.Body"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_width="320dp"
+            android:layout_height="58dp"
             android:layout_marginTop="36dp"
             android:backgroundTint="?attr/colorPrimary"
             android:contentDescription="@string/login_desc_btn_entrar"
@@ -170,8 +172,8 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_logar_google"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_width="320dp"
+            android:layout_height="58dp"
             android:layout_marginTop="16dp"
             android:backgroundTint="?attr/colorSurface"
             android:contentDescription="@string/login_desc_btn_google"

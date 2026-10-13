@@ -1,84 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- =================================================================== -->
-    <!-- GERAL & NAVEGAÇÃO                                                   -->
+    <!-- GERAIS E ACESSIBILIDADE COMUM                                       -->
     <!-- =================================================================== -->
-    <string name="app_name">App Aurora</string>
-    <string name="desenvolvido_por">Desenvolvido por</string>
-    <string name="logotipo_aurora">Logotipo do aplicativo aurora</string>
-    <string name="logotipo_empresa_eagle">Logotipo empresa eagle</string>
+    <string name="app_name">Aurora</string>
+    <string name="common_voltar_tela_anterior">Voltar para a tela anterior</string>
+    <string name="common_desc_alternar_senha">Mostrar ou ocultar a senha</string>
+    <string name="logotipo_aurora">Logotipo do aplicativo Aurora</string>
+    <string name="logotipo_empresa_eagle">Logotipo da empresa Eagle</string>
 
-
-    <!-- Menu de Navegação Inferior -->
+    <!-- =================================================================== -->
+    <!-- NAVEGAÇÃO - MENU INFERIOR (BOTTOM NAV)                              -->
+    <!-- =================================================================== -->
     <string name="menu_home">Início</string>
     <string name="menu_mapa">Mapa</string>
     <string name="menu_contatos">Contatos</string>
-    <string name="menu_perfil">Perfil</string>
+    <string name="menu_menu">Menu</string>
 
-    <!-- Comum / Compartilhado -->
-    <string name="common_voltar_tela_anterior">Voltar para a tela anterior</string>
-    <string name="common_desc_alternar_senha">Alternar visibilidade da senha</string>
+    <!-- =================================================================== -->
+    <!-- NAVEGAÇÃO - MENU LATERAL (DRAWER NAV)                               -->
+    <!-- =================================================================== -->
+    <string name="drawer_perfil">Perfil</string>
+    <string name="drawer_dispositivo">Dispositivo Aurora</string>
+    <string name="drawer_mapa">Mapa</string>
+    <string name="drawer_historico">Histórico</string>
+    <string name="drawer_solicitacoes">Solicitações de Amizade</string>
+    <string name="drawer_gerenciar_circulo">Meus Círculos</string>
+    <string name="drawer_planos">Planos de Assinatura</string>
+    <string name="drawer_grupo_geral">Geral</string>
+    <string name="drawer_configuracoes">Configurações</string>
+    <string name="drawer_acessibilidade">Acessibilidade</string>
+    <string name="drawer_idioma">Idioma</string>
+    <string name="drawer_logout">Sair da Conta</string>
 
     <!-- =================================================================== -->
     <!-- TELA SPLASH                                                         -->
     <!-- =================================================================== -->
-    <string name="splash_logotipo_empresa_eagle">Logotipo da empresa Eagle</string>
+    <string name="desenvolvido_por">Desenvolvido por</string>
 
     <!-- =================================================================== -->
     <!-- TELA DE LOGIN                                                       -->
     <!-- =================================================================== -->
-    <!-- Títulos e Textos -->
-    <string name="login_titulo">Bem-vindo de volta!</string>
-    <string name="login_subtitulo">Faça o login para continuar</string>
-
-    <!-- Campos de Entrada (Hints) -->
-    <string name="login_hint_email">Digite o e-mail</string>
-    <string name="login_hint_senha">Digite sua senha</string>
-
-    <!-- Opções e Ações -->
+    <string name="login_titulo">Boas-vindas ao Aurora</string>
+    <string name="login_subtitulo">Entre na sua conta para continuar</string>
+    <string name="login_hint_email">E-mail</string>
+    <string name="login_hint_senha">Senha</string>
     <string name="login_lembrar_credenciais">Lembrar credenciais</string>
-    <string name="login_esqueceu_senha">Esqueceu a senha?</string>
+    <string name="login_esqueceu_senha">Esqueceu a senha\?</string>
     <string name="login_btn_entrar">Entrar</string>
-    <string name="login_btn_google">Entrar com Google</string>
-
-    <!-- Link Cadastro -->
-    <string name="login_nao_tem_conta">Não tem uma conta?</string>
+    <string name="login_desc_btn_entrar">Entrar na conta</string>
+    <string name="login_btn_google">Entrar com o Google</string>
+    <string name="login_desc_btn_google">Entrar usando a conta do Google</string>
+    <string name="login_nao_tem_conta">Não tem uma conta\? </string>
     <string name="login_criar_conta">Criar conta</string>
-
-    <!-- Acessibilidade (TalkBack) - Login -->
-    <string name="login_desc_lembrar_credenciais">Opção para lembrar credenciais de acesso</string>
-    <string name="login_desc_esqueceu_senha">Clique aqui para recuperar a sua senha</string>
-    <string name="login_desc_btn_entrar">Botão para fazer login</string>
-    <string name="login_desc_btn_google">Botão para fazer login usando conta do Google</string>
-    <string name="login_desc_container_criar_conta">Ainda não tem uma conta? Clique aqui para criar</string>
+    <string name="login_desc_container_criar_conta">Ir para a tela de criação de conta</string>
 
     <!-- =================================================================== -->
     <!-- TELA DE CADASTRO                                                    -->
     <!-- =================================================================== -->
-    <!-- Títulos e Textos -->
-    <string name="cadastro_titulo">Criar Conta</string>
-    <string name="cadastro_subtitulo">Preencha os dados abaixo</string>
-
-    <!-- Campos de Entrada (Hints) -->
-    <string name="cadastro_hint_nome">Nome Completo</string>
+    <string name="cadastro_titulo">Crie sua conta</string>
+    <string name="cadastro_subtitulo">Preencha os dados abaixo para se cadastrar</string>
+    <string name="cadastro_hint_nome">Nome completo</string>
     <string name="cadastro_hint_email">E-mail</string>
-    <string name="cadastro_hint_telefone">Telefone</string>
+    <string name="cadastro_hint_telefone">Telefone / Celular</string>
     <string name="cadastro_hint_senha">Senha</string>
     <string name="cadastro_hint_confirmar_senha">Confirmar senha</string>
-
-    <!-- Botões e Links -->
+    <string name="cadastro_desc_alternar_confirmar_senha">Mostrar ou ocultar a confirmação de senha</string>
     <string name="cadastro_btn_cadastrar">Cadastrar</string>
-    <string name="cadastro_ja_tem_conta">Já tem uma conta?</string>
-    <string name="cadastro_logar">Logar</string>
+    <string name="cadastro_desc_btn_cadastrar">Concluir o cadastro da conta</string>
+    <string name="cadastro_ja_tem_conta">Já possui uma conta?</string>
+    <string name="cadastro_voltar_login">Voltar para Login</string>
 
-    <!-- Acessibilidade (TalkBack) - Cadastro -->
-    <string name="cadastro_desc_nome">Campo para digitação do nome completo</string>
-    <string name="cadastro_desc_email">Campo para digitação do e-mail</string>
-    <string name="cadastro_desc_telefone">Campo para digitação do número de telefone com DDD</string>
-    <string name="cadastro_desc_criar_senha">Campo para criação da senha</string>
-    <string name="cadastro_desc_alternar_confirmar_senha">Alternar visibilidade da confirmação de senha</string>
-    <string name="cadastro_desc_confirmar_senha">Campo para confirmação da senha digitada acima</string>
-    <string name="cadastro_desc_btn_cadastrar">Botão para concluir o cadastro</string>
-    <string name="cadastro_desc_container_ir_para_login">Já tem uma conta? Clique aqui para fazer login</string>
+    <!-- =================================================================== -->
+    <!-- TELA DE ESQUECEU A SENHA                                           -->
+    <!-- =================================================================== -->
+    <string name="esqueceu_senha_titulo">Esqueceu a Senha?</string>
+    <string name="esqueceu_senha_subtitulo">Insira o seu e-mail cadastrado abaixo para receber o código de verificação.</string>
+    <string name="esqueceu_senha_hint_email">E-mail</string>
+    <string name="esqueceu_senha_btn_enviar">Enviar código</string>
+    <string name="esqueceu_senha_desc_btn_enviar">Enviar o código de verificação para o e-mail</string>
+    <string name="esqueceu_senha_lembrou_senha">Lembrou da senha? </string>
+    <string name="esqueceu_senha_voltar_login">Voltar para login</string>
+    <string name="esqueceu_senha_desc_voltar_login">Retornar à tela de login</string>
 
+    <!-- =================================================================== -->
+    <!-- TELA DE CÓDIGO OTP                                                  -->
+    <!-- =================================================================== -->
+    <string name="otp_titulo">Código OTP</string>
+    <string name="otp_subtitulo">Digitamos o código de 4 dígitos, enviado para o seu e-mail cadastrado.</string>
+    <string name="otp_desc_digito_1">Primeiro dígito do código de verificação</string>
+    <string name="otp_desc_digito_2">Segundo dígito do código de verificação</string>
+    <string name="otp_desc_digito_3">Terceiro dígito do código de verificação</string>
+    <string name="otp_desc_digito_4">Quarto dígito do código de verificação</string>
+    <string name="otp_btn_confirmar">Confirmar</string>
+    <string name="otp_desc_btn_confirmar">Confirmar o código de verificação digitado</string>
+    <string name="otp_nao_recebeu_codigo">Não recebeu o código\? </string>
+    <string name="otp_reenviar_codigo">Reenviar</string>
+    <string name="otp_desc_reenviar_codigo">Reenviar novo código por e-mail</string>
+
+    <!-- =================================================================== -->
+    <!-- TELA HOME (FRAGMENT_HOME)                                          -->
+    <!-- =================================================================== -->
+    <string name="home_desc_header_profile">Perfil do usuário. Olá, Usuário. Que bom te ver por aqui.</string>
+    <string name="home_ola">Olá, </string>
+    <string name="home_usuario_padrao">Usuário</string>
+    <string name="home_subtitulo_boas_vindas">Que bom te ver por aqui.</string>
+    <string name="home_hint_pesquisa">Pesquisar lugares, amigos…</string>
+    <string name="home_desc_mapa_preview">Pré-visualização do mapa interativo. Toque duas vezes para abrir o mapa em tela cheia.</string>
+    <string name="home_titulo_navegacao_rapida">Navegação Rápida</string>
+    <string name="home_rotas_salvas">Rotas Salvas</string>
+    <string name="home_subtitulo_rotas_salvas">Seus trajetos</string>
+    <string name="home_desc_btn_rotas_salvas">Rotas Salvas. Acesse seus trajetos habituais. Toque duas vezes para abrir.</string>
+    <string name="home_circulos">Círculos</string>
+    <string name="home_subtitulo_circulos">Grupos e proteção</string>
+    <string name="home_desc_btn_circulos">Círculos. Gestão de grupos de segurança e proteção. Toque duas vezes para abrir.</string>
+    <string name="home_historico">Histórico</string>
+    <string name="home_subtitulo_historico">Alertas e registros</string>
+    <string name="home_desc_btn_historico">Histórico. Registro de alertas, ocorrências e rotas. Toque duas vezes para abrir.</string>
+    <string name="home_titulo_meus_circulos">Meus Círculos</string>
+    <string name="home_btn_gerenciar">Gerenciar</string>
+    <string name="home_desc_gerenciar_circulos">Gerenciar círculos. Toque duas vezes para administrar seus grupos de segurança.</string>
+    <string name="home_circulo_familia">Família</string>
+    <string name="home_membros_ativos_familia">4 membros ativos</string>
+    <string name="home_desc_circulo_familia">Círculo Família, 4 membros ativos. Toque duas vezes para ver detalhes.</string>
+    <string name="home_circulo_faculdade">Faculdade</string>
+    <string name="home_membros_ativos_faculdade">6 membros ativos</string>
+    <string name="home_desc_circulo_faculdade">Círculo Faculdade, 6 membros ativos. Toque duas vezes para ver detalhes.</string>
+    <string name="home_novo_circulo">Novo Círculo</string>
+    <string name="home_desc_add_circulo">Criar ou adicionar novo círculo de segurança. Toque duas vezes para criar.</string>
+    <string name="home_titulo_amigos_proximos">Amigos Próximos</string>
+    <string name="home_btn_ver_todos">Ver todos</string>
+    <string name="home_desc_ver_todos_amigos">Ver lista completa de amigos próximos. Toque duas vezes para abrir.</string>
+    <string name="home_contato_exemplo_nome">Contato 1</string>
+    <string name="home_contato_exemplo_distancia">321 m</string>
+    <string name="home_desc_contato_exemplo">Contato 1, localizado a 321 metros de distância. Toque duas vezes para ver localização no mapa.</string>
+
+    <!-- =================================================================== -->
+    <!-- TELA DE MAPA (FRAGMENT_MAPA)                                       -->
+    <!-- =================================================================== -->
+    <string name="mapa_desc_mapa">Mapa interativo. Toque em um ponto para ver endereço, distância, tempo e coordenadas.</string>
+    <string name="mapa_hint_pesquisa">Pesquisar no mapa…</string>
+    <string name="mapa_desc_btn_voz">Pesquisar por voz</string>
+    <string name="mapa_filtro_todos">Todos</string>
+    <string name="mapa_filtro_rotas">Rotas</string>
+    <string name="mapa_filtro_amigos">Amigos</string>
+    <string name="mapa_filtro_grupos">Grupos</string>
+    <string name="mapa_desc_minha_localizacao">Centralizar na minha localização</string>
+    <string name="mapa_titulo_meus_circulos">Meus círculos</string>
+    <string name="mapa_desc_btn_gerenciar_circulos">Gerenciar círculos</string>
+    <string name="mapa_btn_gerenciar">Gerenciar</string>
+    <string name="mapa_btn_novo_circulo">Novo círculo</string>
+    <string name="mapa_circulo_vazio">Nenhum membro neste círculo ainda.</string>
+    <string name="mapa_padrao_nome_local">Toque em um ponto no mapa</string>
+    <string name="mapa_padrao_estado_local">Selecione um destino para navegar</string>
+    <string name="mapa_padrao_distancia_tempo">-- min (-- km)</string>
+    <string name="mapa_padrao_coordenadas">Latitude:    |   Longitude: </string>
+    <string name="mapa_desc_btn_navigate">Calcular rota até o local selecionado</string>
+    <string name="mapa_titulo_etapas">Etapas do Percurso</string>
+    <string name="mapa_instrucao_etapas">• Toque no botão de rota para ver as instruções detalhadas.</string>
+    <string name="mapa_btn_voltar_circulos">Voltar aos círculos</string>
+
+    <!-- =================================================================== -->
+    <!-- TELA SOS (FRAGMENT_SOS)                                            -->
+    <!-- =================================================================== -->
+    <string name="sos_titulo">Emergência</string>
+    <string name="sos_subtitulo">Precisa de ajuda\?</string>
+    <string name="sos_btn_texto">SOS</string>
+    <string name="sos_desc_btn_sos">Acionar emergência SOS. Mantenha pressionado para enviar o alerta com sua localização.</string>
+    <string name="sos_descricao_explicativa">Ao acionar o SOS, a sua localização será enviada para seus contatos confiáveis</string>
+    <string name="sos_btn_ligar_emergencia">Ligar para emergência</string>
+
+    <!-- =================================================================== -->
+    <!-- TELA DE CONTATOS (FRAGMENT_CONTATOS)                               -->
+    <!-- =================================================================== -->
+    <string name="contatos_titulo">Contatos</string>
+    <string name="contatos_subtitulo">Pessoas que você selecionou em caso de emergência</string>
+    <string name="contatos_btn_adicionar">Adicionar contato</string>
+
+    <!-- =================================================================== -->
+    <!-- TELA DE ACESSIBILIDADE                                              -->
+    <!-- =================================================================== -->
+    <string name="acessibilidade_titulo">Acessibilidade</string>
+    <string name="acessibilidade_subtitulo">Ajuste as configurações para uma experiência de uso mais confortável.</string>
+    <string name="acessibilidade_secao_visual">VISUAL</string>
+    <string name="acessibilidade_alto_contraste">Modo de Alto Contraste</string>
+    <string name="acessibilidade_alto_contraste_desc">Destaca bordas e aumenta a legibilidade das cores</string>
+    <string name="acessibilidade_desc_alto_contraste_row">Modo de Alto Contraste. Destaca bordas e aumenta a legibilidade das cores.</string>
+    <string name="acessibilidade_desc_switch_alto_contraste">Alternar Modo de Alto Contraste</string>
+    <string name="acessibilidade_tamanho_fonte">Tamanho da Fonte</string>
+    <string name="acessibilidade_tamanho_fonte_desc">Ajuste a escala dos textos para facilitar a leitura</string>
+    <string name="acessibilidade_desc_slider_fonte">Controle deslizante para alterar o tamanho da fonte</string>
+    <string name="acessibilidade_secao_interacao">INTERAÇÃO E FEEDBACK</string>
+    <string name="acessibilidade_vibracao">Vibração</string>
+    <string name="acessibilidade_vibracao_desc">Vibra o celular ao acionar o botão SOS e alertas</string>
+    <string name="acessibilidade_desc_feedback_tatil_row">Vibração. Vibra o celular ao acionar o botão SOS e alertas.</string>
+    <string name="acessibilidade_desc_switch_vibracao">Alternar feedback por vibração</string>
+    <string name="acessibilidade_leitor_tela">Suporte a TalkBack</string>
+    <string name="acessibilidade_leitor_tela_desc">Otimiza a leitura de voz dos botões e alertas do app</string>
+    <string name="acessibilidade_desc_leitor_tela_row">Suporte a TalkBack. Otimiza a leitura de voz dos botões e alertas do app.</string>
+    <string name="acessibilidade_desc_switch_leitor_tela">Alternar otimização para leitor de tela</string>
+
+    <!-- =================================================================== -->
+    <!-- TELA DE CONFIGURAÇÕES                                               -->
+    <!-- =================================================================== -->
+    <string name="config_titulo">Configurações</string>
+    <string name="config_subtitulo">Gerencie suas preferências e ajustes do aplicativo</string>
+    <string name="config_notificacoes">Notificações</string>
+    <string name="config_desc_switch_notificacoes">Alternar recebimento de notificações</string>
+    <string name="config_localizacao">Compartilhamento de localização</string>
+    <string name="config_desc_switch_localizacao">Alternar compartilhamento de localização</string>
+    <string name="config_planos_assinatura">Planos de assinatura</string>
+    <string name="config_desc_planos_assinatura">Abrir tela de planos de assinatura</string>
+    <string name="config_acessibilidade">Acessibilidade</string>
+    <string name="config_desc_acessibilidade">Abrir configurações de acessibilidade</string>
+    <string name="config_idioma">Idioma</string>
+    <string name="config_desc_idioma">Alterar idioma do aplicativo</string>
+    <string name="config_sobre">Sobre o aplicativo</string>
+    <string name="config_desc_sobre">Exibir informações sobre o aplicativo</string>
+    <string name="config_sair_conta">Sair da conta</string>
+    <string name="config_desc_sair_conta">Encerrar sessão e sair da conta</string>
+    <string name="campo_email">E-mail</string>
+    <string name="btn_enviar_codigo">Enviar código</string>
 </resources>
