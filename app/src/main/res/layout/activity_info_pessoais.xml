@@ -231,7 +231,7 @@
         <!-- BOTÃO SALVAR ALTERAÇÕES -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_salvar_informacoes"
-            style="@style/AuroraButtonStyle"
+            style="@style/Widget.Aurora.Button"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginStart="24dp"

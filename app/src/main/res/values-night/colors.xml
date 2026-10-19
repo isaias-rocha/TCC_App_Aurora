@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!-- Cores Globais / Design System (Ajustada para Modo Escuro) -->
-    <color name="cor_primaria">#C88A25</color>
-    <color name="cor_segundaria">#2ECC71</color>
-    <color name="cor_terciaria">#B388FF</color> <!-- Ajustado de #8032E6 para garantir rácio de 8.72:1 -->
-    <color name="vermelho_alerta">#FF6B6B</color> <!-- Ajustado de #E74C3C para garantir 6.12:1 -->
-    <color name="texto">#FFFFFF</color>
+    <!-- Cores Globais / Design System (Modo Escuro - WCAG AA) -->
+    <color name="cor_primaria">#7090FF</color>       <!-- Rácio 6.35:1 -->
+    <color name="cor_segundaria">#2ECC71</color>     <!-- Rácio 8.91:1 -->
+    <color name="cor_terciaria">#FFCD88</color>     <!-- Rácio 7.03:1 -->
+    <color name="vermelho_alerta">#FF6B6B</color>    <!-- Rácio 6.75:1 -->
+    <color name="texto">#FFFFFF</color>              <!-- Rácio 18.73:1 -->
 
     <!-- Mapeamento MODO ESCURO -->
     <color name="bg_escuro">#121212</color>
     <color name="surface_escuro">#1E1E1E</color>
-    <color name="on_bg_escuro">#E2E2E2</color>
-    <color name="on_surface_escuro">#E2E2E2</color>
-    <color name="text_primary_escuro">#EDEDED</color>
-    <color name="text_secondary_escuro">#A0A0A0</color>
-    <color name="cor_borda">#2E2E2E</color>
-
+    <color name="on_bg_escuro">#E2E2E2</color>        <!-- Rácio 14.46:1 -->
+    <color name="on_surface_escuro">#E2E2E2</color>   <!-- Rácio 13.14:1 -->
+    <color name="text_primary_escuro">#EDEDED</color>  <!-- Rácio 16.00:1 -->
+    <color name="text_secondary_escuro">#A0A0A0</color><!-- Rácio 7.16:1 -->
+    <color name="cor_borda">#616161</color>           <!-- Rácio 3.02:1 (Ajustado p/ UI) -->
 </resources>

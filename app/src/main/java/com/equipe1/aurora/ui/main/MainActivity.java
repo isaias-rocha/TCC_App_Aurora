@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.os.LocaleListCompat;
@@ -20,9 +21,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.equipe1.aurora.R;
 import com.equipe1.aurora.databinding.ActivityMainBinding;
-import com.equipe1.aurora.ui.dispositivo.DispositivoAuroraActivity;
 import com.equipe1.aurora.ui.historico.HistoricoActivity;
-import com.equipe1.aurora.ui.perfil.PerfilFragment;
 import com.equipe1.aurora.ui.planos.PlanosAssinaturaActivity;
 import com.equipe1.aurora.ui.solicitacao.SolicitacaoAmizadeActivity;
 import com.equipe1.aurora.ui.config.ConfigActivity;
@@ -43,13 +42,14 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = getSharedPreferences("AuroraPrefs", MODE_PRIVATE);
 
+        // Recupera o NavHostFragment responsável por gerenciar o ciclo de vida dos Fragments no NavGraph
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment);
 
         if (navHostFragment != null) {
             NavController navController = navHostFragment.getNavController();
 
-            // 1. BottomNavigationView Listener
+            // 1. BottomNavigationView Listener (Sincronização da barra inferior)
             binding.bottomNavigation.setOnItemSelectedListener(item -> {
                 int itemId = item.getItemId();
 
@@ -75,11 +75,12 @@ public class MainActivity extends AppCompatActivity {
                     navController.navigate(itemId, null, navOptions);
                     return true;
                 } catch (Exception e) {
+                    e.printStackTrace();
                     return false;
                 }
             });
 
-            // 2. Botão SOS
+            // 2. Botão SOS Central
             binding.btnSos.setOnClickListener(v -> {
                 if (navController.getCurrentDestination() != null &&
                         navController.getCurrentDestination().getId() != R.id.nav_sos) {
@@ -98,14 +99,26 @@ public class MainActivity extends AppCompatActivity {
                 int itemId = item.getItemId();
 
                 if (itemId == R.id.drawer_perfil) {
-                    startActivity(new Intent(this, PerfilFragment.class));
+                    try {
+                        navController.navigate(R.id.nav_perfil);
+                    } catch (Exception e) {
+                        navController.navigate(R.id.drawer_perfil);                    }
                 }
                 else if (itemId == R.id.drawer_dispositivo) {
-                    startActivity(new Intent(this, DispositivoAuroraActivity.class));
+                    try {
+                        navController.navigate(R.id.drawer_dispositivo);
+                    } catch (Exception e) {
+                        navController.navigate(R.id.drawer_dispositivo);
+                    }
                 }
                 else if (itemId == R.id.drawer_mapa) {
-                    navController.navigate(R.id.nav_mapa);
+                    try {
+                        navController.navigate(R.id.nav_mapa);
+                    } catch (Exception e) {
+                        navController.navigate(R.id.drawer_mapa);
+                    }
                 }
+                // Activities legadas continuam sendo abertas via Intent tradicional
                 else if (itemId == R.id.drawer_historico) {
                     startActivity(new Intent(this, HistoricoActivity.class));
                 }
@@ -135,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             });
 
-            // 4. Sincroniza ícones ativos
+            // 4. Sincroniza ícones ativos da BottomBar de acordo com o Fragment visível
             navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
                 int id = destination.getId();
                 MenuItem menuItem = binding.bottomNavigation.getMenu().findItem(id);
@@ -150,10 +163,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            // 5. Trata a requisição vinda da DispositivoAuroraActivity
+            // 5. Trata intents de atalhos e notificações em segundo plano para o Mapa
             verificarIntentRedirecionamentoMapa(getIntent(), navController);
         }
 
+        // Trata o botão "Voltar" nativo do sistema fechando o Drawer caso ele esteja aberto
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -168,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    protected void onNewIntent(@NonNull Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
 

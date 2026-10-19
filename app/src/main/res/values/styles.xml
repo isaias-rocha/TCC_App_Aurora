@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Estilo Principal para Botões Preenchidos (Aurora) -->
-    <style name="Widget.Aurora.Button" parent="Widget.Material3.Button">
-        <item name="backgroundTint">@color/cor_primaria</item>
+    <!-- Estilo Principal para Botões Preenchidos (Aurora - Material 3) -->
+    <style name="Widget.Aurora.Button" parent="Widget.Material3.Button.ElevatedButton">
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="cornerRadius">12dp</item>
-        <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textAllCaps">false</item>
-        <item name="fontFamily">@font/inter_regular</item>
-        <!-- Para adicionar sombra ao botão Material, use elevation -->
+        <item name="fontFamily">@font/poppins_semibold</item>
         <item name="elevation">4dp</item>
     </style>
 
+    <!-- Estilo para Cards com Switch (Aurora - Material 3) -->
     <style name="Widget.Aurora.SwitchCard" parent="Widget.Material3.CompoundButton.MaterialSwitch">
         <item name="android:paddingStart">20dp</item>
         <item name="android:paddingEnd">20dp</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingBottom">16dp</item>
-        <item name="android:textAppearance">@style/TextAppearance.Aurora.Body</item>
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textAppearance">?attr/textAppearanceBodyLarge</item>
+        <!-- Token M3 para cor de texto sobre superfícies -->
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
 </resources>

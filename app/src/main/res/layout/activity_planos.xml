@@ -22,6 +22,7 @@
 
     <!-- TÍTULO DA TELA -->
     <TextView
+        style="@style/TextAppearance.Aurora.Title"
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -96,6 +97,7 @@
 
             <!-- Plano Premium -->
             <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Aurora.SwitchCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
@@ -138,7 +140,7 @@
                         android:textSize="14sp" />
 
                     <com.google.android.material.button.MaterialButton
-                        style="@style/AuroraButtonStyle"
+                        style="@style/Widget.Aurora.Button"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:layout_marginTop="24dp"

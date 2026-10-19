@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Base.Theme.Aurora" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Cores Primárias e de Destaque -->
+    <style name="Base.Theme.Aurora" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Cores Primárias, Secundárias e Terciárias (Material 3) -->
         <item name="colorPrimary">@color/cor_primaria</item>
-        <item name="colorPrimaryVariant">@color/cor_primaria</item>
-        <item name="colorOnPrimary">@color/texto</item>
-        <item name="colorSecondary">@color/cor_segundaria</item>
-        <item name="colorTertiary">@color/cor_terciaria</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
 
-        <!-- Fundos e Superfícies (colorSurface define a cor padrão dos Cards) -->
+        <item name="colorSecondary">@color/cor_segundaria</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+
+        <item name="colorTertiary">@color/cor_terciaria</item>
+        <item name="colorOnTertiary">#FFFFFF</item>
+
+        <!-- Fundos, Superfícies e Bordas -->
         <item name="android:windowBackground">@color/bg_claro</item>
         <item name="colorSurface">@color/surface_claro</item>
         <item name="colorOnSurface">@color/on_surface_claro</item>
         <item name="colorOnBackground">@color/on_bg_claro</item>
 
-        <!-- Cores de Texto -->
+        <!-- Define a cor da borda para TextInputLayouts Outlined e Cards M3 -->
+        <item name="colorOutline">@color/text_secondary_claro</item>
+
+        <!-- Cores de Texto Padrão -->
         <item name="android:textColorPrimary">@color/on_bg_claro</item>
         <item name="android:textColorSecondary">@color/text_secondary_claro</item>
 
-        <!-- Fonte Padrão para todo o App -->
+        <!-- Fonte Padrão do Aplicativo -->
         <item name="fontFamily">@font/inter</item>
         <item name="android:fontFamily">@font/inter</item>
     </style>
 
     <style name="Theme.Aurora" parent="Base.Theme.Aurora" />
 
-    <!-- Estilos de Tipografia do Design System Aurora (Globais) -->
+    <!-- Estilos de Tipografia do Design System Aurora (M3) -->
 
     <!-- Título Principal (Poppins Bold) -->
-    <style name="TextAppearance.Aurora.Title" parent="TextAppearance.MaterialComponents.Headline5">
+    <style name="TextAppearance.Aurora.Title" parent="TextAppearance.Material3.TitleLarge">
         <item name="fontFamily">@font/poppins</item>
         <item name="android:fontFamily">@font/poppins</item>
         <item name="android:textFontWeight">700</item>
@@ -37,14 +43,14 @@
     </style>
 
     <!-- Subtítulo / Título de Cards (Poppins SemiBold) -->
-    <style name="TextAppearance.Aurora.Subtitle" parent="TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TextAppearance.Aurora.Subtitle" parent="TextAppearance.Material3.TitleMedium">
         <item name="fontFamily">@font/poppins</item>
         <item name="android:fontFamily">@font/poppins</item>
         <item name="android:textFontWeight">600</item>
     </style>
 
     <!-- Corpo de Texto / Inputs / Rótulos (Inter Regular) -->
-    <style name="TextAppearance.Aurora.Body" parent="TextAppearance.MaterialComponents.Body1">
+    <style name="TextAppearance.Aurora.Body" parent="TextAppearance.Material3.BodyMedium">
         <item name="fontFamily">@font/inter</item>
         <item name="android:fontFamily">@font/inter</item>
         <item name="android:textFontWeight">400</item>

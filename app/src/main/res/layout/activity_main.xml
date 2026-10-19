@@ -28,9 +28,9 @@
             android:layout_gravity="bottom"
             android:backgroundTint="@color/surface_escuro"
             app:fabAlignmentMode="center"
-            app:fabCradleMargin="8dp"
+            app:fabCradleMargin="2dp"
             app:fabCradleRoundedCornerRadius="16dp"
-            app:fabCradleVerticalOffset="8dp">
+            app:fabCradleVerticalOffset="2dp">
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_navigation"

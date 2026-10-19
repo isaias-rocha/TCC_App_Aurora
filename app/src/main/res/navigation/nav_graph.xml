@@ -35,4 +35,17 @@
         android:label="Perfil"
         tools:layout="@layout/fragment_perfil" />
 
+    <fragment
+        android:id="@+id/drawer_dispositivo"
+        android:name="com.equipe1.aurora.ui.dispositivo.DispositivoFragment"
+        android:label="Dispositivo"
+        tools:layout="@layout/fragment_dispositivo">
+
+        <action
+            android:id="@+id/action_dispositivoFragment_to_mapaFragment"
+            app:destination="@id/nav_mapa"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+
 </navigation>

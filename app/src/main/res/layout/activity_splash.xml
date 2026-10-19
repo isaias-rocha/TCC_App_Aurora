@@ -8,7 +8,6 @@
     android:padding="24dp"
     tools:context=".ui.splash.SplashActivity">
 
-    <!-- Container central contendo a logo e o progress bar -->
     <LinearLayout
         android:id="@+id/container_center"
         android:layout_width="wrap_content"
@@ -24,7 +23,7 @@
             android:contentDescription="@string/logotipo_aurora"
             android:src="@drawable/logo_aurora" />
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
+        <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/pb_barra_progresso"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,6 +32,12 @@
             app:indicatorColor="?attr/colorPrimary"
             app:indicatorSize="36dp"
             app:trackCornerRadius="4dp" />
+
+
+
+
+
+
 
     </LinearLayout>
 

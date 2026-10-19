@@ -11,7 +11,7 @@
         <item
             android:id="@+id/drawer_dispositivo"
             android:icon="@drawable/ic_hardware"
-            android:title="Dispositivo Aurora" />
+            android:title="Dispositivo" />
 
         <item
             android:id="@+id/drawer_mapa"

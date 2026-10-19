@@ -1,27 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Base.Theme.Aurora" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Cores Primárias e de Destaque -->
+    <style name="Base.Theme.Aurora" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Cores Primárias, Secundárias e Terciárias (Material 3 - Modo Escuro) -->
         <item name="colorPrimary">@color/cor_primaria</item>
-        <item name="colorPrimaryVariant">@color/cor_primaria</item>
-        <item name="colorOnPrimary">@color/texto</item>
-        <item name="colorSecondary">@color/cor_segundaria</item>
-        <item name="colorTertiary">@color/cor_terciaria</item>
+        <!-- Texto escuro (#000000) sobre a cor primaria tom pastel garante o rácio WCAG > 4.5:1 -->
+        <item name="colorOnPrimary">#000000</item>
 
-        <!-- Fundos e Superfícies (O Card assumirá @color/surface_escuro) -->
+        <item name="colorSecondary">@color/cor_segundaria</item>
+        <item name="colorOnSecondary">#000000</item>
+
+        <item name="colorTertiary">@color/cor_terciaria</item>
+        <item name="colorOnTertiary">#000000</item>
+
+        <!-- Fundos, Superfícies e Bordas -->
         <item name="android:windowBackground">@color/bg_escuro</item>
         <item name="colorSurface">@color/surface_escuro</item>
         <item name="colorOnSurface">@color/on_surface_escuro</item>
         <item name="colorOnBackground">@color/on_bg_escuro</item>
 
-        <!-- Cores de Texto -->
+        <!-- Cor da borda para TextInputLayouts Outlined e Cards M3 -->
+        <item name="colorOutline">@color/cor_borda</item>
+
+        <!-- Cores de Texto Padrão -->
         <item name="android:textColorPrimary">@color/on_bg_escuro</item>
         <item name="android:textColorSecondary">@color/text_secondary_escuro</item>
 
-        <!-- Fonte Padrão para todo o App -->
+        <!-- Fonte Padrão do Aplicativo -->
         <item name="fontFamily">@font/inter</item>
         <item name="android:fontFamily">@font/inter</item>
     </style>
+
+    <style name="Theme.Aurora" parent="Base.Theme.Aurora" />
 
 </resources>
