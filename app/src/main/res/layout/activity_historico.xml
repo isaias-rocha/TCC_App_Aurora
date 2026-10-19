@@ -32,30 +32,30 @@
         android:orientation="horizontal">
 
         <Button
+            style="@style/Widget.Aurora.Button"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:backgroundTint="@color/cor_primaria"
             android:text="Todos"
-            style="@style/TextAppearance.Aurora.Body"
             android:textColor="#FFFFFF"
             android:textSize="12sp" />
 
         <Button
+            style="@style/Widget.Aurora.Button"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:backgroundTint="#1E293B"
             android:text="Rotas"
-            style="@style/TextAppearance.Aurora.Body"
             android:textColor="#94A3B8"
             android:textSize="12sp" />
 
         <Button
+            style="@style/Widget.Aurora.Button"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:backgroundTint="#1E293B"
-            style="@style/TextAppearance.Aurora.Body"
             android:text="Alertas"
             android:textColor="#94A3B8"
             android:textSize="12sp" />
