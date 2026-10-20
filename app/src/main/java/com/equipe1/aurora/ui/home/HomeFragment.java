@@ -54,8 +54,6 @@ public class HomeFragment extends Fragment {
     private MaterialCardView cardCirculoFamilia;
     private MaterialCardView cardCirculoFaculdade;
     private MaterialCardView cardAddCirculo;
-
-    // Secção "Amigos Próximos"
     private TextView tvFriendsSeeAll;
 
     @Override

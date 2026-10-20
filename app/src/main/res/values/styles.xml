@@ -1,26 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Estilo Principal para Botões Preenchidos (Aurora - Material 3) -->
+    <!-- =================================================================== -->
+    <!-- ESTILO PRINCIPAL PARA BOTÕES PREENCHIDOS (AURORA - MATERIAL 3)     -->
+    <!-- =================================================================== -->
     <style name="Widget.Aurora.Button" parent="Widget.Material3.Button.ElevatedButton">
+        <!-- Cor de fundo do botão utilizando o atributo primário do tema -->
         <item name="backgroundTint">?attr/colorPrimary</item>
+
+        <!-- Cor do texto e ícones exibidos sobre a cor primária -->
         <item name="android:textColor">?attr/colorOnPrimary</item>
+
+        <!-- Arredondamento dos cantos do botão -->
         <item name="cornerRadius">12dp</item>
+
+        <!-- Tamanho da fonte do texto -->
         <item name="android:textSize">16sp</item>
+
+        <!-- Mantém o texto com a grafia original (desativa a caixa alta automática) -->
         <item name="android:textAllCaps">false</item>
+
+        <!-- Família de fonte personalizada do projeto -->
         <item name="fontFamily">@font/poppins_semibold</item>
+
+        <!-- Altura da elevação para projetar sombra no estilo Elevated -->
         <item name="elevation">4dp</item>
     </style>
 
-    <!-- Estilo para Cards com Switch (Aurora - Material 3) -->
+    <!-- =================================================================== -->
+    <!-- ESTILO PARA CARDS COM SWITCH (AURORA - MATERIAL 3)                 -->
+    <!-- =================================================================== -->
     <style name="Widget.Aurora.SwitchCard" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <!-- Preenchimento interno lateral (esquerda e direita) -->
         <item name="android:paddingStart">20dp</item>
         <item name="android:paddingEnd">20dp</item>
+
+        <!-- Preenchimento interno vertical (topo e base) -->
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingBottom">16dp</item>
+
+        <!-- Aplica o tamanho e peso de fonte padrão M3 para corpo de texto grande -->
         <item name="android:textAppearance">?attr/textAppearanceBodyLarge</item>
-        <!-- Token M3 para cor de texto sobre superfícies -->
+
+        <!-- Cor do texto utilizando o token M3 para legibilidade em superfícies -->
         <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <!-- =================================================================== -->
+    <!-- ESTILO PARA A PÍLULA OVAL DO ITEM SELECIONADO (BOTTOM NAVIGATION)   -->
+    <!-- =================================================================== -->
+    <style name="EstiloIndicadorOval" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <!-- Cor do indicador (sem o prefixo android:) -->
+        <item name="color">@color/cor_primaria</item>
+
+        <!-- Dimensões da pílula -->
+        <item name="android:width">56dp</item>
+        <item name="android:height">32dp</item>
+
+        <!-- Garantia do formato arredondado estilo pílula Material You -->
+        <item name="shapeAppearance">@style/ShapeAppearance.Material3.Corner.Full</item>
+    </style>
+
+    <!-- =================================================================== -->
+    <!-- ESTILO COMPLEMENTAR: TIPOGRAFIA DOS RÓTULOS DO MENU                 -->
+    <!-- =================================================================== -->
+    <style name="EstiloTextoBottomNav">
+        <item name="fontFamily">@font/poppins_semibold</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>

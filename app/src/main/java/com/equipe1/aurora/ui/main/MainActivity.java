@@ -254,7 +254,8 @@ public class MainActivity extends AppCompatActivity {
         String mensagemSobre = "Projeto Aurora\n" +
                 "Versão: " + versaoApp + "\n\n" +
                 "Integrantes: Gilson Reis, Isaias Rocha De Jesus, Luis Fernando, Matheus Trindade\n\n" +
-                "Desenvolvido pela Equipe 1 do Curso Técnico de Desenvolvimento de Sistemas 2025/2026, com foco em acessibilidade, segurança e melhor experiência do usuário.";
+                "Desenvolvido pela Equipe 1 do Curso Técnico de Desenvolvimento de Sistemas 2025/2026, " +
+                "com foco em acessibilidade, segurança e melhor experiência do usuário.";
 
         new MaterialAlertDialogBuilder(this)
                 .setTitle("Sobre o Aurora")

@@ -14,6 +14,7 @@
     <!-- =================================================================== -->
     <string name="menu_home">Início</string>
     <string name="menu_mapa">Mapa</string>
+    <string name="menu_sos">Emergência</string>
     <string name="menu_contatos">Contatos</string>
     <string name="menu_menu">Menu</string>
 
@@ -101,22 +102,33 @@
     <!-- =================================================================== -->
     <!-- TELA HOME (FRAGMENT_HOME)                                          -->
     <!-- =================================================================== -->
+    <!-- SEÇÃO 1: CABEÇALHO E MENSAGEM DE BOAS-VINDAS -->
     <string name="home_desc_header_profile">Perfil do usuário. Olá, Usuário. Que bom te ver por aqui.</string>
     <string name="home_ola">Olá, </string>
     <string name="home_usuario_padrao">Usuário</string>
     <string name="home_subtitulo_boas_vindas">Que bom te ver por aqui.</string>
+
+    <!-- SEÇÃO 2: BARRA DE PESQUISA -->
     <string name="home_hint_pesquisa">Pesquisar lugares, amigos…</string>
+
+    <!-- SEÇÃO 3: PRÉ-VISUALIZAÇÃO DO MAPA -->
     <string name="home_desc_mapa_preview">Pré-visualização do mapa interativo. Toque duas vezes para abrir o mapa em tela cheia.</string>
+
+    <!-- SEÇÃO 4: ATALHOS DE NAVEGAÇÃO RÁPIDA -->
     <string name="home_titulo_navegacao_rapida">Navegação Rápida</string>
     <string name="home_rotas_salvas">Rotas Salvas</string>
     <string name="home_subtitulo_rotas_salvas">Seus trajetos</string>
-    <string name="home_desc_btn_rotas_salvas">Rotas Salvas. Acesse seus trajetos habituais. Toque duas vezes para abrir.</string>
+    <string name="home_desc_btn_rotas_salvas">Rotas Salvas. Acesse os seus trajetos habituais. Toque duas vezes para abrir.</string>
+
     <string name="home_circulos">Círculos</string>
     <string name="home_subtitulo_circulos">Grupos e proteção</string>
     <string name="home_desc_btn_circulos">Círculos. Gestão de grupos de segurança e proteção. Toque duas vezes para abrir.</string>
+
     <string name="home_historico">Histórico</string>
     <string name="home_subtitulo_historico">Alertas e registros</string>
     <string name="home_desc_btn_historico">Histórico. Registro de alertas, ocorrências e rotas. Toque duas vezes para abrir.</string>
+
+    <!-- SEÇÃO 5: GESTÃO DE CÍRCULOS DE SEGURANÇA -->
     <string name="home_titulo_meus_circulos">Meus Círculos</string>
     <string name="home_btn_gerenciar">Gerenciar</string>
     <string name="home_desc_gerenciar_circulos">Gerenciar círculos. Toque duas vezes para administrar seus grupos de segurança.</string>
@@ -128,13 +140,14 @@
     <string name="home_desc_circulo_faculdade">Círculo Faculdade, 6 membros ativos. Toque duas vezes para ver detalhes.</string>
     <string name="home_novo_circulo">Novo Círculo</string>
     <string name="home_desc_add_circulo">Criar ou adicionar novo círculo de segurança. Toque duas vezes para criar.</string>
+
+    <!-- SEÇÃO 6: AMIGOS PRÓXIMOS -->
     <string name="home_titulo_amigos_proximos">Amigos Próximos</string>
     <string name="home_btn_ver_todos">Ver todos</string>
     <string name="home_desc_ver_todos_amigos">Ver lista completa de amigos próximos. Toque duas vezes para abrir.</string>
     <string name="home_contato_exemplo_nome">Contato 1</string>
     <string name="home_contato_exemplo_distancia">321 m</string>
     <string name="home_desc_contato_exemplo">Contato 1, localizado a 321 metros de distância. Toque duas vezes para ver localização no mapa.</string>
-
     <!-- =================================================================== -->
     <!-- TELA DE MAPA (FRAGMENT_MAPA)                                       -->
     <!-- =================================================================== -->
@@ -154,7 +167,7 @@
     <string name="mapa_padrao_nome_local">Toque em um ponto no mapa</string>
     <string name="mapa_padrao_estado_local">Selecione um destino para navegar</string>
     <string name="mapa_padrao_distancia_tempo">-- min (-- km)</string>
-    <string name="mapa_padrao_coordenadas">Latitude:    |   Longitude: </string>
+    <string name="mapa_padrao_coordenadas">Latitude: Longitude: </string>
     <string name="mapa_desc_btn_navigate">Calcular rota até o local selecionado</string>
     <string name="mapa_titulo_etapas">Etapas do Percurso</string>
     <string name="mapa_instrucao_etapas">• Toque no botão de rota para ver as instruções detalhadas.</string>
@@ -164,7 +177,7 @@
     <!-- TELA SOS (FRAGMENT_SOS)                                            -->
     <!-- =================================================================== -->
     <string name="sos_titulo">Emergência</string>
-    <string name="sos_subtitulo">Precisa de ajuda\?</string>
+    <string name="sos_subtitulo">Precisa de ajuda?</string>
     <string name="sos_btn_texto">SOS</string>
     <string name="sos_desc_btn_sos">Acionar emergência SOS. Mantenha pressionado para enviar o alerta com sua localização.</string>
     <string name="sos_descricao_explicativa">Ao acionar o SOS, a sua localização será enviada para seus contatos confiáveis</string>
@@ -221,6 +234,5 @@
     <string name="config_desc_sair_conta">Encerrar sessão e sair da conta</string>
     <string name="campo_email">E-mail</string>
     <string name="btn_enviar_codigo">Enviar código</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cd_sos_button">clique para ir a tela de emergência</string>
 </resources>
