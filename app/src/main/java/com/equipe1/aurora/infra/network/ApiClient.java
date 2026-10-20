@@ -10,7 +10,7 @@ public class ApiClient {
     // - Para Emulador do Android Studio na mesma máquina: "http://10.0.2.2/api_aurora_gps/"
     // - Para Dispositivo Físico no Wi-Fi: "http://192.168.1.5/api_aurora_gps/" (troque pelo seu IPv4)
     // -----------------------------------------------------------------
-    private static final String BASE_URL = "http://192.168.1.5/api_aurora_gps/";
+    private static final String BASE_URL = "http://192.168.1.8/api_aurora_gps/";
 
     private static Retrofit retrofit = null;
 
