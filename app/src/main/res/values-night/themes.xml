@@ -46,4 +46,7 @@
         <item name="android:fontFamily">@font/inter</item>
         <item name="android:textFontWeight">400</item>
     </style>
+    <!--Cor contato card-->
+    <color name="contatocard">#475052</color>
+    <color name="bordacontatocard">#1B1818</color>
 </resources>

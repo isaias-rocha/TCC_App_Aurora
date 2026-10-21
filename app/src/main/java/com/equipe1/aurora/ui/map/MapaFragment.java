@@ -9,6 +9,7 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,11 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.equipe1.aurora.R;
+import com.equipe1.aurora.domain.model.AreaRisco;
+import com.equipe1.aurora.domain.model.BairroPoligono;
+import com.equipe1.aurora.domain.model.OcorrenciaCrime;
+import com.equipe1.aurora.rede.api.ApiClient;
+import com.equipe1.aurora.rede.api.ApiService;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -40,6 +46,8 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
+import org.osmdroid.views.overlay.Polygon;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
@@ -58,24 +66,29 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MapaFragment extends Fragment {
 
     // =========================================================================
     // 1. VARIÁVEIS E COMPONENTES
     // =========================================================================
 
-    // Componentes do Mapa
+    private final List<Overlay> camadasRiscosList = new ArrayList<>();
+    private boolean exibirAreasRisco = true;
+    private FloatingActionButton btnToggleRiscos;
+
     private MapView map;
     private MyLocationNewOverlay myLocationOverlay;
     private Marker selectedMarker;
 
-    // Controle de Rotas e Navegação
     private final List<Polyline> routePolylines = new ArrayList<>();
     private final List<JSONObject> routesJsonList = new ArrayList<>();
-    private boolean isNavigating = false; // Indica se o usuário está em deslocamento ativo
-    private String currentTransportProfile = "driving"; // Perfis: driving, walking, bike
+    private boolean isNavigating = false;
+    private String currentTransportProfile = "driving";
 
-    // Componentes de Interface (UI)
     private TextView tvNomeDoLocal, tvLocalizacaoEstado, tvCoordenadas, tvEtapasDetalhes;
     private EditText etSearch;
     private FloatingActionButton btnNavigate, btnMyLocation;
@@ -83,7 +96,6 @@ public class MapaFragment extends Fragment {
     private BottomSheetBehavior<View> bottomSheetBehavior;
     private LinearLayout layoutEtapasExpandido;
 
-    // Gerenciador de Permissões de Localização (Android 6.0+)
     private final ActivityResultLauncher<String[]> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
                 Boolean fineLocationGranted = result.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false);
@@ -92,7 +104,7 @@ public class MapaFragment extends Fragment {
                 if ((fineLocationGranted != null && fineLocationGranted) ||
                         (coarseLocationGranted != null && coarseLocationGranted)) {
                     ativarLocalizacaoUsuario();
-                } else {
+                } else if (isAdded() && getContext() != null) {
                     Toast.makeText(getContext(), "Permissão de localização negada.", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -104,38 +116,32 @@ public class MapaFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Carrega as configurações do OSMDroid para armazenar os tiles do mapa
         Configuration.getInstance().load(requireContext(), PreferenceManager.getDefaultSharedPreferences(requireContext()));
         Configuration.getInstance().setUserAgentValue(requireContext().getPackageName());
 
         View root = inflater.inflate(R.layout.fragment_mapa, container, false);
 
-        // Inicializar Views da Interface
         inicializarViews(root);
 
-        // Configurar o BottomSheet Expansível
         View bottomSheetView = root.findViewById(R.id.bottomSheet);
         if (bottomSheetView != null) {
             bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView);
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN); // Escondido até tocar em um ponto
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         }
 
-        // Configurações básicas do Mapa
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
         map.getController().setZoom(17.0);
 
-        // Configuração de Listeners e Eventos
         setupMapClickListener();
         setupSearchListener();
         setupTransportModeListeners();
         setupButtonListeners();
 
-        // Processa busca prévia se recebida via Arguments
         processarBuscaRecebida();
-
-        // Checa permissões de GPS
         checarPermissoesELocalizar();
+
+        carregarTodasAsCamadasDeRisco();
 
         return root;
     }
@@ -170,24 +176,26 @@ public class MapaFragment extends Fragment {
         btnNavigate = root.findViewById(R.id.btnNavigate);
         btnMyLocation = root.findViewById(R.id.btnMyLocation);
 
+        btnToggleRiscos = root.findViewById(R.id.btnToggleRiscos);
+        if (btnToggleRiscos != null) {
+            btnToggleRiscos.setOnClickListener(v -> alternarVisualizacaoRiscos());
+        }
+
         btnModeCar = root.findViewById(R.id.btnModeCar);
         btnModeWalk = root.findViewById(R.id.btnModeWalk);
         btnModeBike = root.findViewById(R.id.btnModeBike);
     }
 
     private void setupButtonListeners() {
-        // Centraliza a câmera no usuário
         if (btnMyLocation != null) {
             btnMyLocation.setOnClickListener(v -> centralizarNaLocalizacaoAtual());
         }
 
-        // Inicia o cálculo de rota
         if (btnNavigate != null) {
             btnNavigate.setOnClickListener(v -> executarCalculoDeRota());
         }
     }
 
-    // Listener para seleção do perfil de transporte (Carro, A pé, Bicicleta)
     private void setupTransportModeListeners() {
         View.OnClickListener listener = v -> {
             int id = v.getId();
@@ -202,7 +210,6 @@ public class MapaFragment extends Fragment {
                 atualizarBotoesTransporte(btnModeBike, btnModeCar, btnModeWalk);
             }
 
-            // Recalcula a rota automaticamente se já houver um destino selecionado
             if (selectedMarker != null) {
                 executarCalculoDeRota();
             }
@@ -214,10 +221,12 @@ public class MapaFragment extends Fragment {
     }
 
     // =========================================================================
-    // 4. PERMISSÕES E GEOLOCALIZAÇÃO EM TEMPO REAL
+    // 4. PERMISSÕES E GEOLOCALIZAÇÃO
     // =========================================================================
 
     private void checarPermissoesELocalizar() {
+        if (!isAdded() || getContext() == null) return;
+
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             ativarLocalizacaoUsuario();
         } else {
@@ -229,17 +238,15 @@ public class MapaFragment extends Fragment {
     }
 
     private void ativarLocalizacaoUsuario() {
-        if (getContext() == null || map == null) return;
+        if (!isAdded() || getContext() == null || map == null) return;
 
         GpsMyLocationProvider provider = new GpsMyLocationProvider(requireContext());
 
-        // Overlay com suporte a atualizações de movimento em tempo real
         myLocationOverlay = new MyLocationNewOverlay(provider, map) {
             @Override
             public void onLocationChanged(android.location.Location location, org.osmdroid.views.overlay.mylocation.IMyLocationProvider source) {
                 super.onLocationChanged(location, source);
 
-                // Rastreia o movimento do usuário se estiver no modo de navegação ativa
                 if (location != null && isNavigating && selectedMarker != null) {
                     GeoPoint posicaoAtual = new GeoPoint(location.getLatitude(), location.getLongitude());
                     GeoPoint destino = selectedMarker.getPosition();
@@ -257,7 +264,6 @@ public class MapaFragment extends Fragment {
         myLocationOverlay.enableMyLocation();
         myLocationOverlay.enableFollowLocation();
 
-        // Ao obter a primeira posição do GPS
         myLocationOverlay.runOnFirstFix(() -> {
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
@@ -286,20 +292,19 @@ public class MapaFragment extends Fragment {
             if (bottomSheetBehavior != null) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
-        } else {
+        } else if (isAdded() && getContext() != null) {
             Toast.makeText(getContext(), "Buscando sinal de GPS...", Toast.LENGTH_SHORT).show();
         }
     }
 
     // =========================================================================
-    // 5. TOQUES NO MAPA E PESQUISA DE ENDEREÇOS
+    // 5. TOQUES NO MAPA E PESQUISA
     // =========================================================================
 
     private void setupMapClickListener() {
         MapEventsReceiver mapEventsReceiver = new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
-                // Ao clicar no mapa, encerra a navegação anterior e limpa as linhas
                 isNavigating = false;
                 limparLinhasDeRota();
 
@@ -310,7 +315,6 @@ public class MapaFragment extends Fragment {
                 adicionarOuMoverMarcador(p);
                 obterEnderecoGeocodificado(p);
 
-                // Exibe o BottomSheet recolhido para apresentar o local
                 if (bottomSheetBehavior != null) {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
@@ -338,7 +342,7 @@ public class MapaFragment extends Fragment {
     }
 
     private void buscarLocalizacao(String query) {
-        if (query.isEmpty()) return;
+        if (query.isEmpty() || !isAdded() || getContext() == null) return;
 
         Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
         try {
@@ -377,12 +381,12 @@ public class MapaFragment extends Fragment {
     }
 
     // =========================================================================
-    // 6. CÁLCULO, MULTI-ROTAS E NAVEGAÇÃO INTERATIVA
+    // 6. CÁLCULO E ROTAS
     // =========================================================================
 
     private void executarCalculoDeRota() {
         if (selectedMarker == null) {
-            Toast.makeText(getContext(), "Selecione um ponto no mapa primeiro.", Toast.LENGTH_SHORT).show();
+            if (isAdded() && getContext() != null) Toast.makeText(getContext(), "Selecione um ponto no mapa primeiro.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -390,18 +394,18 @@ public class MapaFragment extends Fragment {
         GeoPoint origem = (myLocationOverlay != null) ? myLocationOverlay.getMyLocation() : null;
 
         if (origem == null) {
-            Toast.makeText(getContext(), "Aguardando sinal do GPS...", Toast.LENGTH_SHORT).show();
+            if (isAdded() && getContext() != null) Toast.makeText(getContext(), "Aguardando sinal do GPS...", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Toast.makeText(getContext(), "Calculando rotas...", Toast.LENGTH_SHORT).show();
+        if (isAdded() && getContext() != null) Toast.makeText(getContext(), "Calculando rotas...", Toast.LENGTH_SHORT).show();
         calcularETracarRota(origem, destino, currentTransportProfile);
     }
 
-    // Faz a chamada à API do OSRM solicitando alternativas (`alternatives=true`)
     private void calcularETracarRota(GeoPoint origem, GeoPoint destino, String profile) {
         Executors.newSingleThreadExecutor().execute(() -> {
             routesJsonList.clear();
+            HttpURLConnection conn = null;
 
             try {
                 String urlString = String.format(Locale.US,
@@ -411,7 +415,7 @@ public class MapaFragment extends Fragment {
                         destino.getLongitude(), destino.getLatitude());
 
                 URL url = new URL(urlString);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(8000);
 
@@ -432,13 +436,17 @@ public class MapaFragment extends Fragment {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("MAPA_ERRO", "Erro no cálculo OSRM", e);
+            } finally {
+                if (conn != null) conn.disconnect();
             }
 
             new Handler(Looper.getMainLooper()).post(() -> {
+                if (!isAdded() || getContext() == null) return;
+
                 if (!routesJsonList.isEmpty()) {
-                    exibirRotasNoMapa(0); // Desenha a rota principal (índice 0)
-                    isNavigating = true; // Inicia o rastreamento do GPS
+                    exibirRotasNoMapa(0);
+                    isNavigating = true;
 
                     if (myLocationOverlay != null) {
                         myLocationOverlay.enableFollowLocation();
@@ -450,7 +458,6 @@ public class MapaFragment extends Fragment {
         });
     }
 
-    // Desenha as rotas no mapa: Principal (Roxa) e Alternativas (Cinza)
     private void exibirRotasNoMapa(int selectedIndex) {
         limparLinhasDeRota();
 
@@ -472,11 +479,9 @@ public class MapaFragment extends Fragment {
                 boolean isSelected = (i == selectedIndex);
 
                 if (isSelected) {
-                    // Rota Selecionada: Roxa e Larga
                     polyline.getOutlinePaint().setColor(Color.parseColor("#6C5CE7"));
                     polyline.getOutlinePaint().setStrokeWidth(16f);
 
-                    // Atualiza textos do Card no BottomSheet
                     double distanceMeters = route.getDouble("distance");
                     double durationSeconds = route.getDouble("duration");
 
@@ -490,21 +495,20 @@ public class MapaFragment extends Fragment {
                     atualizarInstrucoesEtapas(route);
 
                 } else {
-                    // Rota Alternativa: Cinza e Mais Fina
                     polyline.getOutlinePaint().setColor(Color.parseColor("#64748B"));
                     polyline.getOutlinePaint().setStrokeWidth(10f);
                 }
 
-                // Permite tocar em uma linha cinza para alternar para aquela rota!
                 polyline.setOnClickListener((p, mapView, eventPos) -> {
                     exibirRotasNoMapa(routeIndex);
-                    Toast.makeText(getContext(), "Rota " + (routeIndex + 1) + " selecionada", Toast.LENGTH_SHORT).show();
+                    if (isAdded() && getContext() != null) {
+                        Toast.makeText(getContext(), "Rota " + (routeIndex + 1) + " selecionada", Toast.LENGTH_SHORT).show();
+                    }
                     return true;
                 });
 
                 routePolylines.add(polyline);
 
-                // Garante que a rota selecionada fique por cima das outras no mapa
                 if (isSelected) {
                     map.getOverlays().add(polyline);
                 } else {
@@ -512,34 +516,34 @@ public class MapaFragment extends Fragment {
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("MAPA_ERRO", "Erro ao exibir rota no mapa", e);
             }
         }
 
         map.invalidate();
     }
 
-    // Recalcula o tempo/distância durante a navegação em tempo real
     private void atualizarProgressoEmTempoReal(GeoPoint posicaoAtual, GeoPoint destino) {
         double distanciaRestanteMetros = posicaoAtual.distanceToAsDouble(destino);
-        double tempoRestanteSegundos = distanciaRestanteMetros / 8.3; // Estimativa de velocidade média urbana
+        double tempoRestanteSegundos = distanciaRestanteMetros / 8.3;
 
         if (tvNomeDoLocal != null) {
             tvNomeDoLocal.setText(formatarTempoEDistancia(tempoRestanteSegundos, distanciaRestanteMetros));
         }
 
-        // Se o usuário chegar a menos de 15m do destino
         if (distanciaRestanteMetros < 15.0) {
             isNavigating = false;
             if (tvLocalizacaoEstado != null) {
                 tvLocalizacaoEstado.setText("Você chegou ao seu destino! 🎉");
             }
-            Toast.makeText(getContext(), "Você chegou ao seu destino!", Toast.LENGTH_LONG).show();
+            if (isAdded() && getContext() != null) {
+                Toast.makeText(getContext(), "Você chegou ao seu destino!", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
     // =========================================================================
-    // 7. MÉTODOS AUXILIARES E FORMATADORES
+    // 7. MÉTODOS AUXILIARES E INTEGRAÇÃO DE ÁREAS DE RISCO, BAIRROS E CRIMES
     // =========================================================================
 
     private void adicionarOuMoverMarcador(GeoPoint ponto) {
@@ -554,6 +558,8 @@ public class MapaFragment extends Fragment {
     }
 
     private void obterEnderecoGeocodificado(GeoPoint ponto) {
+        if (!isAdded() || getContext() == null) return;
+
         if (tvCoordenadas != null) {
             tvCoordenadas.setText(String.format(Locale.getDefault(), "Lat: %.4f | Lon: %.4f", ponto.getLatitude(), ponto.getLongitude()));
         }
@@ -621,7 +627,7 @@ public class MapaFragment extends Fragment {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("MAPA_ERRO", "Erro ao formatar etapas da rota", e);
         }
     }
 
@@ -630,7 +636,7 @@ public class MapaFragment extends Fragment {
         if (modifier.contains("left")) return "↖️ Virar à esquerda";
         if (modifier.contains("slight right")) return "↗️ Mantenha-se à direita";
         if (modifier.contains("slight left")) return "↖️ Mantenha-se à esquerda";
-        if (modifier.contains("sharp right")) return "↪️ Curva acentuada à direita";
+        if (modifier.contains("sharp right")) return "↪ Curva acentuada à direita";
         if (modifier.contains("sharp left")) return "↩️ Curva acentuada à esquerda";
         if (modifier.contains("uturn")) return "🔄 Faça o retorno";
         return "⬆️ Siga em frente";
@@ -650,6 +656,8 @@ public class MapaFragment extends Fragment {
     }
 
     private void atualizarBotoesTransporte(Button ativo, Button inativo1, Button inativo2) {
+        if (!isAdded() || getContext() == null) return;
+
         if (ativo != null) {
             ativo.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), android.R.color.holo_purple));
             ativo.setTextColor(Color.WHITE);
@@ -673,5 +681,204 @@ public class MapaFragment extends Fragment {
                 : String.format(Locale.getDefault(), "%d m", (int) metros);
 
         return String.format(Locale.getDefault(), "%d min (%s)", minutos, textoDistancia);
+    }
+
+    // --- CARREGAR TODAS AS CAMADAS DE RISCO ---
+    private void carregarTodasAsCamadasDeRisco() {
+        removerCamadasDeRiscoDoMapa();
+        carregarAreasDeRisco();
+        carregarPoligonosBairros();
+        carregarOcorrenciasCrimes();
+    }
+
+    // 1. Círculos e Pontos de Áreas de Risco
+    private void carregarAreasDeRisco() {
+        ApiService apiService = ApiClient.getApiService();
+
+        apiService.listarRiscos().enqueue(new Callback<List<AreaRisco>>() {
+            @Override
+            public void onResponse(Call<List<AreaRisco>> call, Response<List<AreaRisco>> response) {
+                if (!isAdded() || getContext() == null) return;
+                if (response.isSuccessful() && response.body() != null) {
+                    List<AreaRisco> listaRiscos = response.body();
+
+                    for (AreaRisco risco : listaRiscos) {
+                        try {
+                            double latitude = risco.getLatitude();
+                            double longitude = risco.getLongitude();
+
+                            if (latitude == 0.0 || longitude == 0.0) continue;
+
+                            GeoPoint ponto = new GeoPoint(latitude, longitude);
+
+                            Marker marker = new Marker(map);
+                            marker.setPosition(ponto);
+                            marker.setTitle(risco.getNomeArea() + (risco.getTipoCrime() != null ? " (" + risco.getTipoCrime() + ")" : ""));
+                            marker.setSnippet(risco.getDescricaoArea());
+                            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+                            configurarIconePorCrime(marker, risco.getTipoCrime());
+
+                            map.getOverlays().add(marker);
+                            camadasRiscosList.add(marker);
+
+                            Polygon circle = new Polygon(map);
+                            double raio = risco.getRaioMetros() > 0 ? risco.getRaioMetros() : 100.0;
+                            circle.setPoints(Polygon.pointsAsCircle(ponto, raio));
+
+                            String nivel = risco.getNivelRisco() != null ? risco.getNivelRisco().toUpperCase() : "MEDIO";
+                            if (nivel.contains("ALTO") || nivel.contains("CRITICO")) {
+                                circle.setFillColor(Color.argb(70, 255, 0, 0));
+                                circle.setStrokeColor(Color.RED);
+                            } else {
+                                circle.setFillColor(Color.argb(70, 255, 235, 59));
+                                circle.setStrokeColor(Color.parseColor("#FBC02D"));
+                            }
+                            circle.setStrokeWidth(2f);
+
+                            map.getOverlays().add(circle);
+                            camadasRiscosList.add(circle);
+
+                        } catch (Exception e) {
+                            Log.e("MAPA_ERRO", "Erro ao processar área de risco: " + e.getMessage());
+                        }
+                    }
+                    map.invalidate();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<AreaRisco>> call, Throwable t) {
+                Log.e("MAPA_ERRO", "Falha na conexão com a API de riscos: " + t.getMessage());
+            }
+        });
+    }
+
+    // 2. Polígonos dos Bairros com Cores por Nível de Risco
+    private void carregarPoligonosBairros() {
+        ApiService apiService = ApiClient.getApiService();
+
+        apiService.listarBairros().enqueue(new Callback<List<BairroPoligono>>() {
+            @Override
+            public void onResponse(Call<List<BairroPoligono>> call, Response<List<BairroPoligono>> response) {
+                if (!isAdded() || getContext() == null) return;
+                if (response.isSuccessful() && response.body() != null) {
+                    for (BairroPoligono bairro : response.body()) {
+
+                        // ✅ Pega a lista de GeoPoints diretamente da classe de modelo
+                        List<GeoPoint> pontosGeo = bairro.getCoordenadasVertices();
+
+                        if (pontosGeo == null || pontosGeo.isEmpty()) continue;
+
+                        Polygon poligono = new Polygon(map);
+                        poligono.setPoints(pontosGeo); // Passa a lista direto para o OSMDroid
+                        poligono.setTitle("Bairro: " + bairro.getNomeBairro() + " (Risco: " + bairro.getNivelRisco() + ")");
+
+                        String nivelRisco = bairro.getNivelRisco() != null ? bairro.getNivelRisco().toUpperCase() : "MEDIO";
+                        switch (nivelRisco) {
+                            case "ALTO":
+                                poligono.setFillColor(Color.parseColor("#4DFF0000")); // Vermelho (30%)
+                                poligono.setStrokeColor(Color.parseColor("#FF0000"));
+                                break;
+                            case "MEDIO":
+                                poligono.setFillColor(Color.parseColor("#4DFFFF00")); // Amarelo (30%)
+                                poligono.setStrokeColor(Color.parseColor("#D4AC0D"));
+                                break;
+                            default: // "BAIXO"
+                                poligono.setFillColor(Color.parseColor("#4D00FF00")); // Verde (30%)
+                                poligono.setStrokeColor(Color.parseColor("#00FF00"));
+                                break;
+                        }
+
+                        poligono.setStrokeWidth(3f);
+
+                        // Adiciona na posição 0 para ficar atrás dos marcadores e rotas
+                        map.getOverlays().add(0, poligono);
+                        camadasRiscosList.add(poligono);
+                    }
+                    map.invalidate();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<BairroPoligono>> call, Throwable t) {
+                Log.e("MAPA_ERRO", "Falha na conexão com a API de bairros: " + t.getMessage());
+            }
+        });
+    }
+
+    // 3. Marcadores de Ocorrências e Crimes Importados
+    private void carregarOcorrenciasCrimes() {
+        ApiService apiService = ApiClient.getApiService();
+
+        apiService.listarCrimes().enqueue(new Callback<List<OcorrenciaCrime>>() {
+            @Override
+            public void onResponse(Call<List<OcorrenciaCrime>> call, Response<List<OcorrenciaCrime>> response) {
+                if (!isAdded() || getContext() == null) return;
+                if (response.isSuccessful() && response.body() != null) {
+                    for (OcorrenciaCrime crime : response.body()) {
+                        GeoPoint ponto = new GeoPoint(crime.getLatitude(), crime.getLongitude());
+
+                        Marker marker = new Marker(map);
+                        marker.setPosition(ponto);
+                        marker.setTitle(crime.getTipoCrime());
+                        marker.setSnippet(crime.getDescricao());
+                        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+                        configurarIconePorCrime(marker, crime.getTipoCrime());
+
+                        map.getOverlays().add(marker);
+                        camadasRiscosList.add(marker);
+                    }
+                    map.invalidate();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<OcorrenciaCrime>> call, Throwable t) {
+                Log.e("MAPA_ERRO", "Falha na conexão com a API de crimes: " + t.getMessage());
+            }
+        });
+    }
+
+    private void configurarIconePorCrime(Marker marker, String tipoCrime) {
+        if (tipoCrime == null || !isAdded() || getContext() == null) return;
+        String tipo = tipoCrime.toLowerCase();
+
+        if (tipo.contains("roubo") || tipo.contains("assalto")) {
+            marker.setIcon(ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_menu_myplaces));
+        } else if (tipo.contains("furto")) {
+            marker.setIcon(ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_menu_info_details));
+        } else {
+            marker.setIcon(ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_dialog_alert));
+        }
+    }
+
+    private void alternarVisualizacaoRiscos() {
+        if (!isAdded() || getContext() == null) return;
+
+        exibirAreasRisco = !exibirAreasRisco;
+
+        if (exibirAreasRisco) {
+            carregarTodasAsCamadasDeRisco();
+            Toast.makeText(getContext(), "Áreas e Bairros de Risco Ativados", Toast.LENGTH_SHORT).show();
+            if (btnToggleRiscos != null) {
+                btnToggleRiscos.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), android.R.color.holo_red_dark));
+            }
+        } else {
+            removerCamadasDeRiscoDoMapa();
+            map.invalidate();
+            Toast.makeText(getContext(), "Áreas de Risco Ocultadas", Toast.LENGTH_SHORT).show();
+            if (btnToggleRiscos != null) {
+                btnToggleRiscos.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), android.R.color.darker_gray));
+            }
+        }
+    }
+
+    private void removerCamadasDeRiscoDoMapa() {
+        for (Overlay overlay : camadasRiscosList) {
+            map.getOverlays().remove(overlay);
+        }
+        camadasRiscosList.clear();
     }
 }

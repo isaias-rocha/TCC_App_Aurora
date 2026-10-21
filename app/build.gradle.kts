@@ -37,6 +37,7 @@ android {
 
 
 dependencies {
+    implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
@@ -52,6 +53,8 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
+    // OSMdroid (caso ainda não tenha adicionado para o mapa)
+    implementation("org.osmdroid:osmdroid-android:6.1.16")
 
     implementation(libs.osmdroid.android)
     implementation(libs.core.splashscreen)

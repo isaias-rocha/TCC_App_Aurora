@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.equipe1.aurora.domain.model.ApiClient;
+import com.equipe1.aurora.rede.api.ApiClient;
 import com.equipe1.aurora.domain.model.UsuarioDto;
 
 
@@ -33,6 +33,7 @@ public class AuthViewModel extends ViewModel {
     private final MutableLiveData<String> emailLoginError = new MutableLiveData<>();
     private final MutableLiveData<String> senhaLoginError = new MutableLiveData<>();
     private final MutableLiveData<Boolean> loginSucesso = new MutableLiveData<>();
+    private final MutableLiveData<UsuarioDto> usuarioLogado = new MutableLiveData<>();
 
     // --- Estados para Cadastro ---
     private final MutableLiveData<String> nomeRegError = new MutableLiveData<>();
@@ -59,6 +60,9 @@ public class AuthViewModel extends ViewModel {
     // ============================================================================================
 
     // Getters para a tela de Login
+    public LiveData<UsuarioDto> getUsuarioLogado() {
+        return usuarioLogado;
+    }
     public LiveData<String> getEmailLoginError() {
         return emailLoginError;
     }
@@ -154,6 +158,10 @@ public class AuthViewModel extends ViewModel {
                     @Override
                     public void onResponse(retrofit2.Call<UsuarioDto> call, retrofit2.Response<UsuarioDto> response) {
                         if (response.isSuccessful() && response.body() != null) {
+                           //Usuário retornado pelo Spring Boot
+                            UsuarioDto usuarioDto = response.body();
+                            //Enviar o usuario logado para a Activity
+                            usuarioLogado.setValue(usuarioDto);
                             // Login bem-sucedido validado pelo banco de dados!
                             if (lembrarCredenciais && preferences != null) {
                                 SharedPreferences.Editor dados = preferences.edit();
@@ -280,7 +288,7 @@ public class AuthViewModel extends ViewModel {
         UsuarioDto novoUsuario = new UsuarioDto(nome, email, senha, numerosTelefone, "mock_firebase_uid");
 
         // Dispara a requisição assíncrona usando o Retrofit
-        com.equipe1.aurora.domain.model.ApiClient.getApiService().cadastrarUsuario(novoUsuario)
+        ApiClient.getApiService().cadastrarUsuario(novoUsuario)
                 .enqueue(new retrofit2.Callback<UsuarioDto>() {
                     @Override
                     public void onResponse(retrofit2.Call<UsuarioDto> call, retrofit2.Response<UsuarioDto> response) {

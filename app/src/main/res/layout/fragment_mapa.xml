@@ -124,6 +124,20 @@
                     android:textSize="12sp" />
             </LinearLayout>
         </HorizontalScrollView>
+        <!-- BOTÃO PARA MOSTRAR/OCULTAR ÁREAS DE RISCO -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnToggleRiscos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="240dp"
+            android:contentDescription="Mostrar ou ocultar áreas de risco"
+            app:backgroundTint="#1E293B"
+            app:fabCustomSize="48dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@android:drawable/ic_dialog_alert"
+            app:tint="#EF4444" />
 
 
         <!-- BOTÃO FLUTUANTE PARA VOLTAR À MINHA LOCALIZAÇÃO -->

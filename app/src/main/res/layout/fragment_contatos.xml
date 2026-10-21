@@ -40,7 +40,7 @@
     <!-- RECYCLERVIEW DA LISTA DE CONTATOS -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_contatos"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="16dp"

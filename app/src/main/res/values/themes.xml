@@ -9,6 +9,7 @@
         <item name="colorSecondary">@color/cor_segundaria</item>
 
         <!-- Fundos e Superfícies no Modo Claro -->
+
         <item name="android:windowBackground">@color/bg_claro</item>
         <item name="colorSurface">@color/surface_claro</item>
         <item name="colorOnSurface">@color/on_surface_claro</item>         <!-- Fundos e Superfícies no Modo Claro -->
@@ -49,5 +50,9 @@
         <item name="android:fontFamily">@font/inter</item>
         <item name="android:textFontWeight">400</item>
     </style>
+
+    <!--Cor contato card-->
+    <color name="contatocard">#EAF3F8</color>
+    <color name="bordacontatocard">#1B1818</color>
 
 </resources>

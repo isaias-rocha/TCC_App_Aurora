@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal"
+             android:padding="4dp"
+             android:gravity="center_vertical"
+             android:layout_margin="5dp"
+             android:background="@drawable/background_item_contato">
+
+    <!--Checkbox para marca como contato de SOS-->
+    <CheckBox android:id="@+id/checkSos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginStart="4dp"
+        android:textSize="12sp"
+        android:buttonTint="@color/checkbox_tint"
+        android:layout_marginEnd="8dp"
+        android:text="SOS"/>
+    <!-- NOVO: Foto de Perfil do Contato -->
+    <ImageView
+        android:id="@+id/imgPerfil"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="8dp"
+        android:scaleType="centerCrop"
+        android:background="@drawable/background_circulo"
+        android:clipToOutline="true"
+        android:src="@drawable/ic_profile_user" /> <!-- Imagem padrão temporária -->
+
+
+
+
+    <!--Informações do Contato -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView android:id="@+id/txtNome"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_margin="5dp"
+            android:layout_marginEnd="70dp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary_claro"
+            android:background="@drawable/background_txt_contato"/>
+
+        <TextView android:id="@+id/txtTelefone"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_margin="5dp"
+            android:layout_marginEnd="70dp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary_claro"
+            android:background="@drawable/background_txt_contato"/>
+    </LinearLayout>
+
+    <!--Botão Enviar-->
+    <Button android:id="@+id/btnEnviar"
+        android:layout_width="49dp"
+        android:layout_height="40dp"
+        android:text="Enviar"
+        android:backgroundTint="#86FA75"
+        android:textSize="7sp"
+        android:layout_margin="5dp"
+        android:textStyle="bold"
+        android:layout_marginEnd="4dp"/>
+
+
+    <!-- Botão de Deletar -->
+    <ImageButton
+        android:id="@+id/btnDelete"
+        android:layout_width="35dp"
+        android:layout_margin="5dp"
+        android:layout_height="35dp"
+        android:background="@drawable/background_botao_deletar"
+        android:src="@android:drawable/ic_menu_delete"
+        android:contentDescription="Deletar"
+        />
+</LinearLayout>
