@@ -175,12 +175,12 @@
 
         <!-- LINK PARA LOGIN -->
         <LinearLayout
-            android:id="@+id/container_criar_conta"
+            android:id="@+id/container_voltar_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:clickable="true"
-            android:contentDescription="@string/login_desc_container_criar_conta"
+            android:contentDescription="@string/cadastro_voltar_login"
             android:focusable="true"
             android:gravity="center"
             android:minHeight="48dp"

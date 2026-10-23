@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Cores Globais / Design System (Modo Claro - WCAG AA) -->
-    <color name="cor_primaria">#1F51E6</color>       <!-- Rácio 6.22:1 -->
-    <color name="cor_segundaria">#1F874B</color>     <!-- Rácio 4.54:1 (Ajustado) -->
-    <color name="cor_terciaria">#9C6D22</color>     <!-- Rácio 4.54:1 (Ajustado) -->
-    <color name="vermelho_alerta">#DB3929</color>    <!-- Rácio 4.54:1 (Ajustado) -->
-    <color name="texto">#000000</color>              <!-- Rácio 21.00:1 -->
+    <!-- Cores Globais -->
+    <color name="cor_primaria">#1F51E6</color>
+    <color name="cor_segundaria">#1F874B</color>
+    <color name="cor_terciaria">#9C6D22</color>
+    <color name="vermelho_alerta">#DB3929</color>
+    <color name="texto">#000000</color>
 
-    <!-- Mapeamento MODO CLARO -->
-    <color name="bg_claro">#FFFFFF</color>
-    <color name="surface_claro">#F8FAFC</color>
-    <color name="on_bg_claro">#1E293B</color>         <!-- Rácio 14.63:1 -->
-    <color name="on_surface_claro">#1E293B</color>    <!-- Rácio 13.91:1 -->
-    <color name="text_primary_claro">#2E2E2E</color>  <!-- Rácio 13.58:1 -->
-    <color name="text_secondary_claro">#64748B</color><!-- Rácio 4.76:1 -->
-    <color name="cor_borda_claro">#CBD5E1</color>     <!-- Rácio 3.02:1 para UI -->
+    <!-- Mapeamento Semântico para Modo Claro -->
+    <color name="app_background">#FFFFFF</color>
+    <color name="app_surface">#F8FAFC</color>
+    <color name="on_background">#1E293B</color>
+    <color name="on_surface">#1E293B</color>
+    <color name="text_primary">#2E2E2E</color>
+    <color name="text_secondary">#64748B</color>
+    <color name="cor_borda">#CBD5E1</color> <!-- Agora existe no modo claro! -->
 </resources>

@@ -102,8 +102,10 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         navController.navigate(R.id.nav_perfil);
                     } catch (Exception e) {
-                        navController.navigate(R.id.drawer_perfil);                    }
+                        navController.navigate(R.id.drawer_perfil);
+                    }
                 }
+
                 else if (itemId == R.id.drawer_dispositivo) {
                     try {
                         navController.navigate(R.id.drawer_dispositivo);
@@ -111,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                         navController.navigate(R.id.drawer_dispositivo);
                     }
                 }
+
                 else if (itemId == R.id.drawer_mapa) {
                     try {
                         navController.navigate(R.id.nav_mapa);
@@ -118,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
                         navController.navigate(R.id.drawer_mapa);
                     }
                 }
+
+
                 // Activities legadas continuam sendo abertas via Intent tradicional
                 else if (itemId == R.id.drawer_historico) {
                     startActivity(new Intent(this, HistoricoActivity.class));
@@ -282,5 +287,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             return "1.0.0";
         }
+
     }
 }

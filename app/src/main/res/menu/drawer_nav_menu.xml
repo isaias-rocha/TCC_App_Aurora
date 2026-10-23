@@ -5,61 +5,60 @@
         <item
             android:id="@+id/drawer_perfil"
             android:icon="@drawable/ic_perfil"
-            android:title="Perfil" />
-
+            android:title="@string/drawer_perfil" />
 
         <item
             android:id="@+id/drawer_dispositivo"
             android:icon="@drawable/ic_hardware"
-            android:title="Dispositivo" />
+            android:title="@string/drawer_dispositivo" />
 
         <item
             android:id="@+id/drawer_mapa"
             android:icon="@drawable/ic_mapa"
-            android:title="Mapa" />
+            android:title="@string/drawer_mapa" />
 
         <item
             android:id="@+id/drawer_historico"
             android:icon="@drawable/ic_historico"
-            android:title="Histórico" />
+            android:title="@string/drawer_historico" />
 
         <item
             android:id="@+id/drawer_solicitacoes"
             android:icon="@drawable/ic_add_contato"
-            android:title="Solicitações de Amizade" />
+            android:title="@string/drawer_solicitacoes" />
 
         <item
             android:id="@+id/drawer_gerenciar_circulo"
             android:icon="@drawable/ic_circulo"
-            android:title="Meus Circulos" />
+            android:title="@string/drawer_gerenciar_circulo" />
 
         <item
             android:id="@+id/drawer_planos"
             android:icon="@drawable/ic_dinheiro"
-            android:title="Planos de Assinatura" />
+            android:title="@string/drawer_planos" />
     </group>
 
-    <item android:title="Geral">
+    <item android:title="@string/drawer_grupo_geral">
         <menu>
             <item
                 android:id="@+id/drawer_configuracoes"
                 android:icon="@drawable/ic_config"
-                android:title="Configurações" />
+                android:title="@string/drawer_configuracoes" />
 
             <item
                 android:id="@+id/drawer_acessibilidade"
                 android:icon="@drawable/ic_acessibilidade"
-                android:title="Acessibilidade" />
+                android:title="@string/drawer_acessibilidade" />
 
             <item
                 android:id="@+id/drawer_idioma"
                 android:icon="@drawable/ic_idioma"
-                android:title="idioma" />
+                android:title="@string/drawer_idioma" />
 
             <item
                 android:id="@+id/drawer_logout"
                 android:icon="@drawable/ic_logout"
-                android:title="Sair da Conta" />
+                android:title="@string/drawer_logout" />
         </menu>
     </item>
 

@@ -2,24 +2,34 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Permissões de Internet e Rede -->
+    <!-- =========================================================================
+         PERMISSÕES: INTERNET E ESTADO DE REDE (COMUNICAÇÃO COM O XAMPP/MYSQL)
+         ========================================================================= -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-    <!-- Permissão: Notificações no Android 13+ (API 33+) -->
+    <!-- =========================================================================
+         PERMISSÕES: NOTIFICAÇÕES (ANDROID 13+ / API 33+)
+         ========================================================================= -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <!-- Permissões de Localização (GPS) -->
+    <!-- =========================================================================
+         PERMISSÕES: GEOLOCALIZAÇÃO (GPS)
+         ========================================================================= -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <!-- Permissões para Serviços em Primeiro Plano (Execução em 2º plano) -->
+    <!-- =========================================================================
+         PERMISSÕES: SERVIÇOS EM PRIMEIRA PLANO (BLE E RASTREAMENTO EM 2º PLANO)
+         ========================================================================= -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
 
-    <!-- Permissões Bluetooth para Android 12+ (API 31+) -->
+    <!-- =========================================================================
+         PERMISSÕES: BLUETOOTH LOW ENERGY (ANDROID 12+ / API 31+)
+         ========================================================================= -->
     <uses-permission
         android:name="android.permission.BLUETOOTH_SCAN"
         tools:targetApi="31" />
@@ -33,10 +43,12 @@
         android:name="android.permission.BLUETOOTH_ADMIN"
         android:maxSdkVersion="30" />
 
-    <!-- Permissão: Vibração -->
+    <!-- =========================================================================
+         PERMISSÕES: RECURSOS FÍSICOS DO DISPOSITIVO (VIBRAÇÃO/FEEDBACK TÁTIL)
+         ========================================================================= -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
-    <!-- Declara que o aplicativo exige hardware BLE -->
+    <!-- Declara que o aplicativo exige suporte a hardware Bluetooth Low Energy (BLE) -->
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
@@ -50,28 +62,34 @@
         android:roundIcon="@drawable/ic_launcher_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.Aurora"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"> <!-- Permite tráfego HTTP local para desenvolvimento no XAMPP -->
 
-        <!-- Declaração do Serviço BLE/Wi-Fi de Segundo Plano -->
+        <!-- =========================================================================
+             SERVIÇOS DE SEGUNDO PLANO
+             ========================================================================= -->
+        <!-- Serviço responsável por escutar o botão físico do ESP32 via BLE/Wi-Fi -->
         <service
             android:name=".infra.ble.AuroraBleService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="connectedDevice|location" />
 
-        <!-- Tela de Splash (Inicial) -->
+        <!-- =========================================================================
+             TELA INICIAL (SPLASH SCREEN)
+             ========================================================================= -->
         <activity
             android:name=".ui.splash.SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.Aurora"
-            android:usesCleartextTraffic="true">
+            android:theme="@style/Theme.Aurora">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Demais Telas do Aplicativo -->
+        <!-- =========================================================================
+             TELAS DE AUTENTICAÇÃO E CONTA
+             ========================================================================= -->
         <activity
             android:name=".ui.auth.LoginActivity"
             android:exported="false" />
@@ -84,14 +102,19 @@
         <activity
             android:name=".ui.auth.OtpActivity"
             android:exported="false" />
+
+        <!-- =========================================================================
+             TELA PRINCIPAL (HOSPEDA OS FRAGMENTS: HOME, MAPA, SOS, PERFIL, ETC.)
+             ========================================================================= -->
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="false" />
+
+        <!-- =========================================================================
+             DEMAIS TELAS E DIÁLOGOS AUXILIARES
+             ========================================================================= -->
         <activity
             android:name=".ui.home.HomeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.sos.SosActivity"
             android:exported="false" />
         <activity
             android:name=".ui.contatos.ContatosActivity"
@@ -127,5 +150,6 @@
             android:name=".ui.sos.SeletorEmergencia"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
     </application>
 </manifest>

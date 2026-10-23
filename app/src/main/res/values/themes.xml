@@ -12,18 +12,18 @@
         <item name="colorTertiary">@color/cor_terciaria</item>
         <item name="colorOnTertiary">#FFFFFF</item>
 
-        <!-- Fundos, Superfícies e Bordas -->
-        <item name="android:windowBackground">@color/bg_claro</item>
-        <item name="colorSurface">@color/surface_claro</item>
-        <item name="colorOnSurface">@color/on_surface_claro</item>
-        <item name="colorOnBackground">@color/on_bg_claro</item>
+        <!-- Fundos, Superfícies e Bordas (Chaves Unificadas) -->
+        <item name="android:windowBackground">@color/app_background</item>
+        <item name="colorSurface">@color/app_surface</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorOnBackground">@color/on_background</item>
 
-        <!-- Define a cor da borda para TextInputLayouts Outlined e Cards M3 -->
-        <item name="colorOutline">@color/text_secondary_claro</item>
+        <!-- Cor da borda para TextInputLayouts Outlined e Cards M3 -->
+        <item name="colorOutline">@color/cor_borda</item>
 
         <!-- Cores de Texto Padrão -->
-        <item name="android:textColorPrimary">@color/on_bg_claro</item>
-        <item name="android:textColorSecondary">@color/text_secondary_claro</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
 
         <!-- Fonte Padrão do Aplicativo -->
         <item name="fontFamily">@font/inter</item>
@@ -33,8 +33,6 @@
     <style name="Theme.Aurora" parent="Base.Theme.Aurora" />
 
     <!-- Estilos de Tipografia do Design System Aurora (M3) -->
-
-    <!-- Título Principal (Poppins Bold) -->
     <style name="TextAppearance.Aurora.Title" parent="TextAppearance.Material3.TitleLarge">
         <item name="fontFamily">@font/poppins</item>
         <item name="android:fontFamily">@font/poppins</item>
@@ -42,14 +40,12 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <!-- Subtítulo / Título de Cards (Poppins SemiBold) -->
     <style name="TextAppearance.Aurora.Subtitle" parent="TextAppearance.Material3.TitleMedium">
         <item name="fontFamily">@font/poppins</item>
         <item name="android:fontFamily">@font/poppins</item>
         <item name="android:textFontWeight">600</item>
     </style>
 
-    <!-- Corpo de Texto / Inputs / Rótulos (Inter Regular) -->
     <style name="TextAppearance.Aurora.Body" parent="TextAppearance.Material3.BodyMedium">
         <item name="fontFamily">@font/inter</item>
         <item name="android:fontFamily">@font/inter</item>

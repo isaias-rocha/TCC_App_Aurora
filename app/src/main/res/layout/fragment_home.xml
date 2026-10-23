@@ -12,14 +12,14 @@
         android:layout_height="wrap_content"
         android:padding="24dp">
 
-        <!-- CABEÇALHO DO PERFIL (Agrupado para leitura contínua no TalkBack) -->
+        <!-- CABEÇALHO DO PERFIL -->
         <LinearLayout
             android:id="@+id/ll_header_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:clickable="true"
-            android:contentDescription="Perfil do utilizador. Olá, Usuário. Que bom ver-te por aqui."
+            android:contentDescription="@string/home_desc_header_profile"
             android:focusable="true"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -60,8 +60,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:importantForAccessibility="no"
-                        android:text="Olá, "
-                        android:textColor="?android:attr/textColorPrimary"
+                        android:text="@string/home_ola"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -71,10 +71,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
+                        android:layout_marginStart="5dp"
                         android:importantForAccessibility="no"
                         android:maxLines="1"
-                        android:text="Usuário"
-                        android:textColor="@color/cor_primaria"
+                        android:text="@string/home_usuario_padrao"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="20sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -86,8 +87,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:importantForAccessibility="no"
-                    android:text="Que bom te ver por aqui."
-                    android:textColor="?android:attr/textColorSecondary"
+                    android:text="@string/home_subtitulo_boas_vindas"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
@@ -104,7 +105,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ll_header_profile"
-            app:strokeColor="@color/cor_primaria"
+            app:strokeColor="?attr/colorPrimary"
             app:strokeWidth="1dp">
 
             <LinearLayout
@@ -119,7 +120,7 @@
                     android:layout_height="24dp"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ic_pesquisa"
-                    app:tint="?android:attr/textColorSecondary" />
+                    app:tint="?attr/colorOnSurfaceVariant" />
 
                 <EditText
                     android:id="@+id/et_pesquisa"
@@ -127,13 +128,14 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:autofillHints="name"
                     android:background="@null"
-                    android:hint="Pesquisar lugares, amigos..."
+                    android:hint="@string/home_hint_pesquisa"
                     android:inputType="text"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:textColorHint="?android:attr/textColorSecondary"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textColorHint="?attr/colorOnSurfaceVariant"
                     android:textSize="14sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -167,12 +169,12 @@
                     android:layout_height="match_parent"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
-                    android:contentDescription="Pré-visualização do mapa interativo. Toca duas vezes para abrir o mapa em ecrã inteiro."
+                    android:contentDescription="@string/home_desc_mapa_preview"
                     android:focusable="true" />
             </FrameLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- TÍTULO SEÇÃO: NAVEGAÇÃO / SEÇÕES (Marcado como cabeçalho de acessibilidade) -->
+        <!-- TÍTULO SEÇÃO: NAVEGAÇÃO RÁPIDA -->
         <TextView
             android:id="@+id/tv_secoes_title"
             style="@style/TextAppearance.Aurora.Subtitle"
@@ -180,8 +182,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:accessibilityHeading="true"
-            android:text="Navegação Rápida"
-            android:textColor="?android:attr/textColorPrimary"
+            android:text="@string/home_titulo_navegacao_rapida"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -210,12 +212,12 @@
                     android:layout_height="110dp"
                     android:layout_marginEnd="12dp"
                     android:clickable="true"
-                    android:contentDescription="Rotas Salvas. Acede aos teus trajetos habituais. Toca duas vezes para abrir."
+                    android:contentDescription="@string/home_desc_btn_rotas_salvas"
                     android:focusable="true"
                     app:cardBackgroundColor="?attr/colorSurface"
                     app:cardCornerRadius="14dp"
                     app:cardElevation="0dp"
-                    app:strokeColor="@color/cor_primaria"
+                    app:strokeColor="?attr/colorPrimary"
                     app:strokeWidth="1.5dp">
 
                     <LinearLayout
@@ -231,7 +233,7 @@
                             android:layout_height="32dp"
                             android:importantForAccessibility="no"
                             android:src="@drawable/ic_home"
-                            app:tint="@color/cor_primaria" />
+                            app:tint="?attr/colorPrimary" />
 
                         <TextView
                             style="@style/TextAppearance.Aurora.Subtitle"
@@ -239,8 +241,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:importantForAccessibility="no"
-                            android:text="Rotas Salvas"
-                            android:textColor="?android:attr/textColorPrimary"
+                            android:text="@string/home_rotas_salvas"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="13sp"
                             android:textStyle="bold" />
 
@@ -249,8 +251,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:importantForAccessibility="no"
-                            android:text="Seus trajetos"
-                            android:textColor="?android:attr/textColorSecondary"
+                            android:text="@string/home_subtitulo_rotas_salvas"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="10sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -262,12 +264,12 @@
                     android:layout_height="110dp"
                     android:layout_marginEnd="12dp"
                     android:clickable="true"
-                    android:contentDescription="Círculos. Gestão de grupos de segurança e proteção. Toca duas vezes para abrir."
+                    android:contentDescription="@string/home_desc_btn_circulos"
                     android:focusable="true"
                     app:cardBackgroundColor="?attr/colorSurface"
                     app:cardCornerRadius="14dp"
                     app:cardElevation="0dp"
-                    app:strokeColor="@color/cor_primaria"
+                    app:strokeColor="?attr/colorPrimary"
                     app:strokeWidth="1.5dp">
 
                     <LinearLayout
@@ -283,7 +285,7 @@
                             android:layout_height="32dp"
                             android:importantForAccessibility="no"
                             android:src="@drawable/ic_trabalho"
-                            app:tint="@color/cor_primaria" />
+                            app:tint="?attr/colorPrimary" />
 
                         <TextView
                             style="@style/TextAppearance.Aurora.Subtitle"
@@ -291,8 +293,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:importantForAccessibility="no"
-                            android:text="Círculos"
-                            android:textColor="?android:attr/textColorPrimary"
+                            android:text="@string/home_circulos"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="13sp"
                             android:textStyle="bold" />
 
@@ -301,8 +303,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:importantForAccessibility="no"
-                            android:text="Grupos e proteção"
-                            android:textColor="?android:attr/textColorSecondary"
+                            android:text="@string/home_subtitulo_circulos"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="10sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -313,12 +315,12 @@
                     android:layout_width="140dp"
                     android:layout_height="110dp"
                     android:clickable="true"
-                    android:contentDescription="Histórico. Registo de alertas, ocorrências e rotas. Toca duas vezes para abrir."
+                    android:contentDescription="@string/home_desc_btn_historico"
                     android:focusable="true"
                     app:cardBackgroundColor="?attr/colorSurface"
                     app:cardCornerRadius="14dp"
                     app:cardElevation="0dp"
-                    app:strokeColor="@color/cor_primaria"
+                    app:strokeColor="?attr/colorPrimary"
                     app:strokeWidth="1.5dp">
 
                     <LinearLayout
@@ -334,7 +336,7 @@
                             android:layout_height="32dp"
                             android:importantForAccessibility="no"
                             android:src="@drawable/ic_circulo_adicionar"
-                            app:tint="@color/cor_primaria" />
+                            app:tint="?attr/colorPrimary" />
 
                         <TextView
                             style="@style/TextAppearance.Aurora.Subtitle"
@@ -342,8 +344,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:importantForAccessibility="no"
-                            android:text="Histórico"
-                            android:textColor="?android:attr/textColorPrimary"
+                            android:text="@string/home_historico"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="13sp"
                             android:textStyle="bold" />
 
@@ -352,8 +354,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:importantForAccessibility="no"
-                            android:text="Alertas e registros"
-                            android:textColor="?android:attr/textColorSecondary"
+                            android:text="@string/home_subtitulo_historico"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="10sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -370,8 +372,8 @@
             android:layout_marginTop="28dp"
             android:accessibilityHeading="true"
             android:gravity="center_vertical"
-            android:text="Meus Círculos"
-            android:textColor="?android:attr/textColorPrimary"
+            android:text="@string/home_titulo_meus_circulos"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -383,11 +385,11 @@
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:clickable="true"
-            android:contentDescription="Gerir círculos. Toca duas vezes para administrar os teus grupos de segurança."
+            android:contentDescription="@string/home_desc_gerenciar_circulos"
             android:focusable="true"
             android:gravity="center_vertical"
-            android:text="Gerenciar"
-            android:textColor="@color/cor_primaria"
+            android:text="@string/home_btn_gerenciar"
+            android:textColor="?attr/colorPrimary"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@id/tv_circulos_title"
             app:layout_constraintEnd_toEndOf="parent"
@@ -416,12 +418,12 @@
                     android:layout_height="85dp"
                     android:layout_marginEnd="12dp"
                     android:clickable="true"
-                    android:contentDescription="Círculo Família, 4 membros ativos. Toca duas vezes para ver detalhes."
+                    android:contentDescription="@string/home_desc_circulo_familia"
                     android:focusable="true"
                     app:cardBackgroundColor="?attr/colorSurface"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="0dp"
-                    app:strokeColor="@color/cor_primaria"
+                    app:strokeColor="?attr/colorPrimary"
                     app:strokeWidth="1dp">
 
                     <LinearLayout
@@ -437,8 +439,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:importantForAccessibility="no"
-                            android:text="Família"
-                            android:textColor="?android:attr/textColorPrimary"
+                            android:text="@string/home_circulo_familia"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="14sp"
                             android:textStyle="bold" />
 
@@ -448,8 +450,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:importantForAccessibility="no"
-                            android:text="4 membros ativos"
-                            android:textColor="?android:attr/textColorSecondary"
+                            android:text="@string/home_membros_ativos_familia"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="11sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -461,12 +463,12 @@
                     android:layout_height="85dp"
                     android:layout_marginEnd="12dp"
                     android:clickable="true"
-                    android:contentDescription="Círculo Faculdade, 6 membros ativos. Toca duas vezes para ver detalhes."
+                    android:contentDescription="@string/home_desc_circulo_faculdade"
                     android:focusable="true"
                     app:cardBackgroundColor="?attr/colorSurface"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="0dp"
-                    app:strokeColor="@color/cor_primaria"
+                    app:strokeColor="?attr/colorPrimary"
                     app:strokeWidth="1dp">
 
                     <LinearLayout
@@ -482,8 +484,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:importantForAccessibility="no"
-                            android:text="Faculdade"
-                            android:textColor="?android:attr/textColorPrimary"
+                            android:text="@string/home_circulo_faculdade"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="14sp"
                             android:textStyle="bold" />
 
@@ -493,8 +495,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:importantForAccessibility="no"
-                            android:text="6 membros ativos"
-                            android:textColor="?android:attr/textColorSecondary"
+                            android:text="@string/home_membros_ativos_faculdade"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="11sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -505,12 +507,12 @@
                     android:layout_width="120dp"
                     android:layout_height="85dp"
                     android:clickable="true"
-                    android:contentDescription="Criar ou adicionar novo círculo de segurança. Toca duas vezes para criar."
+                    android:contentDescription="@string/home_desc_add_circulo"
                     android:focusable="true"
                     app:cardBackgroundColor="?attr/colorSurface"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="0dp"
-                    app:strokeColor="@color/cor_primaria"
+                    app:strokeColor="?attr/colorPrimary"
                     app:strokeWidth="1dp">
 
                     <LinearLayout
@@ -526,7 +528,7 @@
                             android:layout_height="24dp"
                             android:importantForAccessibility="no"
                             android:src="@drawable/ic_circulo_adicionar"
-                            app:tint="@color/cor_primaria" />
+                            app:tint="?attr/colorPrimary" />
 
                         <TextView
                             style="@style/TextAppearance.Aurora.Body"
@@ -534,8 +536,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:importantForAccessibility="no"
-                            android:text="Novo Círculo"
-                            android:textColor="@color/cor_primaria"
+                            android:text="@string/home_novo_circulo"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="11sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -553,8 +555,8 @@
             android:layout_marginTop="28dp"
             android:accessibilityHeading="true"
             android:gravity="center_vertical"
-            android:text="Amigos Próximos"
-            android:textColor="?android:attr/textColorPrimary"
+            android:text="@string/home_titulo_amigos_proximos"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -566,11 +568,11 @@
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:clickable="true"
-            android:contentDescription="Ver lista completa de amigos próximos. Toca duas vezes para abrir."
+            android:contentDescription="@string/home_desc_ver_todos_amigos"
             android:focusable="true"
             android:gravity="center_vertical"
-            android:text="Ver todos"
-            android:textColor="@color/cor_primaria"
+            android:text="@string/home_btn_ver_todos"
+            android:textColor="?attr/colorPrimary"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@id/tv_friends_title"
             app:layout_constraintEnd_toEndOf="parent"
@@ -591,24 +593,27 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
+                <!-- Amigo Exemplo 1 -->
                 <LinearLayout
+                    android:id="@+id/container_amigo_exemplo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="24dp"
                     android:clickable="true"
-                    android:contentDescription="Contato 1, localizado a 321 metros de distância. Toca duas vezes para ver localização no mapa."
+                    android:contentDescription="@string/home_desc_contato_exemplo"
                     android:focusable="true"
                     android:gravity="center"
                     android:orientation="vertical">
 
                     <com.google.android.material.imageview.ShapeableImageView
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:importantForAccessibility="no"
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_perfil2"
                         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-                        app:tint="@color/texto" />
+                        app:strokeColor="?attr/colorPrimary"
+                        app:strokeWidth="2dp" />
 
                     <TextView
                         style="@style/TextAppearance.Aurora.Subtitle"
@@ -616,8 +621,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:importantForAccessibility="no"
-                        android:text="Contato 1"
-                        android:textColor="?android:attr/textColorPrimary"
+                        android:text="@string/home_contato_exemplo_nome"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
@@ -626,10 +631,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:importantForAccessibility="no"
-                        android:text="321 m"
-                        android:textColor="?android:attr/textColorSecondary"
+                        android:text="@string/home_contato_exemplo_distancia"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="10sp" />
                 </LinearLayout>
+
             </LinearLayout>
         </HorizontalScrollView>
 

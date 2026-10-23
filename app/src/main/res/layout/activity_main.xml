@@ -41,12 +41,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:backgroundTint="@color/surface_escuro"
+            android:backgroundTint="@color/app_surface"
             app:fabAlignmentMode="center"
-            app:fabCradleMargin="8dp"
+            app:fabCradleMargin="0dp"
             app:fabCradleRoundedCornerRadius="20dp"
             app:fabCradleVerticalOffset="4dp"
-            app:hideOnScroll="true"
+            app:hideOnScroll="false"
             tools:ignore="BottomAppBar">
 
             <!-- BottomNavigationView acoplado dentro da BottomAppBar -->

@@ -4,7 +4,6 @@
     <style name="Base.Theme.Aurora" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Cores Primárias, Secundárias e Terciárias (Material 3 - Modo Escuro) -->
         <item name="colorPrimary">@color/cor_primaria</item>
-        <!-- Texto escuro (#000000) sobre a cor primaria tom pastel garante o rácio WCAG > 4.5:1 -->
         <item name="colorOnPrimary">#000000</item>
 
         <item name="colorSecondary">@color/cor_segundaria</item>
@@ -13,18 +12,18 @@
         <item name="colorTertiary">@color/cor_terciaria</item>
         <item name="colorOnTertiary">#000000</item>
 
-        <!-- Fundos, Superfícies e Bordas -->
-        <item name="android:windowBackground">@color/bg_escuro</item>
-        <item name="colorSurface">@color/surface_escuro</item>
-        <item name="colorOnSurface">@color/on_surface_escuro</item>
-        <item name="colorOnBackground">@color/on_bg_escuro</item>
+        <!-- Fundos, Superfícies e Bordas (Chaves Unificadas) -->
+        <item name="android:windowBackground">@color/app_background</item>
+        <item name="colorSurface">@color/app_surface</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorOnBackground">@color/on_background</item>
 
         <!-- Cor da borda para TextInputLayouts Outlined e Cards M3 -->
         <item name="colorOutline">@color/cor_borda</item>
 
         <!-- Cores de Texto Padrão -->
-        <item name="android:textColorPrimary">@color/on_bg_escuro</item>
-        <item name="android:textColorSecondary">@color/text_secondary_escuro</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
 
         <!-- Fonte Padrão do Aplicativo -->
         <item name="fontFamily">@font/inter</item>
