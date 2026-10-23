@@ -145,6 +145,20 @@
             </LinearLayout>
         </HorizontalScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- BOTÃO PARA MOSTRAR/OCULTAR ÁREAS DE RISCO -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnToggleRiscos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="240dp"
+            android:contentDescription="Mostrar ou ocultar áreas de risco"
+            app:backgroundTint="#1E293B"
+            app:fabCustomSize="48dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@android:drawable/ic_dialog_alert"
+            app:tint="#EF4444" />
 
     <!-- 3. BOTÃO MINHA LOCALIZAÇÃO -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -184,7 +198,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingHorizontal="16dp"
-                android:paddingBottom="24dp">
+                android:paddingBottom="24dp"/>
 
                 <com.google.android.material.bottomsheet.BottomSheetDragHandleView
                     android:id="@+id/dragHandle"

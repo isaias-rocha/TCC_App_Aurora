@@ -7,6 +7,8 @@ public class UsuarioDto {
     private String email;
     private String senha;
     private String telefone;
+    @SerializedName(value = "id_usuario", alternate = {"id", "idUsuario"})
+    private Long id_usuario;
 
     @SerializedName("firebase_uid")
     private String firebaseUid;
@@ -34,5 +36,13 @@ public class UsuarioDto {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Long getId() {
+        return id_usuario;
+    }
+
+    public void setId(Long id) {
+        this.id_usuario = id;
     }
 }

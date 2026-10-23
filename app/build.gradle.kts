@@ -7,7 +7,13 @@ plugins {
 
 android {
     namespace = "com.equipe1.aurora"
-    compileSdk = 37
+    compileSdk {
+        version = release(37)
+
+        buildFeatures {
+            viewBinding = true
+        }
+    }
 
     defaultConfig {
         applicationId = "com.equipe1.aurora"
@@ -53,6 +59,8 @@ dependencies {
     // 1. INTERFACE DE USUÁRIO (UI) E RECURSOS CORE
     // =========================================================================
     // Suporte para compatibilidade de componentes visuais em versões antigas do Android
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation(libs.activity.ktx)
     implementation(libs.appcompat)
     // Componentes visuais do Material Design (Botões, Cards, Modais, etc.)
     implementation(libs.material)
@@ -120,4 +128,20 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     // Framework para testes automatizados de interface visual (UI)
     androidTestImplementation(libs.espresso.core)
+
+    // Retrofit e Gson para comunicação com o backend
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+// OSMDroid
+    implementation(libs.osmdroid.android)
+    // Splash
+    implementation(libs.core.splashscreen)
+
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
+    implementation("androidx.navigation:navigation-fragment:2.7.7")
+    implementation("androidx.navigation:navigation-ui:2.7.7")
+
+
+
 }

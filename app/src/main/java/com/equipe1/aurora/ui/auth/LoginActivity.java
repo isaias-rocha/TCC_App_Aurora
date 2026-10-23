@@ -83,9 +83,28 @@ public class LoginActivity extends AppCompatActivity {
 
         // Observa Sucesso de Login
         viewModel.getLoginSucesso().observe(this, sucesso -> {
-            if (sucesso) {
+            if (Boolean.TRUE.equals(sucesso)) {
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
+            }
+        });
+
+        viewModel.getUsuarioLogado().observe(this, usuario -> {
+            if (usuario != null) {
+                SharedPreferences prefs =
+                        getSharedPreferences("AuroraPrefs", MODE_PRIVATE);
+
+                SharedPreferences.Editor editor = prefs.edit();
+                Long id = usuario.getId();
+                if (id != null) {
+                    editor.putLong("usuarioId_logado", id);
+                    editor.putLong("usuariosId_logado", id);
+                } else {
+                    editor.putLong("usuarioId_logado", -1L);
+                    editor.putLong("usuariosId_logado", -1L);
+                }
+
+                editor.apply();
             }
         });
     }

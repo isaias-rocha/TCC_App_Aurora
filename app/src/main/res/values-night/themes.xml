@@ -33,4 +33,13 @@
 
     <style name="Theme.Aurora" parent="Base.Theme.Aurora" />
 
+    <!-- Corpo de Texto / Inputs / Rótulos (Inter Regular) -->
+    <style name="TextAppearance.Aurora.Body" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/inter</item>
+        <item name="android:fontFamily">@font/inter</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+    <!--Cor contato card-->
+    <color name="contatocard">#475052</color>
+    <color name="bordacontatocard">#1B1818</color>
 </resources>
