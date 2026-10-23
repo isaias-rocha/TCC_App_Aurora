@@ -7,164 +7,167 @@
     android:layout_height="match_parent">
 
     <!-- 1. COMPONENTE PRINCIPAL DO MAPA (OSMDROID) -->
+
+    <!-- 2. CAMADA SUPERIOR (Barra de pesquisa e Filtros horizontais) -->
+
+    <!-- BOTÃO PARA MOSTRAR/OCULTAR ÁREAS DE RISCO -->
     <org.osmdroid.views.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@string/mapa_desc_mapa" />
+        android:contentDescription="@string/mapa_desc_mapa">
 
-    <!-- 2. CAMADA SUPERIOR (Barra de pesquisa e Filtros horizontais) -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="false"
-        android:focusable="false">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="false"
+            android:focusable="false">
 
-        <!-- BARRA DE PESQUISA -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_pesquisa"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="48dp"
-            app:cardBackgroundColor="?attr/colorSurface"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="6dp"
-            app:strokeWidth="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            <!-- BARRA DE PESQUISA -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_pesquisa"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="48dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="6dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeWidth="0dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingEnd="4dp">
-
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_pesquisa"
-                    app:tint="?attr/colorOnSurfaceVariant" />
-
-                <EditText
-                    android:id="@+id/et_pesquisa"
-                    style="@style/TextAppearance.Aurora.Body"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:autofillHints="postalAddress"
-                    android:background="@null"
-                    android:hint="@string/mapa_hint_pesquisa"
-                    android:imeOptions="actionSearch"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:minHeight="48dp"
-                    android:paddingStart="12dp"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textColorHint="?attr/colorOnSurfaceVariant"
-                    android:textSize="14sp" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="4dp">
 
-                <ImageButton
-                    android:id="@+id/btnVoz"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/mapa_desc_btn_voz"
-                    android:padding="10dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_circulo_voz"
-                    app:tint="?attr/colorPrimary" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_pesquisa"
+                        app:tint="?attr/colorOnSurfaceVariant" />
 
-        <!-- CARROSSEL DE FILTROS -->
-        <HorizontalScrollView
-            android:id="@+id/scrollFiltros"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:fillViewport="true"
-            android:scrollbars="none"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/card_pesquisa">
+                    <EditText
+                        android:id="@+id/et_pesquisa"
+                        style="@style/TextAppearance.Aurora.Body"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:autofillHints="postalAddress"
+                        android:background="@null"
+                        android:hint="@string/mapa_hint_pesquisa"
+                        android:imeOptions="actionSearch"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:minHeight="48dp"
+                        android:paddingStart="12dp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textColorHint="?attr/colorOnSurfaceVariant"
+                        android:textSize="14sp" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+                    <ImageButton
+                        android:id="@+id/btnVoz"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/mapa_desc_btn_voz"
+                        android:padding="10dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_circulo_voz"
+                        app:tint="?attr/colorPrimary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- CARROSSEL DE FILTROS -->
+            <HorizontalScrollView
+                android:id="@+id/scrollFiltros"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingHorizontal="16dp">
+                android:layout_marginTop="12dp"
+                android:fillViewport="true"
+                android:scrollbars="none"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_pesquisa">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_filtro_todos"
-                    style="@style/Widget.Aurora.Button"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="@string/mapa_filtro_todos"
-                    android:textAllCaps="false"
-                    android:textSize="12sp" />
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_filtro_rotas"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="@string/mapa_filtro_rotas"
-                    android:textAllCaps="false"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textSize="12sp" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_filtro_todos"
+                        style="@style/Widget.Aurora.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/mapa_filtro_todos"
+                        android:textAllCaps="false"
+                        android:textSize="12sp" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_filtro_amigos"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="@string/mapa_filtro_amigos"
-                    android:textAllCaps="false"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textSize="12sp" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_filtro_rotas"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/mapa_filtro_rotas"
+                        android:textAllCaps="false"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="12sp" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_filtro_grupos"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="@string/mapa_filtro_grupos"
-                    android:textAllCaps="false"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textSize="12sp" />
-            </LinearLayout>
-        </HorizontalScrollView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-        <!-- BOTÃO PARA MOSTRAR/OCULTAR ÁREAS DE RISCO -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnToggleRiscos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="240dp"
-            android:contentDescription="Mostrar ou ocultar áreas de risco"
-            app:backgroundTint="#1E293B"
-            app:fabCustomSize="48dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@android:drawable/ic_dialog_alert"
-            app:tint="#EF4444" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_filtro_amigos"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/mapa_filtro_amigos"
+                        android:textAllCaps="false"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="12sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_filtro_grupos"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/mapa_filtro_grupos"
+                        android:textAllCaps="false"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </HorizontalScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </org.osmdroid.views.MapView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnToggleRiscos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="240dp"
+        android:contentDescription="Mostrar ou ocultar áreas de risco"
+        app:backgroundTint="#1E293B"
+        app:fabCustomSize="48dp"
+        app:srcCompat="@android:drawable/ic_dialog_alert"
+        app:tint="#EF4444" />
 
     <!-- 3. BOTÃO MINHA LOCALIZAÇÃO -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnMinhaLocalizacao"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_margin="16dp"
         android:contentDescription="@string/mapa_desc_minha_localizacao"
         app:backgroundTint="?attr/colorSurface"
@@ -198,7 +201,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingHorizontal="16dp"
-                android:paddingBottom="24dp"/>
+                android:paddingBottom="24dp">
 
                 <com.google.android.material.bottomsheet.BottomSheetDragHandleView
                     android:id="@+id/dragHandle"
@@ -301,6 +304,38 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone">
+
+                    <!-- SELETOR DE MODO DE TRANSPORTE -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnModeCar"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Carro" />
+
+                        <Button
+                            android:id="@+id/btnModeWalk"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="A pé" />
+
+                        <Button
+                            android:id="@+id/btnModeBike"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="Bike" />
+                    </LinearLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -432,7 +467,7 @@
                             android:textColor="?attr/colorOnSurface" />
                     </LinearLayout>
                 </LinearLayout>
-
-            </androidx.core.widget.NestedScrollView>
-        </com.google.android.material.card.MaterialCardView>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </com.google.android.material.card.MaterialCardView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

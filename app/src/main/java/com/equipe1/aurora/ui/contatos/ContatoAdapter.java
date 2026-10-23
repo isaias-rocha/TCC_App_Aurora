@@ -1,4 +1,4 @@
-package com.equipe1.aurora.ui.contacts;
+package com.equipe1.aurora.ui.contatos;
 
 import android.view.LayoutInflater;//transforma XML em View Android
 import android.view.View;//classe base para Elementos visuais
@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 
 import com.bumptech.glide.Glide;
 import com.equipe1.aurora.R;
+import com.equipe1.aurora.domain.model.Contato;
 
 import java.util.List;//permite trabalha com lista
 

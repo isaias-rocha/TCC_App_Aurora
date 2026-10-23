@@ -1,5 +1,6 @@
 package com.equipe1.aurora.ui.mapa;
 
+// --- IMPORTS DO SISTEMA E ANDROID ---
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
+// --- IMPORTS DE JETPACK, ARQUITETURA E RECYCLERVIEW ---
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -29,14 +32,21 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.equipe1.aurora.domain.model.Circulo;
-import com.equipe1.aurora.domain.model.Membro;
-import com.equipe1.aurora.ui.circulos.MembroAdapter;
+// --- IMPORTS DAS CLASSES DO PROJETO AURORA ---
 import com.equipe1.aurora.R;
 import com.equipe1.aurora.databinding.FragmentMapaBinding;
+import com.equipe1.aurora.domain.model.AreaRisco;
+import com.equipe1.aurora.domain.model.BairroPoligono;
+import com.equipe1.aurora.domain.model.Circulo;
+import com.equipe1.aurora.domain.model.Membro;
+import com.equipe1.aurora.domain.model.OcorrenciaCrime;
+import com.equipe1.aurora.ui.circulos.MembroAdapter;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.chip.Chip;
 
+// --- IMPORTS DO MAPA (OSMDROID) E JSON ---
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
@@ -45,12 +55,11 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
+import org.osmdroid.views.overlay.Polygon;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -63,42 +72,48 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * Fragment responsável pela exibição e interação com o mapa OSMDroid,
- * cálculo de rotas via OSRM, visualização de membros do círculo e rastreamento do ESP32.
- */
 public class MapaFragment extends Fragment {
 
-    // --- ATRIBUTOS E GERENCIAMENTO DE ESTADO ---
+    // =========================================================================
+    // 1. GERENCIAMENTO DE BINDING, VIEWMODEL E ESTRUTURAS DO MAPA
+    // =========================================================================
     private FragmentMapaBinding vinculacaoLayout;
     private MapaViewModel viewModel;
     private MapView mapa;
 
+    // Marcador de posição atual (GPS) e marcador de destino selecionado pelo usuário
     private MyLocationNewOverlay marcadorMinhaLocalizacao;
     private Marker marcadorDestinoSelecionado;
 
+    // Coleções para armazenamento das camadas (overlays) desenhadas no mapa
     private final List<Polyline> linhasDesenhadasDaRota = new ArrayList<>();
     private final List<JSONObject> listaDadosRotasJson = new ArrayList<>();
+    private final List<Overlay> camadasRiscosList = new ArrayList<>();
+    private final List<Marker> marcadoresMembros = new ArrayList<>();
+
+    // Estado da navegação em tempo real
     private boolean estaNavegandoAtivamente = false;
     private BottomSheetBehavior<View> comportamentoPainelInferior;
 
+    // Executores assíncronos e manipuladores da thread principal
     private ExecutorService executor;
     private final Handler handlerPrincipal = new Handler(Looper.getMainLooper());
-
     private long idRequisicaoEndereco = 0;
+
+    // Callback para o botão voltar do dispositivo
     private OnBackPressedCallback voltarParaCirculosCallback;
 
+    // Adaptador e coleção para lista de círculos e contatos
     private MembroAdapter adaptadorMembros;
     private final List<Circulo> listaCirculos = new ArrayList<>();
-    private final List<Marker> marcadoresMembros = new ArrayList<>();
 
+    // Gerenciador do contrato de permissões em tempo de execução
     private final ActivityResultLauncher<String[]> lancadorDePermissaoLocalizacao =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), resultado -> {
-                Boolean permissaoPrecisaAceita = resultado.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false);
-                Boolean permissaoAproximadaAceita = resultado.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false);
+                Boolean permissaoPrecisa = resultado.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false);
+                Boolean permissaoAproximada = resultado.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false);
 
-                if ((permissaoPrecisaAceita != null && permissaoPrecisaAceita) ||
-                        (permissaoAproximadaAceita != null && permissaoAproximadaAceita)) {
+                if ((permissaoPrecisa != null && permissaoPrecisa) || (permissaoAproximada != null && permissaoAproximada)) {
                     ativarLocalizacaoUsuario();
                     Toast.makeText(getContext(), "Permissão de localização concedida.", Toast.LENGTH_SHORT).show();
                 } else {
@@ -106,25 +121,31 @@ public class MapaFragment extends Fragment {
                 }
             });
 
-    // --- CICLO DE VIDA ---
+    // =========================================================================
+    // 2. CICLO DE VIDA DO FRAGMENT
+    // =========================================================================
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Inicializa configurações do OSMDroid
         Configuration.getInstance().load(requireContext(), PreferenceManager.getDefaultSharedPreferences(requireContext()));
         Configuration.getInstance().setUserAgentValue(requireContext().getPackageName());
 
-        // Escopo do ViewModel vinculado à Activity principal para compartilhar dados entre telas (MVVM)
+        // Vincula o ViewModel com escopo na Activity para compartilhamento de dados
         viewModel = new ViewModelProvider(requireActivity()).get(MapaViewModel.class);
         executor = Executors.newSingleThreadExecutor();
 
+        // Configuração do ViewBinding e layout raiz
         vinculacaoLayout = FragmentMapaBinding.inflate(inflater, container, false);
         View raiz = vinculacaoLayout.getRoot();
         mapa = vinculacaoLayout.map;
 
+        // Configuração inicial do BottomSheetBehavior (Painel inferior)
         comportamentoPainelInferior = BottomSheetBehavior.from(vinculacaoLayout.bottomSheet);
         comportamentoPainelInferior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
+        // Registro do callback do botão Voltar
         voltarParaCirculosCallback = new OnBackPressedCallback(false) {
             @Override
             public void handleOnBackPressed() {
@@ -133,69 +154,27 @@ public class MapaFragment extends Fragment {
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), voltarParaCirculosCallback);
 
+        // Parametrização básica do motor do mapa
         mapa.setTileSource(TileSourceFactory.MAPNIK);
         mapa.setMultiTouchControls(true);
         mapa.getController().setZoom(17.0);
 
+        // Inicialização de componentes, listeners e observadores
         configurarCliqueNoMapa();
         configurarOuvinteBarraPesquisa();
         configurarOuvintesBotoes();
         configurarCirculos();
         configurarAcessibilidade();
 
-        // MVVM & ESP32: Registra os observadores e processa parâmetros do Bundle
         configurarObservadoresViewModel();
         processarArgumentosEsp32();
-
         processarBuscaRecebida();
         checarPermissoesELocalizar();
 
+        // Solicita o carregamento inicial das camadas ao ViewModel
+        viewModel.carregarTodasAsCamadasDeRisco();
+
         return raiz;
-    }
-
-    // --- INTEGRAÇÃO MVVM PARA O ESP32 ---
-
-    private void configurarObservadoresViewModel() {
-        // Observa alterações de localização do ESP32 no ViewModel
-        viewModel.getPontoEsp32().observe(getViewLifecycleOwner(), pontoEsp32 -> {
-            if (pontoEsp32 != null && mapa != null) {
-                if (marcadorMinhaLocalizacao != null) {
-                    marcadorMinhaLocalizacao.disableFollowLocation();
-                }
-                selecionarLocalEsp32(pontoEsp32);
-            }
-        });
-    }
-
-    private void processarArgumentosEsp32() {
-        if (getArguments() != null && getArguments().containsKey("LATITUDE_ESP32")) {
-            double lat = getArguments().getDouble("LATITUDE_ESP32", 0.0);
-            double lng = getArguments().getDouble("LONGITUDE_ESP32", 0.0);
-
-            if (lat != 0.0 && lng != 0.0) {
-                GeoPoint pontoEsp32 = new GeoPoint(lat, lng);
-                viewModel.setPontoEsp32(pontoEsp32);
-            }
-        }
-    }
-
-    private void selecionarLocalEsp32(GeoPoint pontoEsp32) {
-        estaNavegandoAtivamente = false;
-        viewModel.setEstaNavegando(false);
-
-        limparLinhasDesenhadasNoMapa();
-        adicionarOuMoverMarcadorDeDestino(pontoEsp32);
-
-        if (marcadorDestinoSelecionado != null) {
-            marcadorDestinoSelecionado.setTitle("Localizador Aurora ESP32");
-        }
-
-        mostrarModoLocal();
-        obterEnderecoGeocodificado(pontoEsp32);
-        executarCalculoDeRota();
-
-        vinculacaoLayout.tvNomeDoLocal.setText("Dispositivo Aurora (ESP32)");
-        comportamentoPainelInferior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
     @Override
@@ -215,30 +194,94 @@ public class MapaFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
-        if (executor != null && !executor.isShutdown()) {
-            executor.shutdownNow();
-        }
-
-        if (marcadorMinhaLocalizacao != null) {
-            marcadorMinhaLocalizacao.disableMyLocation();
-        }
-
-        if (mapa != null) {
-            mapa.onDetach();
-        }
-
+        // Libera recursos e encerra threads para evitar memory leaks
+        if (executor != null && !executor.isShutdown()) executor.shutdownNow();
+        if (marcadorMinhaLocalizacao != null) marcadorMinhaLocalizacao.disableMyLocation();
+        if (mapa != null) mapa.onDetach();
         vinculacaoLayout = null;
     }
 
-    // --- CONFIGURAÇÃO DE EVENTOS E LISTENERS ---
+    // =========================================================================
+    // 3. CONFIGURAÇÃO DOS OBSERVADORES DO VIEWMODEL (MVVM)
+    // =========================================================================
+
+    private void configurarObservadoresViewModel() {
+        // Observador da localização do rastreador ESP32
+        viewModel.getPontoEsp32().observe(getViewLifecycleOwner(), pontoEsp32 -> {
+            if (pontoEsp32 != null && mapa != null) {
+                if (marcadorMinhaLocalizacao != null) {
+                    marcadorMinhaLocalizacao.disableFollowLocation();
+                }
+                selecionarLocalEsp32(pontoEsp32);
+            }
+        });
+
+        // Observadores das listas de camadas de risco fornecidas pela API
+        viewModel.getListaRiscos().observe(getViewLifecycleOwner(), this::desenharAreasDeRisco);
+        viewModel.getListaBairros().observe(getViewLifecycleOwner(), this::desenharPoligonosBairros);
+        viewModel.getListaCrimes().observe(getViewLifecycleOwner(), this::desenharOcorrenciasCrimes);
+
+        // Observador para alternar a exibição/ocultação das camadas
+        viewModel.getExibirAreasRisco().observe(getViewLifecycleOwner(), visivel -> {
+            if (visivel) {
+                vinculacaoLayout.btnToggleRiscos.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), android.R.color.holo_red_dark));
+                viewModel.carregarTodasAsCamadasDeRisco();
+            } else {
+                vinculacaoLayout.btnToggleRiscos.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), android.R.color.darker_gray));
+                limparCamadasDeRiscoDoMapa();
+            }
+        });
+    }
+
+    // =========================================================================
+    // 4. INTEGRAÇÃO E NAVEGAÇÃO VIA DISPOSITIVO ESP32
+    // =========================================================================
+
+    // Processa coordenadas recebidas via argumentos do Fragment
+    private void processarArgumentosEsp32() {
+        if (getArguments() != null && getArguments().containsKey("LATITUDE_ESP32")) {
+            double lat = getArguments().getDouble("LATITUDE_ESP32", 0.0);
+            double lng = getArguments().getDouble("LONGITUDE_ESP32", 0.0);
+
+            if (lat != 0.0 && lng != 0.0) {
+                GeoPoint pontoEsp32 = new GeoPoint(lat, lng);
+                viewModel.setPontoEsp32(pontoEsp32);
+            }
+        }
+    }
+
+    // Move o foco do mapa e abre a rota para a localização do ESP32
+    private void selecionarLocalEsp32(GeoPoint pontoEsp32) {
+        estaNavegandoAtivamente = false;
+        viewModel.setEstaNavegando(false);
+
+        limparLinhasDesenhadasNoMapa();
+        adicionarOuMoverMarcadorDeDestino(pontoEsp32);
+
+        if (marcadorDestinoSelecionado != null) {
+            marcadorDestinoSelecionado.setTitle("Localizador Aurora ESP32");
+        }
+
+        mostrarModoLocal();
+        obterEnderecoGeocodificado(pontoEsp32);
+        executarCalculoDeRota();
+
+        vinculacaoLayout.tvNomeDoLocal.setText("Dispositivo Aurora (ESP32)");
+        comportamentoPainelInferior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+    // =========================================================================
+    // 5. OUVINTES DE EVENTOS E BOTÕES DA INTERFACE
+    // =========================================================================
 
     private void configurarOuvintesBotoes() {
         vinculacaoLayout.btnMinhaLocalizacao.setOnClickListener(v -> centralizarNaLocalizacaoAtual());
         vinculacaoLayout.btnNavigate.setOnClickListener(v -> executarCalculoDeRota());
         vinculacaoLayout.btnVoltarCirculos.setOnClickListener(v -> voltarParaCirculos());
+        vinculacaoLayout.btnToggleRiscos.setOnClickListener(v -> viewModel.alternarExibicaoRiscos());
     }
 
+    // Intercepta toques simples diretamente na área do mapa
     private void configurarCliqueNoMapa() {
         MapEventsReceiver receptorEventosMapa = new MapEventsReceiver() {
             @Override
@@ -255,6 +298,7 @@ public class MapaFragment extends Fragment {
         mapa.getOverlays().add(new MapEventsOverlay(receptorEventosMapa));
     }
 
+    // Ação ao tocar em qualquer coordenada do mapa
     private void selecionarLocal(GeoPoint ponto) {
         estaNavegandoAtivamente = false;
         viewModel.setEstaNavegando(false);
@@ -274,6 +318,7 @@ public class MapaFragment extends Fragment {
         comportamentoPainelInferior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
+    // Configura a pesquisa por texto na barra de busca
     private void configurarOuvinteBarraPesquisa() {
         vinculacaoLayout.etPesquisa.setOnEditorActionListener((view, acaoId, evento) -> {
             if (acaoId == EditorInfo.IME_ACTION_SEARCH || (evento != null && evento.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
@@ -284,8 +329,11 @@ public class MapaFragment extends Fragment {
         });
     }
 
-    // --- NAVEGAÇÃO INTERNA DO BOTTOM SHEET ---
+    // =========================================================================
+    // 6. CONTROLE E NAVEGAÇÃO DO PAINEL INFERIOR (BOTTOM SHEET)
+    // =========================================================================
 
+    // Exibe as informações do local selecionado e esconde os círculos
     private void mostrarModoLocal() {
         vinculacaoLayout.layoutCirculos.setVisibility(View.GONE);
         vinculacaoLayout.layoutLocal.setVisibility(View.VISIBLE);
@@ -293,6 +341,7 @@ public class MapaFragment extends Fragment {
         voltarParaCirculosCallback.setEnabled(true);
     }
 
+    // Restaura a visualização padrão dos Círculos de Segurança
     private void voltarParaCirculos() {
         estaNavegandoAtivamente = false;
         viewModel.setEstaNavegando(false);
@@ -311,7 +360,9 @@ public class MapaFragment extends Fragment {
         comportamentoPainelInferior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
-    // --- CÍRCULOS DE CONTATOS ---
+    // =========================================================================
+    // 7. CÍRCULOS DE CONTATOS E MEMBROS DA FAMÍLIA
+    // =========================================================================
 
     private void configurarCirculos() {
         adaptadorMembros = new MembroAdapter(membro -> {
@@ -347,6 +398,7 @@ public class MapaFragment extends Fragment {
         }
     }
 
+    // Renderiza os membros do círculo selecionado no mapa e na lista
     private void selecionarCirculo(Circulo c) {
         adaptadorMembros.submit(c.membros);
         vinculacaoLayout.tvCirculoVazio.setVisibility(c.membros.isEmpty() ? View.VISIBLE : View.GONE);
@@ -363,11 +415,9 @@ public class MapaFragment extends Fragment {
             mapa.getOverlays().add(m);
         }
         mapa.invalidate();
-
-        vinculacaoLayout.rvMembros.announceForAccessibility(
-                "Círculo " + c.nome + ", " + c.membros.size() + " membros");
     }
 
+    // Carga inicial de círculos para demonstração
     private void carregarCirculosDeExemplo() {
         Circulo familia = new Circulo("1", "Família");
         familia.membros.add(new Membro("Maria Souza", "Em casa · há 2 min", 85, -23.5489, -46.6388));
@@ -379,7 +429,9 @@ public class MapaFragment extends Fragment {
         viewModel.setListaCirculos(listaCirculos);
     }
 
-    // --- ACESSIBILIDADE ---
+    // =========================================================================
+    // 8. CONFIGURAÇÕES DE ACESSIBILIDADE
+    // =========================================================================
 
     private void configurarAcessibilidade() {
         ViewCompat.addAccessibilityAction(mapa, "Selecionar o ponto no centro do mapa", (v, args) -> {
@@ -389,6 +441,7 @@ public class MapaFragment extends Fragment {
         });
     }
 
+    // Atualiza a descrição audível para os leitores de tela
     private void atualizarDescricaoAcessivel() {
         if (vinculacaoLayout == null || marcadorDestinoSelecionado == null) return;
         GeoPoint p = marcadorDestinoSelecionado.getPosition();
@@ -399,7 +452,9 @@ public class MapaFragment extends Fragment {
         vinculacaoLayout.blocoInfoLocal.setContentDescription(desc);
     }
 
-    // --- SERVIÇOS DE LOCALIZAÇÃO (GPS) ---
+    // =========================================================================
+    // 9. SERVIÇOS DE LOCALIZAÇÃO E GPS DO DISPOSITIVO
+    // =========================================================================
 
     private void checarPermissoesELocalizar() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -412,6 +467,7 @@ public class MapaFragment extends Fragment {
         }
     }
 
+    // Ativa a camada de geolocalização do usuário no OSMDroid
     private void ativarLocalizacaoUsuario() {
         if (getContext() == null || mapa == null) return;
 
@@ -458,6 +514,7 @@ public class MapaFragment extends Fragment {
         mapa.invalidate();
     }
 
+    // Centraliza a câmera nas coordenadas atuais do GPS
     private void centralizarNaLocalizacaoAtual() {
         if (marcadorMinhaLocalizacao != null && marcadorMinhaLocalizacao.getMyLocation() != null) {
             GeoPoint posicaoUsuario = marcadorMinhaLocalizacao.getMyLocation();
@@ -468,6 +525,10 @@ public class MapaFragment extends Fragment {
             Toast.makeText(getContext(), "Buscando sinal de GPS...", Toast.LENGTH_SHORT).show();
         }
     }
+
+    // =========================================================================
+    // 10. PESQUISA DE ENDEREÇOS E GEOCODIFICAÇÃO
+    // =========================================================================
 
     private void buscarLocalizacaoPeloTexto(String textoPesquisado) {
         if (textoPesquisado.isEmpty()) return;
@@ -507,6 +568,7 @@ public class MapaFragment extends Fragment {
         });
     }
 
+    // Processa parâmetros de busca repassados de outras Fragments
     private void processarBuscaRecebida() {
         if (getArguments() != null && getArguments().containsKey("search_query")) {
             String textoRecebido = getArguments().getString("search_query");
@@ -517,7 +579,9 @@ public class MapaFragment extends Fragment {
         }
     }
 
-    // --- CÁLCULO DE ROTA (API OSRM) ---
+    // =========================================================================
+    // 11. CÁLCULO E DESENHO DE ROTAS (API OSRM)
+    // =========================================================================
 
     private void executarCalculoDeRota() {
         if (marcadorDestinoSelecionado == null) {
@@ -538,14 +602,14 @@ public class MapaFragment extends Fragment {
         baixarETracarRotaInternet(coordenadaOrigem, coordenadaDestino);
     }
 
+    // Requisição assíncrona HTTP ao serviço de roteamento OSRM
     private void baixarETracarRotaInternet(GeoPoint origem, GeoPoint destino) {
         executor.execute(() -> {
             final List<JSONObject> rotasRecebidas = new ArrayList<>();
 
             try {
                 String enderecoRequisicao = String.format(Locale.US,
-                        "https://router.project-osrm.org/route/v1/%s/%.6f,%.6f;%.6f,%.6f?overview=full&geometries=geojson&alternatives=true&steps=true",
-                        "driving",
+                        "https://router.project-osrm.org/route/v1/driving/%.6f,%.6f;%.6f,%.6f?overview=full&geometries=geojson&alternatives=true&steps=true",
                         origem.getLongitude(), origem.getLatitude(),
                         destino.getLongitude(), destino.getLatitude());
 
@@ -571,7 +635,7 @@ public class MapaFragment extends Fragment {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("MAPA_ERRO", "Erro no cálculo da rota", e);
             }
 
             handlerPrincipal.post(() -> {
@@ -596,6 +660,7 @@ public class MapaFragment extends Fragment {
         });
     }
 
+    // Limpa do mapa as linhas desenhadas referente às rotas ativas
     private void limparLinhasDesenhadasNoMapa() {
         for (Polyline linha : linhasDesenhadasDaRota) {
             mapa.getOverlays().remove(linha);
@@ -604,6 +669,7 @@ public class MapaFragment extends Fragment {
         mapa.invalidate();
     }
 
+    // Plota as polilinhas no mapa e destaca a rota selecionada
     private void desenharRotasRecebidasNoMapa(int indiceRotaSelecionada) {
         limparLinhasDesenhadasNoMapa();
 
@@ -650,15 +716,16 @@ public class MapaFragment extends Fragment {
                 mapa.getOverlays().add(linhaColorida);
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("MAPA_ERRO", "Erro ao desenhar rota", e);
             }
         }
         mapa.invalidate();
     }
 
+    // Recalcula o progresso da viagem durante o deslocamento
     private void atualizarInformacoesDeTrajetoEmTempoReal(GeoPoint coordenadaAtual, GeoPoint coordenadaDestino) {
         double distanciaQueFalta = coordenadaAtual.distanceToAsDouble(coordenadaDestino);
-        double tempoEstimadoRestante = distanciaQueFalta / 8.3; // Aproximadamente 30 km/h
+        double tempoEstimadoRestante = distanciaQueFalta / 8.3;
 
         vinculacaoLayout.tvDistanciaTempo.setText(formatarTextoTempoEDistancia(tempoEstimadoRestante, distanciaQueFalta));
 
@@ -671,7 +738,190 @@ public class MapaFragment extends Fragment {
         atualizarDescricaoAcessivel();
     }
 
-    // --- FORMATAÇÃO E AUXILIARES ---
+    // =========================================================================
+    // 12. RENDERIZAÇÃO DAS CAMADAS DE RISCO, BAIRROS E CRIMES
+    // =========================================================================
+
+    // Remove todas as camadas de segurança do mapa
+    private void limparCamadasDeRiscoDoMapa() {
+        for (Overlay overlay : camadasRiscosList) {
+            mapa.getOverlays().remove(overlay);
+        }
+        camadasRiscosList.clear();
+        mapa.invalidate();
+    }
+
+    // Plota círculos concêntricos e pontos de risco no mapa
+    private void desenharAreasDeRisco(List<AreaRisco> listaRiscos) {
+        if (listaRiscos == null || !Boolean.TRUE.equals(viewModel.getExibirAreasRisco().getValue())) return;
+
+        for (AreaRisco risco : listaRiscos) {
+            try {
+                if (risco.getLatitude() == 0.0 || risco.getLongitude() == 0.0) continue;
+
+                GeoPoint ponto = new GeoPoint(risco.getLatitude(), risco.getLongitude());
+
+                Marker marker = new Marker(mapa);
+                marker.setPosition(ponto);
+                marker.setTitle(risco.getNomeArea() + (risco.getTipoCrime() != null ? " (" + risco.getTipoCrime() + ")" : ""));
+                marker.setSnippet(risco.getDescricaoArea());
+                marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                configurarIconePorCrime(marker, risco.getTipoCrime());
+
+                mapa.getOverlays().add(marker);
+                camadasRiscosList.add(marker);
+
+                Polygon circle = new Polygon(mapa);
+                double raio = risco.getRaioMetros() > 0 ? risco.getRaioMetros() : 100.0;
+                circle.setPoints(Polygon.pointsAsCircle(ponto, raio));
+
+                String nivel = risco.getNivelRisco() != null ? risco.getNivelRisco().toUpperCase() : "MEDIO";
+                if (nivel.contains("ALTO") || nivel.contains("CRITICO")) {
+                    circle.setFillColor(Color.argb(70, 255, 0, 0));
+                    circle.setStrokeColor(Color.RED);
+                } else {
+                    circle.setFillColor(Color.argb(70, 255, 235, 59));
+                    circle.setStrokeColor(Color.parseColor("#FBC02D"));
+                }
+                circle.setStrokeWidth(2f);
+
+                mapa.getOverlays().add(circle);
+                camadasRiscosList.add(circle);
+
+            } catch (Exception e) {
+                Log.e("MAPA_ERRO", "Erro ao desenhar área de risco", e);
+            }
+        }
+        mapa.invalidate();
+    }
+
+    // Desenha as fronteiras poligonais dos bairros com cores indicativas de perigo
+    private void desenharPoligonosBairros(List<BairroPoligono> listaBairros) {
+        if (listaBairros == null || !Boolean.TRUE.equals(viewModel.getExibirAreasRisco().getValue())) return;
+
+        for (BairroPoligono bairro : listaBairros) {
+            List<GeoPoint> pontosGeo = bairro.getCoordenadasVertices();
+            if (pontosGeo == null || pontosGeo.isEmpty()) continue;
+
+            Polygon poligono = new Polygon(mapa);
+            poligono.setPoints(pontosGeo);
+            poligono.setTitle("Bairro: " + bairro.getNomeBairro() + " (Risco: " + bairro.getNivelRisco() + ")");
+
+            String nivelRisco = bairro.getNivelRisco() != null ? bairro.getNivelRisco().toUpperCase() : "MEDIO";
+            switch (nivelRisco) {
+                case "ALTO":
+                    poligono.setFillColor(Color.parseColor("#4DFF0000"));
+                    poligono.setStrokeColor(Color.parseColor("#FF0000"));
+                    break;
+                case "MEDIO":
+                    poligono.setFillColor(Color.parseColor("#4DFFFF00"));
+                    poligono.setStrokeColor(Color.parseColor("#D4AC0D"));
+                    break;
+                default:
+                    poligono.setFillColor(Color.parseColor("#4D00FF00"));
+                    poligono.setStrokeColor(Color.parseColor("#00FF00"));
+                    break;
+            }
+
+            poligono.setStrokeWidth(3f);
+            mapa.getOverlays().add(0, poligono);
+            camadasRiscosList.add(poligono);
+        }
+        mapa.invalidate();
+    }
+
+    // Adiciona marcadores específicos para locais de crimes reportados
+    private void desenharOcorrenciasCrimes(List<OcorrenciaCrime> listaCrimes) {
+        if (listaCrimes == null || !Boolean.TRUE.equals(viewModel.getExibirAreasRisco().getValue())) return;
+
+        for (OcorrenciaCrime crime : listaCrimes) {
+            GeoPoint ponto = new GeoPoint(crime.getLatitude(), crime.getLongitude());
+
+            Marker marker = new Marker(mapa);
+            marker.setPosition(ponto);
+            marker.setTitle(crime.getTipoCrime());
+            marker.setSnippet(crime.getDescricao());
+            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            configurarIconePorCrime(marker, crime.getTipoCrime());
+
+            mapa.getOverlays().add(marker);
+            camadasRiscosList.add(marker);
+        }
+        mapa.invalidate();
+    }
+
+    // Configura o ícone gráfico do marcador dependendo da categoria de crime
+    private void configurarIconePorCrime(Marker marker, String tipoCrime) {
+        if (tipoCrime == null || !isAdded() || getContext() == null) return;
+        String tipo = tipoCrime.toLowerCase();
+
+        if (tipo.contains("roubo") || tipo.contains("assalto")) {
+            marker.setIcon(ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_menu_myplaces));
+        } else if (tipo.contains("furto")) {
+            marker.setIcon(ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_menu_info_details));
+        } else {
+            marker.setIcon(ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_dialog_alert));
+        }
+    }
+
+    // =========================================================================
+    // 13. PASSO A PASSO DA NAVEGAÇÃO E ÍCONES DE MANOBRA
+    // =========================================================================
+
+    // Monta o texto legível de instruções de navegação
+    private void escreverPassosDaNavegacaoNaTela(JSONObject jsonCompletoRota) {
+        try {
+            SpannableStringBuilder textoComOsPassos = new SpannableStringBuilder();
+            JSONArray blocosDaRota = jsonCompletoRota.getJSONArray("legs");
+
+            if (blocosDaRota.length() > 0) {
+                JSONArray passos = blocosDaRota.getJSONObject(0).getJSONArray("steps");
+                textoComOsPassos.append("🟢 Ponto de Partida\n\n");
+
+                for (int i = 0; i < passos.length(); i++) {
+                    JSONObject passo = passos.getJSONObject(i);
+                    String nomeRua = passo.optString("name", "");
+                    double metros = passo.optDouble("distance", 0);
+
+                    JSONObject maneuver = passo.optJSONObject("maneuver");
+                    String modifier = (maneuver != null) ? maneuver.optString("modifier", "") : "";
+                    String type = (maneuver != null) ? maneuver.optString("type", "") : "";
+
+                    String iconeManobra = obterIconeManobra(type, modifier);
+                    String distStr = metros < 1000 ? String.format(Locale.getDefault(), "%.0f m", metros) : String.format(Locale.getDefault(), "%.1f km", metros / 1000.0);
+
+                    textoComOsPassos.append(iconeManobra).append(" ");
+                    if (!nomeRua.isEmpty()) {
+                        textoComOsPassos.append("Siga por ").append(nomeRua);
+                    } else {
+                        textoComOsPassos.append("Continue no trajeto");
+                    }
+                    textoComOsPassos.append(" (").append(distStr).append(")\n\n");
+                }
+                textoComOsPassos.append("🔴 Chegada ao Destino");
+                vinculacaoLayout.tvEtapasDetalhes.setText(textoComOsPassos);
+            }
+        } catch (Exception e) {
+            Log.e("MAPA_ERRO", "Erro ao formatar etapas", e);
+            vinculacaoLayout.tvEtapasDetalhes.setText("• Toque no botão de rota para ver as instruções detalhadas.");
+        }
+    }
+
+    // Associa direções do OSRM aos seus respectivos ícones
+    private String obterIconeManobra(String type, String modifier) {
+        if (modifier.contains("right")) return "↗️ Virar à direita";
+        if (modifier.contains("left")) return "↖️ Virar à esquerda";
+        if (modifier.contains("slight right")) return "↗️ Mantenha-se à direita";
+        if (modifier.contains("slight left")) return "↖️ Mantenha-se à esquerda";
+        if (modifier.contains("sharp right")) return "↪ Curva acentuada à direita";
+        if (modifier.contains("sharp left")) return "↩️ Curva acentuada à esquerda";
+        if (modifier.contains("uturn")) return "🔄 Faça o retorno";
+        return "⬆️ Siga em frente";
+    }
+
+    // =========================================================================
+    // 14. MÉTODOS AUXILIARES DE SUPORTE E FORMATAÇÕES
+    // =========================================================================
 
     private void adicionarOuMoverMarcadorDeDestino(GeoPoint coordenada) {
         if (marcadorDestinoSelecionado == null) {
@@ -762,34 +1012,5 @@ public class MapaFragment extends Fragment {
         String textoTempo = minutos < 60 ? minutos + " min" : (minutos / 60) + " h " + (minutos % 60) + " min";
         String textoDistancia = metros < 1000 ? String.format(Locale.getDefault(), "%.0f m", metros) : String.format(Locale.getDefault(), "%.1f km", metros / 1000.0);
         return textoTempo + " (" + textoDistancia + ")";
-    }
-
-    private void escreverPassosDaNavegacaoNaTela(JSONObject jsonCompletoRota) {
-        try {
-            SpannableStringBuilder textoComOsPassos = new SpannableStringBuilder();
-            JSONArray blocosDaRota = jsonCompletoRota.getJSONArray("legs");
-
-            if (blocosDaRota.length() > 0) {
-                JSONArray passos = blocosDaRota.getJSONObject(0).getJSONArray("steps");
-                textoComOsPassos.append("🟢 Ponto de Partida\n\n");
-
-                for (int i = 0; i < passos.length(); i++) {
-                    JSONObject passo = passos.getJSONObject(i);
-                    String instrucao = passo.has("name") && !passo.getString("name").isEmpty()
-                            ? "Siga por " + passo.getString("name")
-                            : "Continue no percurso";
-
-                    double metros = passo.getDouble("distance");
-                    String distStr = metros < 1000 ? String.format(Locale.getDefault(), "%.0f m", metros) : String.format(Locale.getDefault(), "%.1f km", metros / 1000.0);
-
-                    textoComOsPassos.append("• ").append(instrucao).append(" (").append(distStr).append(")\n");
-                }
-                textoComOsPassos.append("\n🔴 Chegada ao Destino");
-                vinculacaoLayout.tvEtapasDetalhes.setText(textoComOsPassos);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            vinculacaoLayout.tvEtapasDetalhes.setText("• Toque no botão de rota para ver as instruções detalhadas.");
-        }
     }
 }

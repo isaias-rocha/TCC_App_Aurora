@@ -1,4 +1,4 @@
-package com.equipe1.aurora.rede.api;
+package com.equipe1.aurora.infra.network;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

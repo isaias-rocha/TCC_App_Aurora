@@ -7,16 +7,13 @@ import android.util.Patterns;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import com.equipe1.aurora.infra.network.ApiClient;
+import com.equipe1.aurora.infra.network.api.ApiClient;
 import com.equipe1.aurora.infra.dto.UsuarioDto;
 
-import com.equipe1.aurora.rede.api.ApiClient;
-import com.equipe1.aurora.domain.model.UsuarioDto;
 
 /**
  * AuthViewModel: O "cérebro" do fluxo de autenticação.
- *
+
  * Responsabilidades:
  * 1. Processar e validar todos os dados de formulários (Login, Cadastro, Esqueceu Senha, OTP).
  * 2. Gerenciar a autenticação reativa via provedores sociais (Google Sign-In).

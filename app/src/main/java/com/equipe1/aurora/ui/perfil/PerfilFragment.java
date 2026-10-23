@@ -52,40 +52,40 @@ public class PerfilFragment extends Fragment {
         // 1. Informações Pessoais -> InfoPessoaisActivity
         binding.menuInfoPessoais.setOnClickListener(v -> {
             startActivity(new Intent(requireContext(), InfoPessoaisActivity.class));
-            Toast.makeText(requireContext(), "Informações Pessoais", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Tela Informações Pessoais", Toast.LENGTH_SHORT).show();
         });
 
         // 2. Dispositivo Embarcado (Mensagem temporária)
         binding.menuDispositivoEmbarcado.setOnClickListener(v -> {
             startActivity(new Intent(requireContext(), DispositivoFragment.class));
-            Toast.makeText(requireContext(), "Dispositivo Embarcado", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Tela Dispositivo Embarcado", Toast.LENGTH_SHORT).show();
         });
 
         // 3. Contatos -> ContatosActivity
         binding.menuContatos.setOnClickListener(v -> {
             startActivity(new Intent(requireContext(), ContatosFragment.class));
-            Toast.makeText(requireContext(), "Contatos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Tela Contatos", Toast.LENGTH_SHORT).show();
 
         });
 
         // 4. Histórico -> HistoricoActivity
         binding.menuHistorico.setOnClickListener(v -> {
             startActivity(new Intent(requireContext(), HistoricoActivity.class));
-            Toast.makeText(requireContext(), "Histórico", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Tela Histórico", Toast.LENGTH_SHORT).show();
 
         });
 
         // 5. Planos de Assinatura -> PlanosAssinaturaActivity
         binding.menuPlanoAssinatura.setOnClickListener(v -> {
             startActivity(new Intent(requireContext(), PlanosAssinaturaActivity.class));
-            Toast.makeText(requireContext(), "Planos de Assinatura", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Tela Planos de Assinatura", Toast.LENGTH_SHORT).show();
 
         });
 
         // 6. Configurações -> ConfigActivity
         binding.menuConfiguracoes.setOnClickListener(v -> {
             startActivity(new Intent(requireContext(), ConfigActivity.class));
-            Toast.makeText(requireContext(), "Configurações", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Tela Configurações", Toast.LENGTH_SHORT).show();
         });
     }
 

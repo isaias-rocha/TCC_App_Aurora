@@ -28,16 +28,14 @@
         android:scaleType="centerCrop"
         android:background="@drawable/background_circulo"
         android:clipToOutline="true"
-        android:src="@drawable/ic_profile_user" /> <!-- Imagem padrão temporária -->
-
-
+        android:src="@drawable/ic_perfil" /> <!-- Imagem padrão temporária -->
 
 
     <!--Informações do Contato -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:orientation="vertical">
 
         <TextView android:id="@+id/txtNome"
@@ -47,7 +45,7 @@
             android:layout_margin="5dp"
             android:layout_marginEnd="70dp"
             android:textStyle="bold"
-            android:textColor="@color/text_primary_claro"
+            android:textColor="@color/text_primary"
             android:background="@drawable/background_txt_contato"/>
 
         <TextView android:id="@+id/txtTelefone"
@@ -57,17 +55,17 @@
             android:layout_margin="5dp"
             android:layout_marginEnd="70dp"
             android:textStyle="bold"
-            android:textColor="@color/text_primary_claro"
+            android:textColor="@color/text_secondary"
             android:background="@drawable/background_txt_contato"/>
     </LinearLayout>
 
     <!--Botão Enviar-->
-    <Button android:id="@+id/btnEnviar"
-        android:layout_width="49dp"
-        android:layout_height="40dp"
+    <ImageButton android:id="@+id/btnEnviar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:text="Enviar"
-        android:backgroundTint="#86FA75"
-        android:textSize="7sp"
+        android:backgroundTint="#6FE260"
+        android:src="@drawable/ic_enviar"
         android:layout_margin="5dp"
         android:textStyle="bold"
         android:layout_marginEnd="4dp"/>
@@ -76,11 +74,11 @@
     <!-- Botão de Deletar -->
     <ImageButton
         android:id="@+id/btnDelete"
-        android:layout_width="35dp"
+        android:layout_width="48dp"
         android:layout_margin="5dp"
-        android:layout_height="35dp"
+        android:layout_height="48dp"
         android:background="@drawable/background_botao_deletar"
-        android:src="@android:drawable/ic_menu_delete"
+        android:src="@drawable/ic_lixeira"
         android:contentDescription="Deletar"
         />
 </LinearLayout>

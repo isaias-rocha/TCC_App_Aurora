@@ -20,7 +20,7 @@ import com.equipe1.aurora.infra.ble.AuroraBleService;
 import com.equipe1.aurora.infra.dto.ConsultaResponseDto;
 import com.equipe1.aurora.infra.dto.DispositivoDto;
 import com.equipe1.aurora.infra.dto.mapper.DispositivoMapper;
-import com.equipe1.aurora.infra.network.ApiClient;
+import com.equipe1.aurora.infra.network.api.ApiClient;
 
 import java.util.ArrayList;
 import java.util.List;

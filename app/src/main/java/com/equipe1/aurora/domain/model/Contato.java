@@ -1,4 +1,4 @@
-package com.equipe1.aurora.ui.contacts;
+package com.equipe1.aurora.domain.model;
 
 public class Contato {
     private Long id;

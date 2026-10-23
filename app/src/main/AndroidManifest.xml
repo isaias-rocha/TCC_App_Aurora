@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <!-- =========================================================================
-         PERMISSÕES: SERVIÇOS EM PRIMEIRA PLANO (BLE E RASTREAMENTO EM 2º PLANO)
+         PERMISSÕES: SERVIÇOS EM PRIMEIRA PLANO (BLE E RASTREAMENTO EM SEGUNDO PLANO)
          ========================================================================= -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
