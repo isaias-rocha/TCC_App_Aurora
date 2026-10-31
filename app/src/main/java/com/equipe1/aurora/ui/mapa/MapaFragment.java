@@ -1,9 +1,19 @@
 package com.equipe1.aurora.ui.mapa;
 
+// ============================================================================================
+// ARQUIVO: MapaFragment.java
+// CAMADA: Apresentação (View - MVVM)
+// FUNÇÃO: Fragmento responsável pela renderização do mapa interativo (OSMDroid), tratamento das
+//         interações de interface via ViewBinding (pesquisa de locais, aplicação de filtros,
+//         desenho de rotas OSRM, camadas de segurança) e observação reativa dos estados expostos
+//         pelo MapaViewModel.
+// ============================================================================================
+
 // --- IMPORTS DO SISTEMA E ANDROID ---
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -33,7 +43,6 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 // --- IMPORTS DAS CLASSES DO PROJETO AURORA ---
-import com.equipe1.aurora.R;
 import com.equipe1.aurora.databinding.FragmentMapaBinding;
 import com.equipe1.aurora.domain.model.AreaRisco;
 import com.equipe1.aurora.domain.model.BairroPoligono;
@@ -42,7 +51,11 @@ import com.equipe1.aurora.domain.model.Membro;
 import com.equipe1.aurora.domain.model.OcorrenciaCrime;
 import com.equipe1.aurora.ui.circulos.MembroAdapter;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.color.MaterialColors;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 
 // --- IMPORTS DO MAPA (OSMDROID) E JSON ---
 import org.json.JSONArray;
@@ -81,7 +94,7 @@ public class MapaFragment extends Fragment {
     private MapaViewModel viewModel;
     private MapView mapa;
 
-    // Marcador de posição atual (GPS) e marcador de destino selecionado pelo usuário
+    // Marcador de posição atual (GPS) e marcador de destino selecionado
     private MyLocationNewOverlay marcadorMinhaLocalizacao;
     private Marker marcadorDestinoSelecionado;
 
@@ -91,11 +104,11 @@ public class MapaFragment extends Fragment {
     private final List<Overlay> camadasRiscosList = new ArrayList<>();
     private final List<Marker> marcadoresMembros = new ArrayList<>();
 
-    // Estado da navegação em tempo real
+    // Estado da navegação em tempo real e painel inferior
     private boolean estaNavegandoAtivamente = false;
     private BottomSheetBehavior<View> comportamentoPainelInferior;
 
-    // Executores assíncronos e manipuladores da thread principal
+    // Executores assíncronos e controle da thread principal
     private ExecutorService executor;
     private final Handler handlerPrincipal = new Handler(Looper.getMainLooper());
     private long idRequisicaoEndereco = 0;
@@ -107,7 +120,11 @@ public class MapaFragment extends Fragment {
     private MembroAdapter adaptadorMembros;
     private final List<Circulo> listaCirculos = new ArrayList<>();
 
-    // Gerenciador do contrato de permissões em tempo de execução
+    // Estado do filtro ativo
+    private enum TipoFiltro { NENHUM, ROTAS, CIRCULOS }
+    private TipoFiltro filtroAtivo = TipoFiltro.NENHUM;
+
+    // Gerenciador do contrato de permissões de localização em tempo de execução
     private final ActivityResultLauncher<String[]> lancadorDePermissaoLocalizacao =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), resultado -> {
                 Boolean permissaoPrecisa = resultado.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false);
@@ -132,11 +149,11 @@ public class MapaFragment extends Fragment {
         Configuration.getInstance().load(requireContext(), PreferenceManager.getDefaultSharedPreferences(requireContext()));
         Configuration.getInstance().setUserAgentValue(requireContext().getPackageName());
 
-        // Vincula o ViewModel com escopo na Activity para compartilhamento de dados
+        // Vincula o ViewModel no escopo da Activity para compartilhamento de dados
         viewModel = new ViewModelProvider(requireActivity()).get(MapaViewModel.class);
         executor = Executors.newSingleThreadExecutor();
 
-        // Configuração do ViewBinding e layout raiz
+        // Inflação via ViewBinding
         vinculacaoLayout = FragmentMapaBinding.inflate(inflater, container, false);
         View raiz = vinculacaoLayout.getRoot();
         mapa = vinculacaoLayout.map;
@@ -154,12 +171,12 @@ public class MapaFragment extends Fragment {
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), voltarParaCirculosCallback);
 
-        // Parametrização básica do motor do mapa
+        // Configuração básica do motor do mapa
         mapa.setTileSource(TileSourceFactory.MAPNIK);
         mapa.setMultiTouchControls(true);
         mapa.getController().setZoom(17.0);
 
-        // Inicialização de componentes, listeners e observadores
+        // Inicialização de componentes, ouvintes e observadores
         configurarCliqueNoMapa();
         configurarOuvinteBarraPesquisa();
         configurarOuvintesBotoes();
@@ -171,7 +188,7 @@ public class MapaFragment extends Fragment {
         processarBuscaRecebida();
         checarPermissoesELocalizar();
 
-        // Solicita o carregamento inicial das camadas ao ViewModel
+        // Solicita o carregamento inicial das camadas de risco
         viewModel.carregarTodasAsCamadasDeRisco();
 
         return raiz;
@@ -194,7 +211,7 @@ public class MapaFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // Libera recursos e encerra threads para evitar memory leaks
+        // Liberação de recursos para prevenção de vazamento de memória
         if (executor != null && !executor.isShutdown()) executor.shutdownNow();
         if (marcadorMinhaLocalizacao != null) marcadorMinhaLocalizacao.disableMyLocation();
         if (mapa != null) mapa.onDetach();
@@ -206,7 +223,7 @@ public class MapaFragment extends Fragment {
     // =========================================================================
 
     private void configurarObservadoresViewModel() {
-        // Observador da localização do rastreador ESP32
+        // Observa coordenadas transmitidas pelo rastreador ESP32
         viewModel.getPontoEsp32().observe(getViewLifecycleOwner(), pontoEsp32 -> {
             if (pontoEsp32 != null && mapa != null) {
                 if (marcadorMinhaLocalizacao != null) {
@@ -216,18 +233,18 @@ public class MapaFragment extends Fragment {
             }
         });
 
-        // Observadores das listas de camadas de risco fornecidas pela API
+        // Observa atualização das listas de camadas de risco
         viewModel.getListaRiscos().observe(getViewLifecycleOwner(), this::desenharAreasDeRisco);
         viewModel.getListaBairros().observe(getViewLifecycleOwner(), this::desenharPoligonosBairros);
         viewModel.getListaCrimes().observe(getViewLifecycleOwner(), this::desenharOcorrenciasCrimes);
 
-        // Observador para alternar a exibição/ocultação das camadas
+        // Observa alternância de visibilidade das camadas de segurança
         viewModel.getExibirAreasRisco().observe(getViewLifecycleOwner(), visivel -> {
             if (visivel) {
-                vinculacaoLayout.btnToggleRiscos.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), android.R.color.holo_red_dark));
+                vinculacaoLayout.btnAlternarRiscos.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), android.R.color.holo_red_dark));
                 viewModel.carregarTodasAsCamadasDeRisco();
             } else {
-                vinculacaoLayout.btnToggleRiscos.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), android.R.color.darker_gray));
+                vinculacaoLayout.btnAlternarRiscos.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), android.R.color.darker_gray));
                 limparCamadasDeRiscoDoMapa();
             }
         });
@@ -237,7 +254,6 @@ public class MapaFragment extends Fragment {
     // 4. INTEGRAÇÃO E NAVEGAÇÃO VIA DISPOSITIVO ESP32
     // =========================================================================
 
-    // Processa coordenadas recebidas via argumentos do Fragment
     private void processarArgumentosEsp32() {
         if (getArguments() != null && getArguments().containsKey("LATITUDE_ESP32")) {
             double lat = getArguments().getDouble("LATITUDE_ESP32", 0.0);
@@ -250,7 +266,6 @@ public class MapaFragment extends Fragment {
         }
     }
 
-    // Move o foco do mapa e abre a rota para a localização do ESP32
     private void selecionarLocalEsp32(GeoPoint pontoEsp32) {
         estaNavegandoAtivamente = false;
         viewModel.setEstaNavegando(false);
@@ -271,17 +286,111 @@ public class MapaFragment extends Fragment {
     }
 
     // =========================================================================
-    // 5. OUVINTES DE EVENTOS E BOTÕES DA INTERFACE
+    // 5. OUVINTES DE EVENTOS, BOTÕES E FILTROS DA INTERFACE
     // =========================================================================
 
     private void configurarOuvintesBotoes() {
+        // Centraliza a câmera no GPS
         vinculacaoLayout.btnMinhaLocalizacao.setOnClickListener(v -> centralizarNaLocalizacaoAtual());
+
+        // Inicia o cálculo da rota
         vinculacaoLayout.btnNavigate.setOnClickListener(v -> executarCalculoDeRota());
+
+        // Retorna ao painel de círculos
         vinculacaoLayout.btnVoltarCirculos.setOnClickListener(v -> voltarParaCirculos());
-        vinculacaoLayout.btnToggleRiscos.setOnClickListener(v -> viewModel.alternarExibicaoRiscos());
+
+        // Alterna a exibição das áreas de risco
+        vinculacaoLayout.btnAlternarRiscos.setOnClickListener(v -> viewModel.alternarExibicaoRiscos());
+
+        // Controle do menu de subfiltros
+        vinculacaoLayout.btnFiltro.setOnClickListener(v -> {
+            TransitionManager.beginDelayedTransition(vinculacaoLayout.scrollFiltros, new AutoTransition());
+            if (vinculacaoLayout.layoutOpcoesFiltro.getVisibility() == View.VISIBLE) {
+                vinculacaoLayout.layoutOpcoesFiltro.setVisibility(View.GONE);
+            } else {
+                vinculacaoLayout.layoutOpcoesFiltro.setVisibility(View.VISIBLE);
+            }
+        });
+
+        // Ações dos subfiltros
+        vinculacaoLayout.btnFiltroRotas.setOnClickListener(v -> aplicarFiltro(TipoFiltro.ROTAS));
+        vinculacaoLayout.btnFiltroCirculos.setOnClickListener(v -> aplicarFiltro(TipoFiltro.CIRCULOS));
+        vinculacaoLayout.btnLimparFiltro.setOnClickListener(v -> limparFiltros());
     }
 
-    // Intercepta toques simples diretamente na área do mapa
+    private void aplicarFiltro(TipoFiltro novoFiltro) {
+        this.filtroAtivo = novoFiltro;
+        atualizarEstadoVisualFiltros();
+
+        switch (novoFiltro) {
+            case ROTAS:
+                Toast.makeText(getContext(), "Filtro: Rotas ativado", Toast.LENGTH_SHORT).show();
+                break;
+
+            case CIRCULOS:
+                Toast.makeText(getContext(), "Filtro: Círculos ativado", Toast.LENGTH_SHORT).show();
+                break;
+
+            default:
+                break;
+        }
+
+        recolherMenuFiltros();
+    }
+
+    private void limparFiltros() {
+        this.filtroAtivo = TipoFiltro.NENHUM;
+        atualizarEstadoVisualFiltros();
+        Toast.makeText(getContext(), "Filtros limpos", Toast.LENGTH_SHORT).show();
+        recolherMenuFiltros();
+    }
+
+    private void atualizarEstadoVisualFiltros() {
+        if (getContext() == null || vinculacaoLayout == null) return;
+
+        int colorPrimary = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorPrimaryFixed, Color.BLUE);
+        int colorOnPrimary = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnPrimary, Color.WHITE);
+        int colorOnSurface = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnSurface, Color.BLACK);
+        int colorOutline = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOutline, Color.GRAY);
+
+        boolean temFiltroAtivo = (filtroAtivo != TipoFiltro.NENHUM);
+
+        if (temFiltroAtivo) {
+            vinculacaoLayout.btnFiltro.setTextColor(colorPrimary);
+            vinculacaoLayout.btnFiltro.setIconTint(ColorStateList.valueOf(colorPrimary));
+            vinculacaoLayout.btnLimparFiltro.setVisibility(View.VISIBLE);
+        } else {
+            vinculacaoLayout.btnFiltro.setTextColor(colorOnSurface);
+            vinculacaoLayout.btnFiltro.setIconTint(ColorStateList.valueOf(colorOnSurface));
+            vinculacaoLayout.btnLimparFiltro.setVisibility(View.GONE);
+        }
+
+        estilarSubfiltro(vinculacaoLayout.btnFiltroRotas, filtroAtivo == TipoFiltro.ROTAS, colorPrimary, colorOnPrimary, colorOnSurface, colorOutline);
+        estilarSubfiltro(vinculacaoLayout.btnFiltroCirculos, filtroAtivo == TipoFiltro.CIRCULOS, colorPrimary, colorOnPrimary, colorOnSurface, colorOutline);
+    }
+
+    private void estilarSubfiltro(MaterialButton btn, boolean ativo, int colorPrimary, int colorOnPrimary, int colorOnSurface, int colorOutline) {
+        if (btn == null) return;
+
+        if (ativo) {
+            btn.setBackgroundColor(colorPrimary);
+            btn.setTextColor(colorOnPrimary);
+            btn.setStrokeWidth(0);
+        } else {
+            btn.setBackgroundColor(Color.TRANSPARENT);
+            btn.setTextColor(colorOnSurface);
+            btn.setStrokeWidth((int) (1 * getResources().getDisplayMetrics().density));
+            btn.setStrokeColor(ColorStateList.valueOf(colorOutline));
+        }
+    }
+
+    private void recolherMenuFiltros() {
+        if (vinculacaoLayout != null && vinculacaoLayout.layoutOpcoesFiltro.getVisibility() == View.VISIBLE) {
+            TransitionManager.beginDelayedTransition(vinculacaoLayout.scrollFiltros, new AutoTransition());
+            vinculacaoLayout.layoutOpcoesFiltro.setVisibility(View.GONE);
+        }
+    }
+
     private void configurarCliqueNoMapa() {
         MapEventsReceiver receptorEventosMapa = new MapEventsReceiver() {
             @Override
@@ -289,7 +398,6 @@ public class MapaFragment extends Fragment {
                 selecionarLocal(pontoTocado);
                 return true;
             }
-
             @Override
             public boolean longPressHelper(GeoPoint pontoTocado) {
                 return false;
@@ -298,7 +406,6 @@ public class MapaFragment extends Fragment {
         mapa.getOverlays().add(new MapEventsOverlay(receptorEventosMapa));
     }
 
-    // Ação ao tocar em qualquer coordenada do mapa
     private void selecionarLocal(GeoPoint ponto) {
         estaNavegandoAtivamente = false;
         viewModel.setEstaNavegando(false);
@@ -318,7 +425,6 @@ public class MapaFragment extends Fragment {
         comportamentoPainelInferior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
-    // Configura a pesquisa por texto na barra de busca
     private void configurarOuvinteBarraPesquisa() {
         vinculacaoLayout.etPesquisa.setOnEditorActionListener((view, acaoId, evento) -> {
             if (acaoId == EditorInfo.IME_ACTION_SEARCH || (evento != null && evento.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
@@ -330,10 +436,9 @@ public class MapaFragment extends Fragment {
     }
 
     // =========================================================================
-    // 6. CONTROLE E NAVEGAÇÃO DO PAINEL INFERIOR (BOTTOM SHEET)
+    // 6. CONTROLE DO PAINEL INFERIOR (BOTTOM SHEET)
     // =========================================================================
 
-    // Exibe as informações do local selecionado e esconde os círculos
     private void mostrarModoLocal() {
         vinculacaoLayout.layoutCirculos.setVisibility(View.GONE);
         vinculacaoLayout.layoutLocal.setVisibility(View.VISIBLE);
@@ -341,7 +446,6 @@ public class MapaFragment extends Fragment {
         voltarParaCirculosCallback.setEnabled(true);
     }
 
-    // Restaura a visualização padrão dos Círculos de Segurança
     private void voltarParaCirculos() {
         estaNavegandoAtivamente = false;
         viewModel.setEstaNavegando(false);
@@ -361,7 +465,7 @@ public class MapaFragment extends Fragment {
     }
 
     // =========================================================================
-    // 7. CÍRCULOS DE CONTATOS E MEMBROS DA FAMÍLIA
+    // 7. CÍRCULOS DE CONTATOS E MEMBROS
     // =========================================================================
 
     private void configurarCirculos() {
@@ -372,8 +476,6 @@ public class MapaFragment extends Fragment {
         });
         vinculacaoLayout.rvMembros.setLayoutManager(new LinearLayoutManager(requireContext()));
         vinculacaoLayout.rvMembros.setAdapter(adaptadorMembros);
-
-        carregarCirculosDeExemplo();
 
         float densidade = getResources().getDisplayMetrics().density;
         for (Circulo c : listaCirculos) {
@@ -398,7 +500,6 @@ public class MapaFragment extends Fragment {
         }
     }
 
-    // Renderiza os membros do círculo selecionado no mapa e na lista
     private void selecionarCirculo(Circulo c) {
         adaptadorMembros.submit(c.membros);
         vinculacaoLayout.tvCirculoVazio.setVisibility(c.membros.isEmpty() ? View.VISIBLE : View.GONE);
@@ -417,18 +518,6 @@ public class MapaFragment extends Fragment {
         mapa.invalidate();
     }
 
-    // Carga inicial de círculos para demonstração
-    private void carregarCirculosDeExemplo() {
-        Circulo familia = new Circulo("1", "Família");
-        familia.membros.add(new Membro("Maria Souza", "Em casa · há 2 min", 85, -23.5489, -46.6388));
-        familia.membros.add(new Membro("João Souza", "A caminho · há 1 min", 52, -23.5614, -46.6559));
-        Circulo amigos = new Circulo("2", "Amigos da escola");
-        amigos.membros.add(new Membro("Ana Lima", "Na Etec · há 5 min", 40, -23.5329, -46.6395));
-        listaCirculos.add(familia);
-        listaCirculos.add(amigos);
-        viewModel.setListaCirculos(listaCirculos);
-    }
-
     // =========================================================================
     // 8. CONFIGURAÇÕES DE ACESSIBILIDADE
     // =========================================================================
@@ -441,14 +530,13 @@ public class MapaFragment extends Fragment {
         });
     }
 
-    // Atualiza a descrição audível para os leitores de tela
     private void atualizarDescricaoAcessivel() {
         if (vinculacaoLayout == null || marcadorDestinoSelecionado == null) return;
         GeoPoint p = marcadorDestinoSelecionado.getPosition();
         String desc = vinculacaoLayout.tvNomeDoLocal.getText() + ". "
                 + vinculacaoLayout.tvLocalizacaoEstado.getText() + ". "
                 + vinculacaoLayout.tvDistanciaTempo.getText().toString().replace("(", ", ").replace(")", "") + ". "
-                + String.format(new Locale("pt", "BR"), "Latitude %.5f, longitude %.5f", p.getLatitude(), p.getLongitude());
+                + String.format(new Locale("pt", "BR"), "Latitude %.6f, longitude %.6f", p.getLatitude(), p.getLongitude());
         vinculacaoLayout.blocoInfoLocal.setContentDescription(desc);
     }
 
@@ -467,7 +555,6 @@ public class MapaFragment extends Fragment {
         }
     }
 
-    // Ativa a camada de geolocalização do usuário no OSMDroid
     private void ativarLocalizacaoUsuario() {
         if (getContext() == null || mapa == null) return;
 
@@ -514,7 +601,6 @@ public class MapaFragment extends Fragment {
         mapa.invalidate();
     }
 
-    // Centraliza a câmera nas coordenadas atuais do GPS
     private void centralizarNaLocalizacaoAtual() {
         if (marcadorMinhaLocalizacao != null && marcadorMinhaLocalizacao.getMyLocation() != null) {
             GeoPoint posicaoUsuario = marcadorMinhaLocalizacao.getMyLocation();
@@ -568,7 +654,6 @@ public class MapaFragment extends Fragment {
         });
     }
 
-    // Processa parâmetros de busca repassados de outras Fragments
     private void processarBuscaRecebida() {
         if (getArguments() != null && getArguments().containsKey("search_query")) {
             String textoRecebido = getArguments().getString("search_query");
@@ -602,7 +687,6 @@ public class MapaFragment extends Fragment {
         baixarETracarRotaInternet(coordenadaOrigem, coordenadaDestino);
     }
 
-    // Requisição assíncrona HTTP ao serviço de roteamento OSRM
     private void baixarETracarRotaInternet(GeoPoint origem, GeoPoint destino) {
         executor.execute(() -> {
             final List<JSONObject> rotasRecebidas = new ArrayList<>();
@@ -660,7 +744,6 @@ public class MapaFragment extends Fragment {
         });
     }
 
-    // Limpa do mapa as linhas desenhadas referente às rotas ativas
     private void limparLinhasDesenhadasNoMapa() {
         for (Polyline linha : linhasDesenhadasDaRota) {
             mapa.getOverlays().remove(linha);
@@ -669,7 +752,6 @@ public class MapaFragment extends Fragment {
         mapa.invalidate();
     }
 
-    // Plota as polilinhas no mapa e destaca a rota selecionada
     private void desenharRotasRecebidasNoMapa(int indiceRotaSelecionada) {
         limparLinhasDesenhadasNoMapa();
 
@@ -722,7 +804,6 @@ public class MapaFragment extends Fragment {
         mapa.invalidate();
     }
 
-    // Recalcula o progresso da viagem durante o deslocamento
     private void atualizarInformacoesDeTrajetoEmTempoReal(GeoPoint coordenadaAtual, GeoPoint coordenadaDestino) {
         double distanciaQueFalta = coordenadaAtual.distanceToAsDouble(coordenadaDestino);
         double tempoEstimadoRestante = distanciaQueFalta / 8.3;
@@ -732,7 +813,7 @@ public class MapaFragment extends Fragment {
         if (distanciaQueFalta < 15.0) {
             estaNavegandoAtivamente = false;
             viewModel.setEstaNavegando(false);
-            vinculacaoLayout.tvDistanciaTempo.setText("Você chegou ao seu destino! 🎉");
+            vinculacaoLayout.tvDistanciaTempo.setText("Você chegou ao seu destino!");
             Toast.makeText(getContext(), "Você chegou ao seu destino!", Toast.LENGTH_LONG).show();
         }
         atualizarDescricaoAcessivel();
@@ -742,7 +823,6 @@ public class MapaFragment extends Fragment {
     // 12. RENDERIZAÇÃO DAS CAMADAS DE RISCO, BAIRROS E CRIMES
     // =========================================================================
 
-    // Remove todas as camadas de segurança do mapa
     private void limparCamadasDeRiscoDoMapa() {
         for (Overlay overlay : camadasRiscosList) {
             mapa.getOverlays().remove(overlay);
@@ -751,7 +831,6 @@ public class MapaFragment extends Fragment {
         mapa.invalidate();
     }
 
-    // Plota círculos concêntricos e pontos de risco no mapa
     private void desenharAreasDeRisco(List<AreaRisco> listaRiscos) {
         if (listaRiscos == null || !Boolean.TRUE.equals(viewModel.getExibirAreasRisco().getValue())) return;
 
@@ -795,7 +874,6 @@ public class MapaFragment extends Fragment {
         mapa.invalidate();
     }
 
-    // Desenha as fronteiras poligonais dos bairros com cores indicativas de perigo
     private void desenharPoligonosBairros(List<BairroPoligono> listaBairros) {
         if (listaBairros == null || !Boolean.TRUE.equals(viewModel.getExibirAreasRisco().getValue())) return;
 
@@ -830,7 +908,6 @@ public class MapaFragment extends Fragment {
         mapa.invalidate();
     }
 
-    // Adiciona marcadores específicos para locais de crimes reportados
     private void desenharOcorrenciasCrimes(List<OcorrenciaCrime> listaCrimes) {
         if (listaCrimes == null || !Boolean.TRUE.equals(viewModel.getExibirAreasRisco().getValue())) return;
 
@@ -850,7 +927,6 @@ public class MapaFragment extends Fragment {
         mapa.invalidate();
     }
 
-    // Configura o ícone gráfico do marcador dependendo da categoria de crime
     private void configurarIconePorCrime(Marker marker, String tipoCrime) {
         if (tipoCrime == null || !isAdded() || getContext() == null) return;
         String tipo = tipoCrime.toLowerCase();
@@ -865,10 +941,9 @@ public class MapaFragment extends Fragment {
     }
 
     // =========================================================================
-    // 13. PASSO A PASSO DA NAVEGAÇÃO E ÍCONES DE MANOBRA
+    // 13. NAVEGAÇÃO PASSO A PASSO
     // =========================================================================
 
-    // Monta o texto legível de instruções de navegação
     private void escreverPassosDaNavegacaoNaTela(JSONObject jsonCompletoRota) {
         try {
             SpannableStringBuilder textoComOsPassos = new SpannableStringBuilder();
@@ -907,7 +982,6 @@ public class MapaFragment extends Fragment {
         }
     }
 
-    // Associa direções do OSRM aos seus respectivos ícones
     private String obterIconeManobra(String type, String modifier) {
         if (modifier.contains("right")) return "↗️ Virar à direita";
         if (modifier.contains("left")) return "↖️ Virar à esquerda";
@@ -920,7 +994,7 @@ public class MapaFragment extends Fragment {
     }
 
     // =========================================================================
-    // 14. MÉTODOS AUXILIARES DE SUPORTE E FORMATAÇÕES
+    // 14. MÉTODOS AUXILIARES DE GEOCODIFICAÇÃO E SUPORTE
     // =========================================================================
 
     private void adicionarOuMoverMarcadorDeDestino(GeoPoint coordenada) {
@@ -1004,7 +1078,7 @@ public class MapaFragment extends Fragment {
     }
 
     private String formatarCoordenadas(GeoPoint p) {
-        return String.format(Locale.US, "Lat: %.5f | Lon: %.5f", p.getLatitude(), p.getLongitude());
+        return String.format(Locale.US, "Lat: %.7f | Lon: %.7f", p.getLatitude(), p.getLongitude());
     }
 
     private String formatarTextoTempoEDistancia(double segundos, double metros) {

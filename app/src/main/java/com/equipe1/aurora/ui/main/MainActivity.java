@@ -30,26 +30,29 @@ import com.equipe1.aurora.ui.auth.LoginActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String KEY_IDIOMA = "key_idioma";
+
+    private static final String CHAVE_IDIOMA = "key_idioma";
     private ActivityMainBinding binding;
-    private SharedPreferences preferences;
+    private SharedPreferences preferencias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Inflação da Activity usando ViewBinding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        preferences = getSharedPreferences("AuroraPrefs", MODE_PRIVATE);
+        preferencias = getSharedPreferences("AuroraPrefs", MODE_PRIVATE);
 
-        // Recupera o NavHostFragment responsável por gerenciar o ciclo de vida dos Fragments no NavGraph
+        // Inicialização do NavHostFragment do Navigation Component
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment);
 
         if (navHostFragment != null) {
-            NavController navController = navHostFragment.getNavController();
+            NavController controladorNavegacao = navHostFragment.getNavController();
 
-            // 1. BottomNavigationView Listener (Sincronização da barra inferior)
+            // 1. Configuração da barra de navegação inferior (BottomNavigationView)
             binding.bottomNavigation.setOnItemSelectedListener(item -> {
                 int itemId = item.getItemId();
 
@@ -60,19 +63,19 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
 
-                if (navController.getCurrentDestination() != null &&
-                        navController.getCurrentDestination().getId() == itemId) {
+                if (controladorNavegacao.getCurrentDestination() != null &&
+                        controladorNavegacao.getCurrentDestination().getId() == itemId) {
                     return true;
                 }
 
-                NavOptions navOptions = new NavOptions.Builder()
+                NavOptions opcoesNavegacao = new NavOptions.Builder()
                         .setLaunchSingleTop(true)
                         .setRestoreState(true)
                         .setPopUpTo(R.id.nav_home, false, true)
                         .build();
 
                 try {
-                    navController.navigate(itemId, null, navOptions);
+                    controladorNavegacao.navigate(itemId, null, opcoesNavegacao);
                     return true;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -80,81 +83,65 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            // 2. Botão SOS Central
+            // 2. Ação do Botão SOS Central
             binding.btnSos.setOnClickListener(v -> {
-                if (navController.getCurrentDestination() != null &&
-                        navController.getCurrentDestination().getId() != R.id.nav_sos) {
+                if (controladorNavegacao.getCurrentDestination() != null &&
+                        controladorNavegacao.getCurrentDestination().getId() != R.id.nav_sos) {
 
-                    NavOptions navOptions = new NavOptions.Builder()
+                    NavOptions opcoesNavegacao = new NavOptions.Builder()
                             .setLaunchSingleTop(true)
                             .setPopUpTo(R.id.nav_home, false)
                             .build();
 
-                    navController.navigate(R.id.nav_sos, null, navOptions);
+                    controladorNavegacao.navigate(R.id.nav_sos, null, opcoesNavegacao);
                 }
             });
 
-            // 3. Drawer Listener (Menu Lateral)
+            // 3. Menu Lateral (Drawer Navigation)
             binding.navigationView.setNavigationItemSelectedListener(item -> {
                 int itemId = item.getItemId();
 
                 if (itemId == R.id.drawer_perfil) {
                     try {
-                        navController.navigate(R.id.nav_perfil);
+                        controladorNavegacao.navigate(R.id.nav_perfil);
                     } catch (Exception e) {
-                        navController.navigate(R.id.drawer_perfil);
+                        controladorNavegacao.navigate(R.id.drawer_perfil);
                     }
-                }
-
-                else if (itemId == R.id.drawer_dispositivo) {
+                } else if (itemId == R.id.drawer_dispositivo) {
                     try {
-                        navController.navigate(R.id.drawer_dispositivo);
+                        controladorNavegacao.navigate(R.id.drawer_dispositivo);
                     } catch (Exception e) {
-                        navController.navigate(R.id.drawer_dispositivo);
+                        controladorNavegacao.navigate(R.id.drawer_dispositivo);
                     }
-                }
-
-                else if (itemId == R.id.drawer_mapa) {
+                } else if (itemId == R.id.drawer_mapa) {
                     try {
-                        navController.navigate(R.id.nav_mapa);
+                        controladorNavegacao.navigate(R.id.nav_mapa);
                     } catch (Exception e) {
-                        navController.navigate(R.id.drawer_mapa);
+                        controladorNavegacao.navigate(R.id.drawer_mapa);
                     }
-                }
-
-
-                // Activities legadas continuam sendo abertas via Intent tradicional
-                else if (itemId == R.id.drawer_historico) {
+                } else if (itemId == R.id.drawer_historico) {
                     startActivity(new Intent(this, HistoricoActivity.class));
-                }
-                else if (itemId == R.id.drawer_planos) {
+                } else if (itemId == R.id.drawer_planos) {
                     startActivity(new Intent(this, PlanosAssinaturaActivity.class));
-                }
-                else if (itemId == R.id.drawer_solicitacoes) {
+                } else if (itemId == R.id.drawer_solicitacoes) {
                     startActivity(new Intent(this, SolicitacaoAmizadeActivity.class));
-                }
-                else if (itemId == R.id.drawer_configuracoes) {
+                } else if (itemId == R.id.drawer_configuracoes) {
                     startActivity(new Intent(this, ConfigActivity.class));
-                }
-                else if (itemId == R.id.drawer_acessibilidade) {
+                } else if (itemId == R.id.drawer_acessibilidade) {
                     startActivity(new Intent(this, AcessibilidadeActivity.class));
-                }
-                else if (itemId == R.id.drawer_idioma) {
+                } else if (itemId == R.id.drawer_idioma) {
                     abrirDialogoIdioma();
-                }
-                else if (itemId == R.id.drawer_logout) {
-                    Intent intent = new Intent(this, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
+                } else if (itemId == R.id.drawer_logout) {
+                    // Confirmação ao clicar em Sair do Menu Lateral
+                    exibirDialogoConfirmacaoLogout();
                 }
 
                 binding.drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             });
 
-            // 4. Sincroniza ícones ativos da BottomBar de acordo com o Fragment visível
-            navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            // 4. Sincronização automática do item selecionado na BottomBar
+            controladorNavegacao.addOnDestinationChangedListener((controller, destination, arguments) -> {
                 int id = destination.getId();
                 MenuItem menuItem = binding.bottomNavigation.getMenu().findItem(id);
 
@@ -168,11 +155,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            // 5. Trata intents de atalhos e notificações em segundo plano para o Mapa
-            verificarIntentRedirecionamentoMapa(getIntent(), navController);
+            // 5. Verificação de redirecionamentos diretos ao mapa
+            verificarIntentRedirecionamentoMapa(getIntent(), controladorNavegacao);
         }
 
-        // Trata o botão "Voltar" nativo do sistema fechando o Drawer caso ele esteja aberto
+        // Tratamento prioritário do botão Voltar para fechar o Drawer se estiver aberto
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -184,6 +171,24 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    // Diálogo de confirmação acionado pelo botão Logout do Drawer
+    private void exibirDialogoConfirmacaoLogout() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Encerrar Sessão")
+                .setMessage("Deseja realmente sair da sua conta?")
+                .setPositiveButton("Sair", (dialog, which) -> realizarLogout())
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    // Executa a saída limpando as rotas da pilha
+    private void realizarLogout() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -198,38 +203,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void verificarIntentRedirecionamentoMapa(Intent intent, NavController navController) {
+    private void verificarIntentRedirecionamentoMapa(Intent intent, NavController controladorNavegacao) {
         if (intent != null && intent.getBooleanExtra("ABRIR_MAPA", false)) {
-            double lat = intent.getDoubleExtra("LATITUDE_ESP32", 0.0);
-            double lng = intent.getDoubleExtra("LONGITUDE_ESP32", 0.0);
+            double latitude = intent.getDoubleExtra("LATITUDE_DISPOSITIVO", 0.0);
+            double longitude = intent.getDoubleExtra("LONGITUDE_DISPOSITIVO", 0.0);
 
-            Bundle bundle = new Bundle();
-            bundle.putDouble("LATITUDE_ESP32", lat);
-            bundle.putDouble("LONGITUDE_ESP32", lng);
+            Bundle parametros = new Bundle();
+            parametros.putDouble("LATITUDE_DISPOSITIVO", latitude);
+            parametros.putDouble("LONGITUDE_DISPOSITIVO", longitude);
 
-            navController.navigate(R.id.nav_mapa, bundle);
+            controladorNavegacao.navigate(R.id.nav_mapa, parametros);
         }
     }
-
-    /* ============================================================================================
-       LÓGICA: SELEÇÃO DE IDIOMA
-       ============================================================================================ */
 
     private void abrirDialogoIdioma() {
         String[] idiomas = {
                 "Português (Brasil)",
                 "English (US)",
                 "Español (España)",
-                "Deutsch (Deutschland)",
-                "Русский (Россия)"
+                "Deutsch (Deutschland)"
         };
 
         String[] tagsLinguagem = {
                 "pt-BR",
                 "en-US",
                 "es-ES",
-                "de-DE",
-                "ru-RU"
+                "de-DE"
         };
 
         new MaterialAlertDialogBuilder(this)
@@ -237,9 +236,8 @@ public class MainActivity extends AppCompatActivity {
                 .setItems(idiomas, (dialog, which) -> {
                     String tagSelecionada = tagsLinguagem[which];
 
-                    preferences.edit().putString(KEY_IDIOMA, tagSelecionada).apply();
+                    preferencias.edit().putString(CHAVE_IDIOMA, tagSelecionada).apply();
 
-                    // Aplica o novo idioma globalmente no app via AppCompatDelegate
                     LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(tagSelecionada);
                     AppCompatDelegate.setApplicationLocales(appLocale);
 
@@ -249,44 +247,9 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
-    /* ============================================================================================
-       LÓGICA: SOBRE O APLICATIVO
-       ============================================================================================ */
-
-    private void abrirDialogoSobre() {
-        String versaoApp = obterVersaoDoApp();
-
-        String mensagemSobre = "Projeto Aurora\n" +
-                "Versão: " + versaoApp + "\n\n" +
-                "Integrantes: Gilson Reis, Isaias Rocha De Jesus, Luis Fernando, Matheus Trindade\n\n" +
-                "Desenvolvido pela Equipe 1 do Curso Técnico de Desenvolvimento de Sistemas 2025/2026, " +
-                "com foco em acessibilidade, segurança e melhor experiência do usuário.";
-
-        new MaterialAlertDialogBuilder(this)
-                .setTitle("Sobre o Aurora")
-                .setMessage(mensagemSobre)
-                .setPositiveButton("Fechar", null)
-                .setNeutralButton("Termos & Privacidade", (dialog, which) -> {
-                    Toast.makeText(this, "Abrindo Termos de Uso...", Toast.LENGTH_SHORT).show();
-                })
-                .show();
-    }
-
-    private String obterVersaoDoApp() {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                PackageInfo pInfo = getPackageManager().getPackageInfo(
-                        getPackageName(),
-                        PackageManager.PackageInfoFlags.of(0)
-                );
-                return pInfo.versionName;
-            } else {
-                PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-                return pInfo.versionName;
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            return "1.0.0";
-        }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }

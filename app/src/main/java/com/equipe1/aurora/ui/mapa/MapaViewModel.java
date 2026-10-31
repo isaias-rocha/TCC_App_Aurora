@@ -1,5 +1,14 @@
 package com.equipe1.aurora.ui.mapa;
 
+// ============================================================================================
+// ARQUIVO: MapaViewModel.java
+// CAMADA: Apresentação (ViewModel - MVVM)
+// FUNÇÃO: Gerencia e encapsula os estados da interface do mapa (pontos selecionados, dispositivo
+//         ESP32, navegação) e orquestra a comunicação assíncrona via Retrofit com os serviços de
+//         camadas de segurança (áreas de risco, bairros e crimes), reexpondo os resultados como
+//         LiveData para a View.
+// ============================================================================================
+
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -28,84 +37,77 @@ public class MapaViewModel extends ViewModel {
     // 1. ESTADOS DO MAPA, NAVEGAÇÃO E ESP32 (LIVEDATA)
     // =========================================================================
 
-    // Armazena a coordenada do ponto selecionado manualmente pelo usuário no mapa
+    // Armazena o ponto selecionado manualmente pelo usuário no mapa
     private final MutableLiveData<GeoPoint> pontoSelecionado = new MutableLiveData<>();
 
-    // Armazena a localização em tempo real transmitida pelo hardware ESP32
+    // Armazena a localização obtida pelo hardware ESP32
     private final MutableLiveData<GeoPoint> pontoEsp32 = new MutableLiveData<>();
 
-    // Lista de círculos de contatos e seus respectivos membros
+    // Lista de círculos de contatos
     private final MutableLiveData<List<Circulo>> listaCirculos = new MutableLiveData<>(new ArrayList<>());
 
-    // Define se o aplicativo está atualmente em modo de navegação ativa por GPS
+    // Controla se a navegação por GPS está ativa
     private final MutableLiveData<Boolean> estaNavegando = new MutableLiveData<>(false);
 
     // =========================================================================
     // 2. ESTADOS DAS CAMADAS DE SEGURANÇA E RISCO (LIVEDATA)
     // =========================================================================
 
-    // Lista de áreas de risco retornadas pela API (polígonos e círculos)
+    // Lista de áreas de risco recebidas da API
     private final MutableLiveData<List<AreaRisco>> listaRiscos = new MutableLiveData<>(new ArrayList<>());
 
-    // Lista de polígonos delimitadores dos bairros com classificação de risco
+    // Lista de polígonos dos bairros
     private final MutableLiveData<List<BairroPoligono>> listaBairros = new MutableLiveData<>(new ArrayList<>());
 
-    // Lista de ocorrências criminais pontuais registradas na API
+    // Lista de ocorrências criminais
     private final MutableLiveData<List<OcorrenciaCrime>> listaCrimes = new MutableLiveData<>(new ArrayList<>());
 
-    // Flag de controle para mostrar ou ocultar as camadas de risco no mapa
+    // Flag de visibilidade das camadas de risco
     private final MutableLiveData<Boolean> exibirAreasRisco = new MutableLiveData<>(true);
 
-    // Mensagens de erro de rede ou processamento
+    // Mensagens de erro de comunicação
     private final MutableLiveData<String> mensagemErro = new MutableLiveData<>();
 
     // =========================================================================
     // 3. GETTERS E SETTERS DAS VARIÁVEIS DE ESTADO
     // =========================================================================
 
-    // Retorna a referência observável do ponto selecionado
     public LiveData<GeoPoint> getPontoSelecionado() { return pontoSelecionado; }
     public void setPontoSelecionado(GeoPoint ponto) { pontoSelecionado.setValue(ponto); }
 
-    // Retorna a referência observável da coordenada do ESP32
     public LiveData<GeoPoint> getPontoEsp32() { return pontoEsp32; }
     public void setPontoEsp32(GeoPoint ponto) { pontoEsp32.setValue(ponto); }
 
-    // Retorna a lista observável de círculos de segurança
     public LiveData<List<Circulo>> getListaCirculos() { return listaCirculos; }
     public void setListaCirculos(List<Circulo> circulos) { listaCirculos.setValue(circulos); }
 
-    // Retorna o estado atual da navegação
     public LiveData<Boolean> getEstaNavegando() { return estaNavegando; }
     public void setEstaNavegando(boolean navegando) { estaNavegando.setValue(navegando); }
 
-    // Observadores para as camadas de segurança
     public LiveData<List<AreaRisco>> getListaRiscos() { return listaRiscos; }
     public LiveData<List<BairroPoligono>> getListaBairros() { return listaBairros; }
     public LiveData<List<OcorrenciaCrime>> getListaCrimes() { return listaCrimes; }
 
-    // Controla o estado de visibilidade das camadas de risco
     public LiveData<Boolean> getExibirAreasRisco() { return exibirAreasRisco; }
     public void alternarExibicaoRiscos() {
         Boolean atual = exibirAreasRisco.getValue();
         exibirAreasRisco.setValue(atual == null || !atual);
     }
 
-    // Retorna mensagens de erro para tratamento na View
     public LiveData<String> getMensagemErro() { return mensagemErro; }
 
     // =========================================================================
     // 4. REQUISIÇÕES DA CAMADA DE DADOS (RETROFIT)
     // =========================================================================
 
-    // Método principal para disparar a busca simultânea de todas as camadas
+    // Dispara a busca simultânea de todas as camadas de risco na API
     public void carregarTodasAsCamadasDeRisco() {
         carregarAreasDeRisco();
         carregarPoligonosBairros();
         carregarOcorrenciasCrimes();
     }
 
-    // Requisição assíncrona para buscar os dados das áreas de risco
+    // Requisição assíncrona para obter áreas de risco
     private void carregarAreasDeRisco() {
         ApiService apiService = ApiClient.getApiService();
         apiService.listarRiscos().enqueue(new Callback<List<AreaRisco>>() {
@@ -123,7 +125,7 @@ public class MapaViewModel extends ViewModel {
         });
     }
 
-    // Requisição assíncrona para obter as fronteiras geométricas dos bairros
+    // Requisição assíncrona para obter polígonos de bairros
     private void carregarPoligonosBairros() {
         ApiService apiService = ApiClient.getApiService();
         apiService.listarBairros().enqueue(new Callback<List<BairroPoligono>>() {
@@ -141,7 +143,7 @@ public class MapaViewModel extends ViewModel {
         });
     }
 
-    // Requisição assíncrona para recuperar histórico de ocorrências criminais
+    // Requisição assíncrona para obter ocorrências de crimes
     private void carregarOcorrenciasCrimes() {
         ApiService apiService = ApiClient.getApiService();
         apiService.listarCrimes().enqueue(new Callback<List<OcorrenciaCrime>>() {

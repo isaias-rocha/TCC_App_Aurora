@@ -122,7 +122,7 @@
                     android:text="Informações pessoais"
                     android:textColor="?android:attr/textColorSecondary"
                     android:textSize="16sp"
-                    app:drawableStartCompat="@drawable/ic_circle_informacoes"
+                    app:drawableStartCompat="@drawable/ic_informacoes"
                     app:drawableTint="#94A3B8" />
 
                 <!-- 2. Dispositivo Embarcado -->

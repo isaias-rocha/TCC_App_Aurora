@@ -24,7 +24,7 @@
             android:clickable="true"
             android:contentDescription="Voltar para a tela anterior"
             android:focusable="true"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_voltar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="?android:attr/textColorPrimary" />
@@ -168,7 +168,7 @@
                     android:text="Sobre o aplicativo"
                     android:textColor="?android:attr/textColorSecondary"
                     android:textSize="16sp"
-                    app:drawableStartCompat="@drawable/ic_circle_informacoes"
+                    app:drawableStartCompat="@drawable/ic_informacoes"
                     app:drawableTint="#94A3B8" />
 
             </LinearLayout>

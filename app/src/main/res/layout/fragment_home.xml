@@ -18,9 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:clickable="true"
-            android:contentDescription="@string/home_desc_header_profile"
-            android:focusable="true"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +42,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_weight="1"
-                android:importantForAccessibility="no"
+                android:clickable="true"
+                android:contentDescription="@string/home_desc_header_profile"
+                android:focusable="true"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -70,11 +69,11 @@
                         style="@style/TextAppearance.Aurora.Title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
                         android:layout_marginStart="5dp"
+                        android:ellipsize="end"
                         android:importantForAccessibility="no"
                         android:maxLines="1"
-                        android:text="@string/home_usuario_padrao"
+                        android:text="@string/home_nome_usuario"
                         android:textColor="?attr/colorPrimary"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -91,6 +90,18 @@
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="14sp" />
             </LinearLayout>
+
+            <!-- Ícone de Notificação -->
+            <ImageButton
+                android:id="@+id/btn_notificacao"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/home_desc_notificacao"
+                android:padding="12dp"
+                android:src="@drawable/ic_notificacao"
+                app:tint="?attr/colorOnSurface" />
+
         </LinearLayout>
 
         <!-- BARRA DE PESQUISA -->
@@ -144,7 +155,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_map_preview"
             android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_height="300dp"
             android:layout_marginTop="24dp"
             app:cardBackgroundColor="?attr/colorSurface"
             app:cardCornerRadius="16dp"
@@ -232,7 +243,7 @@
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:importantForAccessibility="no"
-                            android:src="@drawable/ic_home"
+                            android:src="@drawable/ic_localizacao"
                             app:tint="?attr/colorPrimary" />
 
                         <TextView
@@ -252,6 +263,110 @@
                             android:layout_height="wrap_content"
                             android:importantForAccessibility="no"
                             android:text="@string/home_subtitulo_rotas_salvas"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Card: Histórico -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btn_historico"
+                    android:layout_width="140dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="12dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/home_desc_btn_historico"
+                    android:focusable="true"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="?attr/colorPrimary"
+                    app:strokeWidth="1.5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:importantForAccessibility="no"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_historico"
+                            app:tint="?attr/colorPrimary" />
+
+                        <TextView
+                            style="@style/TextAppearance.Aurora.Subtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:importantForAccessibility="no"
+                            android:text="@string/home_historico"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            style="@style/TextAppearance.Aurora.Body"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:importantForAccessibility="no"
+                            android:text="@string/home_subtitulo_historico"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Card: Dispositivo -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btn_secao_dispositivo"
+                    android:layout_width="140dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="12dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/home_desc_btn_dispositivos"
+                    android:focusable="true"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="?attr/colorPrimary"
+                    app:strokeWidth="1.5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:importantForAccessibility="no"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_hardware"
+                            app:tint="?attr/colorPrimary" />
+
+                        <TextView
+                            style="@style/TextAppearance.Aurora.Subtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:importantForAccessibility="no"
+                            android:text="@string/home_dispositivos"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            style="@style/TextAppearance.Aurora.Body"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:importantForAccessibility="no"
+                            android:text="@string/home_subtitulo_dispositivos"
                             android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="10sp" />
                     </LinearLayout>
@@ -284,7 +399,7 @@
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:importantForAccessibility="no"
-                            android:src="@drawable/ic_trabalho"
+                            android:src="@drawable/ic_circulo"
                             app:tint="?attr/colorPrimary" />
 
                         <TextView
@@ -304,57 +419,6 @@
                             android:layout_height="wrap_content"
                             android:importantForAccessibility="no"
                             android:text="@string/home_subtitulo_circulos"
-                            android:textColor="?attr/colorOnSurfaceVariant"
-                            android:textSize="10sp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Card: Histórico -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/btn_historico"
-                    android:layout_width="140dp"
-                    android:layout_height="110dp"
-                    android:clickable="true"
-                    android:contentDescription="@string/home_desc_btn_historico"
-                    android:focusable="true"
-                    app:cardBackgroundColor="?attr/colorSurface"
-                    app:cardCornerRadius="14dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="?attr/colorPrimary"
-                    app:strokeWidth="1.5dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:importantForAccessibility="no"
-                        android:orientation="vertical"
-                        android:padding="12dp">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_circulo_adicionar"
-                            app:tint="?attr/colorPrimary" />
-
-                        <TextView
-                            style="@style/TextAppearance.Aurora.Subtitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:importantForAccessibility="no"
-                            android:text="@string/home_historico"
-                            android:textColor="?attr/colorOnSurface"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            style="@style/TextAppearance.Aurora.Body"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:importantForAccessibility="no"
-                            android:text="@string/home_subtitulo_historico"
                             android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="10sp" />
                     </LinearLayout>
@@ -411,96 +475,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <!-- Círculo Família -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_circulo_familia"
-                    android:layout_width="150dp"
-                    android:layout_height="85dp"
-                    android:layout_marginEnd="12dp"
-                    android:clickable="true"
-                    android:contentDescription="@string/home_desc_circulo_familia"
-                    android:focusable="true"
-                    app:cardBackgroundColor="?attr/colorSurface"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="?attr/colorPrimary"
-                    app:strokeWidth="1dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:importantForAccessibility="no"
-                        android:orientation="vertical"
-                        android:padding="12dp">
-
-                        <TextView
-                            style="@style/TextAppearance.Aurora.Subtitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:importantForAccessibility="no"
-                            android:text="@string/home_circulo_familia"
-                            android:textColor="?attr/colorOnSurface"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            style="@style/TextAppearance.Aurora.Body"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:importantForAccessibility="no"
-                            android:text="@string/home_membros_ativos_familia"
-                            android:textColor="?attr/colorOnSurfaceVariant"
-                            android:textSize="11sp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Círculo Faculdade -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_circulo_faculdade"
-                    android:layout_width="150dp"
-                    android:layout_height="85dp"
-                    android:layout_marginEnd="12dp"
-                    android:clickable="true"
-                    android:contentDescription="@string/home_desc_circulo_faculdade"
-                    android:focusable="true"
-                    app:cardBackgroundColor="?attr/colorSurface"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="?attr/colorPrimary"
-                    app:strokeWidth="1dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:importantForAccessibility="no"
-                        android:orientation="vertical"
-                        android:padding="12dp">
-
-                        <TextView
-                            style="@style/TextAppearance.Aurora.Subtitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:importantForAccessibility="no"
-                            android:text="@string/home_circulo_faculdade"
-                            android:textColor="?attr/colorOnSurface"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            style="@style/TextAppearance.Aurora.Body"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:importantForAccessibility="no"
-                            android:text="@string/home_membros_ativos_faculdade"
-                            android:textColor="?attr/colorOnSurfaceVariant"
-                            android:textSize="11sp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
                 <!-- Card Criar Novo Círculo -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_add_circulo"
@@ -546,16 +520,16 @@
             </LinearLayout>
         </HorizontalScrollView>
 
-        <!-- SEÇÃO: AMIGOS PRÓXIMOS -->
+        <!-- SEÇÃO: CONTATOS PRÓXIMOS -->
         <TextView
-            android:id="@+id/tv_friends_title"
+            android:id="@+id/tv_contatos_proximos"
             style="@style/TextAppearance.Aurora.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_marginTop="28dp"
             android:accessibilityHeading="true"
             android:gravity="center_vertical"
-            android:text="@string/home_titulo_amigos_proximos"
+            android:text="@string/home_titulo_contatos_proximos"
             android:textColor="?attr/colorOnSurface"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -574,9 +548,9 @@
             android:text="@string/home_btn_ver_todos"
             android:textColor="?attr/colorPrimary"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@id/tv_friends_title"
+            app:layout_constraintBottom_toBottomOf="@id/tv_contatos_proximos"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_friends_title" />
+            app:layout_constraintTop_toTopOf="@id/tv_contatos_proximos" />
 
         <HorizontalScrollView
             android:id="@+id/hsv_friends"
@@ -586,7 +560,7 @@
             android:scrollbars="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_friends_title">
+            app:layout_constraintTop_toBottomOf="@id/tv_contatos_proximos">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -635,9 +609,7 @@
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="10sp" />
                 </LinearLayout>
-
             </LinearLayout>
         </HorizontalScrollView>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

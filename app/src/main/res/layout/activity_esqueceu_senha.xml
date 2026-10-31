@@ -22,7 +22,7 @@
             android:clickable="true"
             android:contentDescription="@string/common_voltar_tela_anterior"
             android:focusable="true"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_voltar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="?attr/colorOnSurface" />

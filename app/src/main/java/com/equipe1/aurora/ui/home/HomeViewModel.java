@@ -9,86 +9,88 @@ import java.util.List;
 
 public class HomeViewModel extends ViewModel {
 
-    private final MutableLiveData<String> userName = new MutableLiveData<>();
-    private final MutableLiveData<List<UserCircle>> userCircles = new MutableLiveData<>();
-    private final MutableLiveData<List<Friend>> nearbyFriends = new MutableLiveData<>();
+    // Estados observáveis da tela (MutableLiveData privado para encapsulamento)
+    private final MutableLiveData<String> nomeUsuario = new MutableLiveData<>();
+    private final MutableLiveData<List<CirculoUsuario>> circulosUsuario = new MutableLiveData<>();
+    private final MutableLiveData<List<ContatoProximo>> contatosProximos = new MutableLiveData<>();
 
+    // Construtor: Inicializa o carregamento dos dados da Home
     public HomeViewModel() {
-        loadUserData();
-        loadUserCircles();
-        loadNearbyFriends();
+        carregarDadosUsuario();
+        carregarCirculosUsuario();
+        carregarContatosProximos();
     }
 
-    public LiveData<String> getUserName() {
-        return userName;
+    // Getters públicos que expõem apenas LiveData imutável para a View
+    public LiveData<String> getObterNomeUsuario() {
+        return nomeUsuario;
     }
 
-    public LiveData<List<UserCircle>> getUserCircles() {
-        return userCircles;
+    public LiveData<List<CirculoUsuario>> getObterCirculosUsuario() {
+        return circulosUsuario;
     }
 
-    public LiveData<List<Friend>> getNearbyFriends() {
-        return nearbyFriends;
+    public LiveData<List<ContatoProximo>> getObterContatosProximos() {
+        return contatosProximos;
     }
 
-    private void loadUserData() {
-        // Simulação de carregamento via Repository / Firebase
-        userName.setValue("Visconde");
+    // Simulação de busca dos dados do perfil do usuário via UseCase/Repository
+    private void carregarDadosUsuario() {
+        // Exemplo: BuscarUsuarioUseCase.executar()
+        nomeUsuario.setValue("Usuário");
     }
 
-    private void loadUserCircles() {
-        // Lista de círculos de segurança ativos do usuário
-        List<UserCircle> circles = new ArrayList<>();
-        circles.add(new UserCircle("Família", "4 membros ativos"));
-        circles.add(new UserCircle("Escola", "3 membros ativos"));
-        circles.add(new UserCircle("Trabalho", "2 membros ativos"));
-        userCircles.setValue(circles);
+    // Simulação de busca dos círculos de segurança ativos do usuário
+    private void carregarCirculosUsuario() {
+        // Exemplo: ObterCirculosUseCase.executar()
+        List<CirculoUsuario> listaCirculos = new ArrayList<>();
+        listaCirculos.add(new CirculoUsuario("Etec", "4 membros ativos"));
+        circulosUsuario.setValue(listaCirculos);
     }
 
-    private void loadNearbyFriends() {
-        // Lista de contatos de confiança próximos
-        List<Friend> list = new ArrayList<>();
-        list.add(new Friend("Isaias", "321 m"));
-        list.add(new Friend("Gilson", "550 m"));
-        list.add(new Friend("Paulo", "1.2 km"));
-        nearbyFriends.setValue(list);
+    // Simulação de busca de contatos próximos cadastrados
+    private void carregarContatosProximos() {
+        // Exemplo: ObterContatosProximosUseCase.executar()
+        List<ContatoProximo> listaContatos = new ArrayList<>();
+        listaContatos.add(new ContatoProximo("Ana Silva", "200 m de distância"));
+        contatosProximos.setValue(listaContatos);
     }
 
-    // Class interna para os Círculos de Segurança
-    public static class UserCircle {
-        private final String title;
-        private final String membersCount;
+    // Modelo interno para representação de Círculos na camada de UI
+    public static class CirculoUsuario {
+        private final String titulo;
+        private final String quantidadeMembros;
 
-        public UserCircle(String title, String membersCount) {
-            this.title = title;
-            this.membersCount = membersCount;
+        public CirculoUsuario(String titulo, String quantidadeMembros) {
+            this.titulo = titulo;
+            this.quantidadeMembros = quantidadeMembros;
         }
 
-        public String getTitle() {
-            return title;
+        public String getTitulo() {
+            return titulo;
         }
 
-        public String getMembersCount() {
-            return membersCount;
+        public String getQuantidadeMembros() {
+            return quantidadeMembros;
         }
     }
 
-    // Class interna para Amigos Próximos
-    public static class Friend {
-        private final String name;
-        private final String distance;
+    // Modelo interno para representação de Contatos Próximos na camada de UI
+    public static class ContatoProximo {
+        private final String nome;
+        private final String distancia;
 
-        public Friend(String name, String distance) {
-            this.name = name;
-            this.distance = distance;
+        public ContatoProximo(String nome, String distancia) {
+            this.nome = nome;
+            this.distancia = distancia;
         }
 
-        public String getName() {
-            return name;
+        public String getNome() {
+            return nome;
         }
 
-        public String getDistance() {
-            return distance;
+        public String getDistancia() {
+            return distancia;
         }
     }
 }

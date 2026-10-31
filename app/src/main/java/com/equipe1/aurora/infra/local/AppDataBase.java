@@ -12,7 +12,7 @@ import com.equipe1.aurora.infra.local.entity.AlertaSosEntity;
 import com.equipe1.aurora.infra.local.entity.LocalizacaoEntity;
 
 /**
- * Base de dados local do Room (SQLite) do ecossistema Aurora[cite: 32].
+ * Base de dados local do Room (SQLite) do ecossistema Aurora
  * Armazena localmente históricos de localização e eventos de emergência SOS.
  */
 @Database(
@@ -26,10 +26,10 @@ public abstract class AppDataBase extends RoomDatabase {
     // DECLARAÇÃO DOS DAOs
     // =========================================================================
 
-    /** Fornece o DAO para operações de coordenadas de localização offline[cite: 32]. */
+    /** Fornece o DAO para operações de coordenadas de localização offline*/
     public abstract LocalizacaoDao localizacaoDao();
 
-    /** Fornece o DAO para operações de alertas SOS (App e Dispositivo)[cite: 28, 29]. */
+    /** Fornece o DAO para operações de alertas SOS (App e Dispositivo) */
     public abstract AlertaSosDao alertaSosDao();
 
     // =========================================================================

@@ -1,5 +1,8 @@
 package com.equipe1.aurora.infra.network.api;
 
+// =========================================================================
+// 1. IMPORTAÇÕES DE MODELOS, DTOS E RETROFIT
+// =========================================================================
 import com.equipe1.aurora.domain.model.AreaRisco;
 import com.equipe1.aurora.domain.model.BairroPoligono;
 import com.equipe1.aurora.domain.model.Contato;
@@ -21,22 +24,26 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
+// =========================================================================
+// 2. INTERFACE DE SERVIÇOS API REST
+// =========================================================================
+// Mapeia todos os endpoints de comunicação entre a aplicação Android e o servidor backend.
 public interface ApiService {
 
-    // -----------------------------------------------------------------
+    // =========================================================================
     // BLOCO 1: AUTENTICAÇÃO DE USUÁRIOS
-    // -----------------------------------------------------------------
+    // =========================================================================
     @POST("api/auth/cadastro")
     Call<UsuarioDto> cadastrarUsuario(@Body UsuarioDto usuario);
 
     @POST("api/auth/login")
     Call<UsuarioDto> realizarLoginApi(@Body UsuarioDto usuario);
 
-    // -----------------------------------------------------------------
+    // =========================================================================
     // BLOCO 2: CONSULTA DE DISPOSITIVOS E RASTREAMENTO GPS
-    // -----------------------------------------------------------------
-    // Busca o histórico geral de pontos/dispositivos gravados no MySQL
-    @Headers("X-API-Key: aurora-gps-2026")
+    // =========================================================================
+    // Busca o histórico geral de pontos e dispositivos gravados no MySQL
+    @Headers("X-API-Key: equipe01-aurora")
     @GET("consultar.php")
     Call<ConsultaResponseDto> consultarDispositivos(
             @Query("limite") Integer limite,
@@ -44,7 +51,7 @@ public interface ApiService {
     );
 
     // Busca filtrando por um dispositivo específico e/ou ocorrência de SOS
-    @Headers("X-API-Key: aurora-gps-2026")
+    @Headers("X-API-Key: equipe01-aurora")
     @GET("consultar.php")
     Call<ConsultaResponseDto> consultarDispositivoPorUid(
             @Query("device_uid") String deviceUid,
@@ -52,6 +59,9 @@ public interface ApiService {
             @Query("limite") Integer limite
     );
 
+    // =========================================================================
+    // BLOCO 3: GESTÃO DE CONTATOS DE EMERGÊNCIA
+    // =========================================================================
     @FormUrlEncoded
     @POST("api/contatos/enviar-convite")
     Call<Void> enviarSolicitacaoContato(
@@ -72,14 +82,15 @@ public interface ApiService {
             @Field("isSos") boolean isSos
     );
 
+    // =========================================================================
+    // BLOCO 4: ÁREAS DE RISCO, POLÍGONOS E MAPAS
+    // =========================================================================
     @GET("api/riscos")
     Call<List<AreaRisco>> listarRiscos();
 
-    // Bairro (polígonos e áreas de risco)
     @GET("api/mapa/bairros")
     Call<List<BairroPoligono>> listarBairros();
 
-    // Ocorrências de crimes
     @GET("api/mapa/crimes")
     Call<List<OcorrenciaCrime>> listarCrimes();
 }

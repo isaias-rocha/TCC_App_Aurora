@@ -22,7 +22,7 @@
     <!-- NAVEGAÇÃO - MENU LATERAL (DRAWER NAV)                               -->
     <!-- =================================================================== -->
     <string name="drawer_perfil">Perfil</string>
-    <string name="drawer_dispositivo">Dispositivo Aurora</string>
+    <string name="drawer_dispositivo">Dispositivo</string>
     <string name="drawer_mapa">Mapa</string>
     <string name="drawer_historico">Histórico</string>
     <string name="drawer_solicitacoes">Solicitações de Amizade</string>
@@ -105,8 +105,9 @@
     <!-- SEÇÃO 1: CABEÇALHO E MENSAGEM DE BOAS-VINDAS -->
     <string name="home_desc_header_profile">Perfil do usuário. Olá, Usuário. Que bom te ver por aqui.</string>
     <string name="home_ola">Olá, </string>
-    <string name="home_usuario_padrao">Usuário</string>
+    <string name="home_nome_usuario">Usuário</string>
     <string name="home_subtitulo_boas_vindas">Que bom te ver por aqui.</string>
+    <string name="home_desc_notificacao"></string>
 
     <!-- SEÇÃO 2: BARRA DE PESQUISA -->
     <string name="home_hint_pesquisa">Pesquisar lugares, amigos…</string>
@@ -121,43 +122,42 @@
     <string name="home_desc_btn_rotas_salvas">Rotas Salvas. Acesse os seus trajetos habituais. Toque duas vezes para abrir.</string>
 
     <string name="home_circulos">Círculos</string>
-    <string name="home_subtitulo_circulos">Grupos e proteção</string>
-    <string name="home_desc_btn_circulos">Círculos. Gestão de grupos de segurança e proteção. Toque duas vezes para abrir.</string>
+    <string name="home_subtitulo_circulos">Grupos</string>
+    <string name="home_desc_btn_circulos">Círculos. Gestão de grupos. Toque duas vezes para abrir.</string>
 
     <string name="home_historico">Histórico</string>
     <string name="home_subtitulo_historico">Alertas e registros</string>
     <string name="home_desc_btn_historico">Histórico. Registro de alertas, ocorrências e rotas. Toque duas vezes para abrir.</string>
 
+    <string name="home_dispositivos">Dispositivos</string>
+    <string name="home_subtitulo_dispositivos">Ver seus dispositivos</string>
+    <string name="home_desc_btn_dispositivos">Dispositivos. Acesse os seus dispositivos de rastreamento. Toque duas vezes para abrir.</string>
+
+
     <!-- SEÇÃO 5: GESTÃO DE CÍRCULOS DE SEGURANÇA -->
     <string name="home_titulo_meus_circulos">Meus Círculos</string>
     <string name="home_btn_gerenciar">Gerenciar</string>
-    <string name="home_desc_gerenciar_circulos">Gerenciar círculos. Toque duas vezes para administrar seus grupos de segurança.</string>
-    <string name="home_circulo_familia">Família</string>
-    <string name="home_membros_ativos_familia">4 membros ativos</string>
-    <string name="home_desc_circulo_familia">Círculo Família, 4 membros ativos. Toque duas vezes para ver detalhes.</string>
-    <string name="home_circulo_faculdade">Faculdade</string>
-    <string name="home_membros_ativos_faculdade">6 membros ativos</string>
-    <string name="home_desc_circulo_faculdade">Círculo Faculdade, 6 membros ativos. Toque duas vezes para ver detalhes.</string>
+    <string name="home_desc_gerenciar_circulos">Gerenciar círculos. Toque duas vezes para administrar os seus grupos.</string>
     <string name="home_novo_circulo">Novo Círculo</string>
     <string name="home_desc_add_circulo">Criar ou adicionar novo círculo de segurança. Toque duas vezes para criar.</string>
 
     <!-- SEÇÃO 6: AMIGOS PRÓXIMOS -->
-    <string name="home_titulo_amigos_proximos">Amigos Próximos</string>
+    <string name="home_titulo_contatos_proximos">Contatos Próximos</string>
     <string name="home_btn_ver_todos">Ver todos</string>
     <string name="home_desc_ver_todos_amigos">Ver lista completa de amigos próximos. Toque duas vezes para abrir.</string>
     <string name="home_contato_exemplo_nome">Contato 1</string>
-    <string name="home_contato_exemplo_distancia">321 m</string>
+    <string name="home_contato_exemplo_distancia">321 metros</string>
     <string name="home_desc_contato_exemplo">Contato 1, localizado a 321 metros de distância. Toque duas vezes para ver localização no mapa.</string>
+
     <!-- =================================================================== -->
     <!-- TELA DE MAPA (FRAGMENT_MAPA)                                       -->
     <!-- =================================================================== -->
     <string name="mapa_desc_mapa">Mapa interativo. Toque em um ponto para ver endereço, distância, tempo e coordenadas.</string>
     <string name="mapa_hint_pesquisa">Pesquisar no mapa…</string>
     <string name="mapa_desc_btn_voz">Pesquisar por voz</string>
-    <string name="mapa_filtro_todos">Todos</string>
+    <string name="mapa_filtro">Filtro</string>
     <string name="mapa_filtro_rotas">Rotas</string>
-    <string name="mapa_filtro_amigos">Amigos</string>
-    <string name="mapa_filtro_grupos">Grupos</string>
+    <string name="mapa_filtro_circulos">Circulos</string>
     <string name="mapa_desc_minha_localizacao">Centralizar na minha localização</string>
     <string name="mapa_titulo_meus_circulos">Meus círculos</string>
     <string name="mapa_desc_btn_gerenciar_circulos">Gerenciar círculos</string>
@@ -179,7 +179,7 @@
     <string name="sos_titulo">Emergência</string>
     <string name="sos_subtitulo">Precisa de ajuda?</string>
     <string name="sos_btn_texto">SOS</string>
-    <string name="sos_desc_btn_sos">Acionar emergência SOS. Mantenha pressionado para enviar o alerta com sua localização.</string>
+    <string name="sos_desc_btn_sos">Acionar emergência SOS. Mantenha pressionado para enviar o alerta com a sua localização.</string>
     <string name="sos_descricao_explicativa">Ao acionar o SOS, a sua localização será enviada para seus contatos confiáveis</string>
     <string name="sos_btn_ligar_emergencia">Ligar para emergência</string>
 
@@ -234,5 +234,6 @@
     <string name="config_desc_sair_conta">Encerrar sessão e sair da conta</string>
     <string name="campo_email">E-mail</string>
     <string name="btn_enviar_codigo">Enviar código</string>
-    <string name="cd_sos_button">clique para ir a tela de emergência</string>
+    <string name="cd_sos_button">clique para ir à tela de emergência</string>
+    <string name="mapa_desc_btn_toggle_riscos">Mostrar ou Ocultar as àreas de riscos</string>
 </resources>

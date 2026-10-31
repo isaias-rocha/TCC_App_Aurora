@@ -6,7 +6,7 @@
              android:padding="4dp"
              android:gravity="center_vertical"
              android:layout_margin="5dp"
-             android:background="@drawable/background_item_contato">
+             android:background="@drawable/bg_item_contato">
 
     <!--Checkbox para marca como contato de SOS-->
     <CheckBox android:id="@+id/checkSos"
@@ -26,7 +26,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginEnd="8dp"
         android:scaleType="centerCrop"
-        android:background="@drawable/background_circulo"
+        android:background="@drawable/bg_circulo"
         android:clipToOutline="true"
         android:src="@drawable/ic_perfil" /> <!-- Imagem padrão temporária -->
 
@@ -46,7 +46,7 @@
             android:layout_marginEnd="70dp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:background="@drawable/background_txt_contato"/>
+            android:background="@drawable/bg_txt_contato"/>
 
         <TextView android:id="@+id/txtTelefone"
             android:layout_width="150dp"
@@ -56,7 +56,7 @@
             android:layout_marginEnd="70dp"
             android:textStyle="bold"
             android:textColor="@color/text_secondary"
-            android:background="@drawable/background_txt_contato"/>
+            android:background="@drawable/bg_txt_contato"/>
     </LinearLayout>
 
     <!--Botão Enviar-->
@@ -77,7 +77,7 @@
         android:layout_width="48dp"
         android:layout_margin="5dp"
         android:layout_height="48dp"
-        android:background="@drawable/background_botao_deletar"
+        android:background="@drawable/bg_botao_deletar"
         android:src="@drawable/ic_lixeira"
         android:contentDescription="Deletar"
         />

@@ -6,8 +6,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.IBinder;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -15,133 +15,144 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.equipe1.aurora.domain.model.DispositivoEmbarcado;
 import com.equipe1.aurora.infra.ble.AuroraBleService;
-import com.equipe1.aurora.infra.dto.ConsultaResponseDto;
-import com.equipe1.aurora.infra.dto.DispositivoDto;
-import com.equipe1.aurora.infra.dto.mapper.DispositivoMapper;
-import com.equipe1.aurora.infra.network.api.ApiClient;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+// =====================================================================
+// AURORA GPS - VIEWMODEL COM GESTÃO COMPLETA (DispositivoViewModel.java)
+// =====================================================================
+// Controla a persistência (SharedPreferences), ativação/desativação,
+// renomeação e remoção de múltiplos rastreadores.
+// =====================================================================
 
-/**
- * =====================================================================
- * AURORA GPS - VIEWMODEL DA TELA DE DISPOSITIVOS
- * =====================================================================
- * Ponte reativa responsável por manter os dados da interface ativos durante
- * rotações do ecrã, controlar a comunicação com o serviço BLE e integrar
- * a consulta ao servidor local (consultar.php) via Retrofit.
- * =====================================================================
- */
 public class DispositivoViewModel extends AndroidViewModel implements AuroraBleService.ServiceCallback {
 
-    private static final String TAG = "DispositivoViewModel";
+    private static final String PREFS_DISPOSITIVOS = "aurora_prefs_dispositivos";
+    private static final String KEY_MACS_PAREADOS = "set_macs_pareados";
+    private static final String KEY_ULTIMO_MAC = "ultimo_mac_conectado";
 
-    // Instância do serviço de ligação BLE e indicador de vinculação
     private AuroraBleService bleService;
     private boolean serviceBound = false;
 
-    // -----------------------------------------------------------------
-    // BLOCO 1: LIVEDATAS DE CONEXÃO E TELEMETRIA BLE (TEMPO REAL)
-    // -----------------------------------------------------------------
-    private final MutableLiveData<Boolean> estaConectado = new MutableLiveData<>(false);
-    private final MutableLiveData<String> nomeDispositivo = new MutableLiveData<>("Localizador Aurora");
-    private final MutableLiveData<Integer> nivelBateria = new MutableLiveData<>(100);
-    private final MutableLiveData<String> statusGps = new MutableLiveData<>("Aguardando sinal...");
-    private final MutableLiveData<double[]> ultimasCoordenadas = new MutableLiveData<>(null);
-    private final MutableLiveData<double[]> eventoSosAcionado = new MutableLiveData<>(null);
+    private final MutableLiveData<List<DispositivoItem>> listaDispositivosPareados = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<List<BluetoothDevice>> dispositivosEncontrados = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<double[]> eventoSosAcionado = new MutableLiveData<>(null);
 
-    // -----------------------------------------------------------------
-    // BLOCO 2: LIVEDATAS DA API REST (HISTÓRICO MYSQL)
-    // -----------------------------------------------------------------
-    private final MutableLiveData<List<DispositivoEmbarcado>> historicoBancoLiveData = new MutableLiveData<>(new ArrayList<>());
-    private final MutableLiveData<Boolean> carregandoApiLiveData = new MutableLiveData<>(false);
-    private final MutableLiveData<String> mensagemErroApiLiveData = new MutableLiveData<>(null);
-
-    // -----------------------------------------------------------------
-    // BLOCO 3: CONSTRUTOR DA CLASSE
-    // -----------------------------------------------------------------
     public DispositivoViewModel(@NonNull Application application) {
         super(application);
+        carregarDispositivosSalvos();
     }
 
-    // -----------------------------------------------------------------
-    // BLOCO 4: EXPOSIÇÃO DE GETTERS IMUTÁVEIS (LIVEDATA) PARA O FRAGMENT
-    // -----------------------------------------------------------------
-    public LiveData<Boolean> getEstaConectado() { return estaConectado; }
-    public LiveData<String> getNomeDispositivo() { return nomeDispositivo; }
-    public LiveData<Integer> getNivelBateria() { return nivelBateria; }
-    public LiveData<String> getStatusGps() { return statusGps; }
-    public LiveData<double[]> getUltimasCoordenadas() { return ultimasCoordenadas; }
-    public LiveData<double[]> getEventoSosAcionado() { return eventoSosAcionado; }
+    // BLOCO 1: GETTERS LIVEDATA
+    public LiveData<List<DispositivoItem>> getListaDispositivosPareados() { return listaDispositivosPareados; }
     public LiveData<List<BluetoothDevice>> getDispositivosEncontrados() { return dispositivosEncontrados; }
+    public LiveData<double[]> getEventoSosAcionado() { return eventoSosAcionado; }
 
-    public LiveData<List<DispositivoEmbarcado>> getHistoricoBancoLiveData() { return historicoBancoLiveData; }
-    public LiveData<Boolean> getCarregandoApiLiveData() { return carregandoApiLiveData; }
-    public LiveData<String> getMensagemErroApiLiveData() { return mensagemErroApiLiveData; }
+    // BLOCO 2: CARREGAMENTO DOS DISPOSITIVOS SALVOS NO SHAREDPREFERENCES
+    public void carregarDispositivosSalvos() {
+        SharedPreferences prefs = getApplication().getSharedPreferences(PREFS_DISPOSITIVOS, Context.MODE_PRIVATE);
+        Set<String> setMacs = prefs.getStringSet(KEY_MACS_PAREADOS, new HashSet<>());
 
-    // -----------------------------------------------------------------
-    // BLOCO 5: MÉTODOS DE REQUISIÇÃO À API REST (consultar.php)
-    // -----------------------------------------------------------------
-    /**
-     * Executa a busca assíncrona dos últimos registos de localização
-     * guardados na base de dados local MySQL através do Retrofit.
-     */
-    public void carregarDadosDoBancoServidor() {
-        carregandoApiLiveData.setValue(true);
+        List<DispositivoItem> itens = new ArrayList<>();
+        for (String mac : setMacs) {
+            String nome = prefs.getString("nome_" + mac, "Aurora GPS (" + mac + ")");
+            boolean ativo = prefs.getBoolean("ativo_" + mac, true);
 
-        ApiClient.getApiService().consultarDispositivos(50, "desc").enqueue(new Callback<ConsultaResponseDto>() {
-            @Override
-            public void onResponse(Call<ConsultaResponseDto> call, Response<ConsultaResponseDto> response) {
-                carregandoApiLiveData.setValue(false);
-
-                if (response.isSuccessful() && response.body() != null && response.body().isSucesso()) {
-                    List<DispositivoDto> listaDto = response.body().getDados();
-                    List<DispositivoEmbarcado> listaDominio = DispositivoMapper.paraListaDominio(listaDto);
-
-                    historicoBancoLiveData.setValue(listaDominio);
-                } else {
-                    mensagemErroApiLiveData.setValue("Erro ao consultar servidor local. Código: " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ConsultaResponseDto> call, Throwable t) {
-                carregandoApiLiveData.setValue(false);
-                Log.e(TAG, "Falha na requisição HTTP: " + t.getMessage(), t);
-                mensagemErroApiLiveData.setValue("Falha de ligação com o servidor local: " + t.getMessage());
-            }
-        });
-    }
-
-    // -----------------------------------------------------------------
-    // BLOCO 6: INICIALIZAÇÃO E GESTÃO DO SERVIÇO DE SEGUNDO PLANO (BLE)
-    // -----------------------------------------------------------------
-    /**
-     * Limpa a lista interna de dispositivos BLE encontrados durante a varredura.
-     */
-    public void limparListaDispositivos() {
-        dispositivosEncontrados.setValue(new ArrayList<>());
-    }
-
-    /**
-     * Inicia o Foreground Service e estabelece a vinculação segura (bind) com a aplicação.
-     */
-    public void iniciarEConectarServico() {
-        if (serviceBound && bleService != null) {
-            bleService.conectarBle();
-            return;
+            DispositivoItem item = new DispositivoItem(mac, nome);
+            item.setAtivo(ativo);
+            itens.add(item);
         }
 
+        listaDispositivosPareados.setValue(itens);
+    }
+
+    // BLOCO 3: OPERAÇÕES DE SALVAR, RENOMEAR, ATIVAR/DESATIVAR E REMOVER
+    public void salvarNovoDispositivo(String mac, String nomeCustomizado) {
+        SharedPreferences prefs = getApplication().getSharedPreferences(PREFS_DISPOSITIVOS, Context.MODE_PRIVATE);
+        Set<String> setMacs = new HashSet<>(prefs.getStringSet(KEY_MACS_PAREADOS, new HashSet<>()));
+
+        setMacs.add(mac);
+        prefs.edit()
+                .putStringSet(KEY_MACS_PAREADOS, setMacs)
+                .putString("nome_" + mac, nomeCustomizado)
+                .putBoolean("ativo_" + mac, true)
+                .putString(KEY_ULTIMO_MAC, mac)
+                .apply();
+
+        carregarDispositivosSalvos();
+    }
+
+    public void renomearDispositivo(String mac, String novoNome) {
+        SharedPreferences prefs = getApplication().getSharedPreferences(PREFS_DISPOSITIVOS, Context.MODE_PRIVATE);
+        prefs.edit().putString("nome_" + mac, novoNome).apply();
+
+        carregarDispositivosSalvos();
+    }
+
+    public void alternarEstadoAtivoDispositivo(String mac, boolean ativo) {
+        SharedPreferences prefs = getApplication().getSharedPreferences(PREFS_DISPOSITIVOS, Context.MODE_PRIVATE);
+        prefs.edit().putBoolean("ativo_" + mac, ativo).apply();
+
+        List<DispositivoItem> lista = listaDispositivosPareados.getValue();
+        if (lista != null) {
+            for (DispositivoItem item : lista) {
+                if (item.getMacAddress().equals(mac)) {
+                    item.setAtivo(ativo);
+                    break;
+                }
+            }
+            listaDispositivosPareados.setValue(lista);
+        }
+    }
+
+    public void removerDispositivo(String mac) {
+        SharedPreferences prefs = getApplication().getSharedPreferences(PREFS_DISPOSITIVOS, Context.MODE_PRIVATE);
+        Set<String> setMacs = new HashSet<>(prefs.getStringSet(KEY_MACS_PAREADOS, new HashSet<>()));
+
+        setMacs.remove(mac);
+        prefs.edit()
+                .putStringSet(KEY_MACS_PAREADOS, setMacs)
+                .remove("nome_" + mac)
+                .remove("ativo_" + mac)
+                .apply();
+
+        carregarDispositivosSalvos();
+    }
+
+    // BLOCO 4: INTEGRAÇÃO E CONEXÃO BLE
+    public void iniciarVarreduraParaSelecao() {
+        dispositivosEncontrados.setValue(new ArrayList<>());
+        if (serviceBound && bleService != null) {
+            bleService.iniciarVarreduraParaSelecao();
+        } else {
+            iniciarEConectarServico();
+        }
+    }
+
+    public void conectarDispositivoEspecifico(String macAddress) {
+        BluetoothDevice device = buscarDevicePorMacNaLista(macAddress);
+        if (bleService != null && device != null) {
+            bleService.conectarDispositivoEspecifico(device);
+        }
+    }
+
+    private BluetoothDevice buscarDevicePorMacNaLista(String mac) {
+        List<BluetoothDevice> lista = dispositivosEncontrados.getValue();
+        if (lista != null) {
+            for (BluetoothDevice d : lista) {
+                if (d.getAddress().equals(mac)) return d;
+            }
+        }
+        return null;
+    }
+
+    public void iniciarEConectarServico() {
         Context context = getApplication().getApplicationContext();
         Intent intent = new Intent(context, AuroraBleService.class);
-
         try {
             ContextCompat.startForegroundService(context, intent);
             context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
@@ -150,27 +161,6 @@ public class DispositivoViewModel extends AndroidViewModel implements AuroraBleS
         }
     }
 
-    public void iniciarConexaoBle() {
-        if (serviceBound && bleService != null) {
-            bleService.conectarBle();
-        } else {
-            iniciarEConectarServico();
-        }
-    }
-
-    public void conectarDispositivoSelecionado(BluetoothDevice device) {
-        if (bleService != null) {
-            bleService.conectarDispositivoEspecifico(device);
-        }
-    }
-
-    public void setNomeDispositivoCustomizado(String nome) {
-        nomeDispositivo.postValue(nome);
-    }
-
-    // -----------------------------------------------------------------
-    // BLOCO 7: CONNECTION INTERFACE PARA INTER-PROCESS COMMUNICATION (IPC)
-    // -----------------------------------------------------------------
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -178,7 +168,6 @@ public class DispositivoViewModel extends AndroidViewModel implements AuroraBleS
             bleService = binder.getService();
             bleService.setServiceCallback(DispositivoViewModel.this);
             serviceBound = true;
-            bleService.conectarBle();
         }
 
         @Override
@@ -188,20 +177,26 @@ public class DispositivoViewModel extends AndroidViewModel implements AuroraBleS
         }
     };
 
-    // -----------------------------------------------------------------
-    // BLOCO 8: CALLBACKS DE EVENTOS EM TEMPO REAL RECEBIDOS DO SERVIÇO
-    // -----------------------------------------------------------------
+    // BLOCO 5: REPASSE DE EVENTOS BLE
     @Override
     public void onStatusConexaoAlterado(boolean conectado) {
-        estaConectado.postValue(conectado);
-        statusGps.postValue(conectado ? "Sinal Ativo" : "Desconectado");
+        List<DispositivoItem> lista = listaDispositivosPareados.getValue();
+        if (lista != null && !lista.isEmpty()) {
+            lista.get(0).setConectado(conectado);
+            listaDispositivosPareados.postValue(lista);
+        }
     }
 
     @Override
     public void onDadosGpsRecebidos(double lat, double lng, int bateria) {
-        ultimasCoordenadas.postValue(new double[]{lat, lng});
-        nivelBateria.postValue(bateria);
-        statusGps.postValue("Sinal OK");
+        List<DispositivoItem> lista = listaDispositivosPareados.getValue();
+        if (lista != null && !lista.isEmpty()) {
+            DispositivoItem item = lista.get(0);
+            item.setCoordenadas(lat, lng);
+            item.setNivelBateria(bateria);
+            item.setStatusGps("Sinal OK");
+            listaDispositivosPareados.postValue(lista);
+        }
     }
 
     @Override
@@ -210,44 +205,31 @@ public class DispositivoViewModel extends AndroidViewModel implements AuroraBleS
     }
 
     @Override
-    public void onNomeDispositivoLido(String nome) {
-        nomeDispositivo.postValue(nome);
-    }
+    public void onNomeDispositivoLido(String nome, String macAddress) {}
 
     @Override
     public void onDispositivoEncontrado(BluetoothDevice device) {
-        List<BluetoothDevice> listaAtual = dispositivosEncontrados.getValue();
-        if (listaAtual == null) {
-            listaAtual = new ArrayList<>();
+        List<BluetoothDevice> lista = dispositivosEncontrados.getValue();
+        if (lista == null) lista = new ArrayList<>();
+
+        for (BluetoothDevice d : lista) {
+            if (d.getAddress().equals(device.getAddress())) return;
         }
 
-        if (device != null) {
-            for (BluetoothDevice d : listaAtual) {
-                if (d.getAddress().equals(device.getAddress())) {
-                    return; // Evita duplicados verificando o MAC Address
-                }
-            }
-
-            List<BluetoothDevice> novaLista = new ArrayList<>(listaAtual);
-            novaLista.add(device);
-            dispositivosEncontrados.postValue(novaLista);
-        }
+        List<BluetoothDevice> novaLista = new ArrayList<>(lista);
+        novaLista.add(device);
+        dispositivosEncontrados.postValue(novaLista);
     }
 
     public void resetarEventoSos() {
         eventoSosAcionado.setValue(null);
     }
 
-    // -----------------------------------------------------------------
-    // BLOCO 9: LIMPEZA E DESVINCULAÇÃO DO SERVIÇO (DESTRUIÇÃO DO VIEWMODEL)
-    // -----------------------------------------------------------------
     @Override
     protected void onCleared() {
         super.onCleared();
         if (serviceBound) {
-            try {
-                getApplication().getApplicationContext().unbindService(serviceConnection);
-            } catch (Exception ignored) {}
+            try { getApplication().getApplicationContext().unbindService(serviceConnection); } catch (Exception ignored) {}
             serviceBound = false;
         }
     }

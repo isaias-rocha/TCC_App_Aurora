@@ -41,7 +41,7 @@ public class SosViewModel extends AndroidViewModel {
 
     /**
      * Executa a regra de negócio para registrar o alerta de emergência na base local (Room)
-     * com origem 'APP' [RF026 / Tabela Alerta_SOS][cite: 28, 74].
+     * com origem 'APP' [RF026 / Tabela Alerta_SOS]
      */
     public void enviarAlertaSos(double latitude, double longitude) {
         executorService.execute(() -> {

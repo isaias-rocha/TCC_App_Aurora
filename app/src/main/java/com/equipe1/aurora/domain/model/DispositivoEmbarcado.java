@@ -179,7 +179,7 @@ public class DispositivoEmbarcado implements Serializable {
      * Retorna a coordenada formatada para exibição simplificada
      */
     public String getCoordenadasFormatadas() {
-        return String.format("Lat: %.6f | Lon: %.6f", latitude, longitude);
+        return String.format("Lat: %.7f | Lon: %.7f", latitude, longitude);
     }
 
     @Override
