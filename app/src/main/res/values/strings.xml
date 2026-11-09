@@ -236,4 +236,6 @@
     <string name="btn_enviar_codigo">Enviar código</string>
     <string name="cd_sos_button">clique para ir à tela de emergência</string>
     <string name="mapa_desc_btn_toggle_riscos">Mostrar ou Ocultar as àreas de riscos</string>
+    <string name="historico_titulo">Histórico</string>
+    <string name="historico_subtitulo">Registros de suas rotas e alertas</string>
 </resources>

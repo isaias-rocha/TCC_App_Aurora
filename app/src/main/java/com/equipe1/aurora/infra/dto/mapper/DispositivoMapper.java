@@ -21,7 +21,7 @@ public class DispositivoMapper {
     // -----------------------------------------------------------------
     /**
      * Converte uma instância individual de DispositivoDto para o modelo de domínio.
-     * Trata valores nulos para evitar excepções de NullPointerException.
+     * Trata valores nulos para evitar exceções de NullPointerException.
      */
     public static DispositivoEmbarcado paraDominio(DispositivoDto dto) {
         if (dto == null) {

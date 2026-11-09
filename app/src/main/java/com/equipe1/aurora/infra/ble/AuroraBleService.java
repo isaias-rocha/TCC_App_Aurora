@@ -31,10 +31,8 @@ public class AuroraBleService extends Service implements AuroraBleManager.BleCal
 
     private static final String TAG = "AuroraBleService";
     private static final String PREFS_DISPOSITIVOS = "aurora_prefs_dispositivos";
-
     private static final String CHANNEL_ID = "AuroraBleServiceChannel";
     private static final int NOTIFICATION_ID = 1001;
-
     private static final String CHANNEL_SOS_ID = "AuroraSosAlertChannel";
     private static final int NOTIFICATION_SOS_ID = 1002;
 
@@ -180,7 +178,7 @@ public class AuroraBleService extends Service implements AuroraBleManager.BleCal
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setAutoCancel(true)
-                .setVibrate(new long[]{0, 500, 300, 500})
+                .setVibrate(new long[]{0, 500, 200, 500})
                 .build();
 
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -194,17 +192,15 @@ public class AuroraBleService extends Service implements AuroraBleManager.BleCal
     }
 
     private void criarCanalNotificacao() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            if (manager != null) {
-                NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Monitoramento Dispositivo", NotificationManager.IMPORTANCE_LOW);
-                manager.createNotificationChannel(channel);
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        if (manager != null) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Monitoramento Dispositivo", NotificationManager.IMPORTANCE_LOW);
+            manager.createNotificationChannel(channel);
 
-                NotificationChannel sosChannel = new NotificationChannel(CHANNEL_SOS_ID, "Alertas SOS", NotificationManager.IMPORTANCE_HIGH);
-                sosChannel.setVibrationPattern(new long[]{0, 500, 200, 500});
-                sosChannel.enableVibration(true);
-                manager.createNotificationChannel(sosChannel);
-            }
+            NotificationChannel sosChannel = new NotificationChannel(CHANNEL_SOS_ID, "Alertas SOS", NotificationManager.IMPORTANCE_HIGH);
+            sosChannel.setVibrationPattern(new long[]{0, 500, 200, 500});
+            sosChannel.enableVibration(true);
+            manager.createNotificationChannel(sosChannel);
         }
     }
 

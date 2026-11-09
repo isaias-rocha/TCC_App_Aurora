@@ -1,14 +1,12 @@
 package com.equipe1.aurora.infra.network.api;
 
-// =========================================================================
-// 1. IMPORTAÇÕES DE MODELOS, DTOS E RETROFIT
-// =========================================================================
 import com.equipe1.aurora.domain.model.AreaRisco;
 import com.equipe1.aurora.domain.model.BairroPoligono;
 import com.equipe1.aurora.domain.model.Contato;
 import com.equipe1.aurora.domain.model.OcorrenciaCrime;
 import com.equipe1.aurora.infra.dto.ConsultaResponseDto;
 import com.equipe1.aurora.infra.dto.UsuarioDto;
+import com.equipe1.aurora.infra.local.entity.AlertaSosEntity;
 
 import java.util.List;
 
@@ -24,10 +22,6 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-// =========================================================================
-// 2. INTERFACE DE SERVIÇOS API REST
-// =========================================================================
-// Mapeia todos os endpoints de comunicação entre a aplicação Android e o servidor backend.
 public interface ApiService {
 
     // =========================================================================
@@ -42,7 +36,6 @@ public interface ApiService {
     // =========================================================================
     // BLOCO 2: CONSULTA DE DISPOSITIVOS E RASTREAMENTO GPS
     // =========================================================================
-    // Busca o histórico geral de pontos e dispositivos gravados no MySQL
     @Headers("X-API-Key: equipe01-aurora")
     @GET("consultar.php")
     Call<ConsultaResponseDto> consultarDispositivos(
@@ -50,7 +43,6 @@ public interface ApiService {
             @Query("ordem") String ordem
     );
 
-    // Busca filtrando por um dispositivo específico e/ou ocorrência de SOS
     @Headers("X-API-Key: equipe01-aurora")
     @GET("consultar.php")
     Call<ConsultaResponseDto> consultarDispositivoPorUid(
@@ -58,6 +50,11 @@ public interface ApiService {
             @Query("sos") Boolean sos,
             @Query("limite") Integer limite
     );
+
+    // Endpoint adicionado para sincronização de alertas locais gerados offline no Room[cite: 118, 119]
+    @Headers("X-API-Key: equipe01-aurora")
+    @POST("sincronizar_sos.php")
+    Call<Void> sincronizarAlertaOffline(@Body AlertaSosEntity alerta);
 
     // =========================================================================
     // BLOCO 3: GESTÃO DE CONTATOS DE EMERGÊNCIA

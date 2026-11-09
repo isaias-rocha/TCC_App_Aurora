@@ -48,19 +48,19 @@ public class AlertaSosEntity {
     private String origem;
 
     /**
-     * Estado atual do alerta: 'ATIVO', 'ENCERRADO' ou 'CANCELADO'[cite: 74].
+     * Estado atual do alerta: 'ATIVO', 'ENCERRADO' ou 'CANCELADO'
      */
     private String status;
 
     /**
-     * Identificador do dispositivo embarcado (ESP32) associado. Pode ser nulo se o disparo for via aplicativo[cite: 74].
+     * Identificador do dispositivo embarcado (ESP32) associado. Pode ser nulo se o disparo for via aplicativo
      */
     private Integer dispositivoId;
 
     /**
      * Flag de controlo de rede:
-     * - false: Registo pendente de envio para o servidor MySQL remoto[cite: 32].
-     * - true: Registo já sincronizado com a API com sucesso.
+     * - false: Registro pendente de envio para o servidor MySQL remoto
+     * - true: Registro já sincronizado com a API com sucesso.
      */
     private boolean sincronizado;
 

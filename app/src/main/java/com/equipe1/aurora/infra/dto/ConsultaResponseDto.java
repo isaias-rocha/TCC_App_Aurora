@@ -3,7 +3,7 @@ package com.equipe1.aurora.infra.dto;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
-// DTO wrapper para encapsular a resposta completa do consultar.php
+// DTO wrapper para encapsular a resposta completa da api consultar.php
 public class ConsultaResponseDto {
 
     @SerializedName("sucesso")

@@ -1,8 +1,12 @@
 package com.equipe1.aurora.ui.sos;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,38 +23,45 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.equipe1.aurora.databinding.DialogSeletorEmergenciaBinding;
 import com.equipe1.aurora.databinding.FragmentSosBinding;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
+import com.google.android.gms.tasks.CancellationTokenSource;
 
-/**
- * Fragment responsável pelo painel de emergência SOS, contagem regressiva e ligação rápida para órgãos públicos.
- */
+// =====================================================================
+// AURORA GPS - FRAGMENT DA TELA DE EMERGÊNCIA SOS (SosFragment.java)
+// =====================================================================
+// Captura geolocalização em tempo real do Android 10+ via FusedLocation
+// e dispara pânico por toque mantido (1 segundo) [RF026].
+// =====================================================================
+
 public class SosFragment extends Fragment {
 
-    // ViewBinding para acesso seguro aos componentes do layout fragment_sos.xml
+    // // BLOCO 1: ATRIBUTOS E BINDINGS
     private FragmentSosBinding binding;
-
-    // ViewModel associado ao ciclo de vida do Fragment
     private SosViewModel sosViewModel;
+    private FusedLocationProviderClient fusedLocationClient;
 
-    // Controle da contagem regressiva de 2 segundos ao manter o botão pressionado
     private CountDownTimer countDownTimer;
     private boolean isHolding = false;
-    private static final long TEMPO_PRESSIONADO_MS = 2000; // 2 segundos
+    private static final long TEMPO_PRESSIONADO_MS = 1000; // Retenção de 1 segundo
 
+    // // BLOCO 2: CICLO DE VIDA DO FRAGMENT
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Infla a interface utilizando ViewBinding
         binding = FragmentSosBinding.inflate(inflater, container, false);
-
-        // Inicializa o ViewModel
         sosViewModel = new ViewModelProvider(this).get(SosViewModel.class);
 
-        // Configura as escutas de eventos dos componentes visuais
+        // Inicializa o cliente nativo de localização do Android
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+
         configurarBotaoVoltar();
         configurarBotaoSos();
         configurarSeletorEmergencia();
@@ -59,9 +70,7 @@ public class SosFragment extends Fragment {
         return binding.getRoot();
     }
 
-    /**
-     * Configura a ação de clique do botão voltar da barra superior.
-     */
+    // // BLOCO 3: NAVEGAÇÃO E RETORNO
     private void configurarBotaoVoltar() {
         if (binding == null) return;
         binding.btnVoltar.setOnClickListener(v ->
@@ -69,13 +78,12 @@ public class SosFragment extends Fragment {
         );
     }
 
-    /**
-     * Observa as alterações nos LiveDatas expostos pelo ViewModel.
-     */
+    // // BLOCO 4: OBSERVAÇÃO REATIVA DO VIEWMODEL
     private void observarViewModel() {
         sosViewModel.alertaEnviadoComSucesso.observe(getViewLifecycleOwner(), sucesso -> {
             if (Boolean.TRUE.equals(sucesso)) {
-                Toast.makeText(requireContext(), "Emergência acionada e salva localmente!", Toast.LENGTH_LONG).show();
+                Toast.makeText(requireContext(), "🚨 SOS DO APP ATIVADO! \n" +
+                        "Alerta com sua localização em tempo real gravado localmente.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -86,23 +94,19 @@ public class SosFragment extends Fragment {
         });
     }
 
-    /**
-     * Configura o evento de pressionar continuamente (hold de 2 segundos) o botão SOS.
-     */
+    // // BLOCO 5: LÓGICA DO TOQUE CONTÍNUO DE 1 SEGUNDO
     private void configurarBotaoSos() {
         if (binding == null) return;
 
         binding.btnSos.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    // Inicia a contagem quando o usuário toca no botão
                     iniciarContagemRegressiva();
                     return true;
 
                 case MotionEvent.ACTION_UP:
-                    v.performClick(); // Garante a acessibilidade do Android ao soltar o toque
+                    v.performClick();
                 case MotionEvent.ACTION_CANCEL:
-                    // Cancela a contagem se o usuário soltar antes dos 2 segundos
                     cancelarContagemRegressiva();
                     return true;
             }
@@ -110,42 +114,29 @@ public class SosFragment extends Fragment {
         });
     }
 
-    /**
-     * Inicia a contagem regressiva de 2, 1 segundos antes do disparo efetivo do alerta.
-     */
+    // // BLOCO 6: CONTAGEM REGRESSIVA E FEEDBACK VISUAL/TÁTIL
     private void iniciarContagemRegressiva() {
         isHolding = true;
-        vibrar(100); // Feedback tátil inicial do toque
+        vibrar(100);
 
-        countDownTimer = new CountDownTimer(TEMPO_PRESSIONADO_MS, 1000) {
+        countDownTimer = new CountDownTimer(TEMPO_PRESSIONADO_MS, 500) {
             @Override
             public void onTick(long millisUntilFinished) {
-                // Proteção para evitar acesso ao binding caso a View seja destruída
                 if (binding == null) return;
-
-                int segundosRestantes = (int) Math.ceil(millisUntilFinished / 1000.0);
-
-                // Atualização visual do texto do botão
-                binding.btnSos.setText(String.valueOf(segundosRestantes));
-
-                // Acessibilidade para leitores de tela (TalkBack)
-                String anuncio = "Segure por mais " + segundosRestantes + " segundos para disparar o SOS";
-                binding.btnSos.setContentDescription(anuncio);
-                binding.btnSos.announceForAccessibility(segundosRestantes + " segundos");
+                binding.btnSos.setText("...");
+                binding.btnSos.announceForAccessibility("Mantenha pressionado por 1 segundo");
             }
 
             @Override
             public void onFinish() {
                 if (isHolding && binding != null) {
-                    dispararAlertaSos();
+                    dispararAlertaSosApp();
                 }
             }
         }.start();
     }
 
-    /**
-     * Cancela o temporizador e restaura a interface gráfica ao estado padrão.
-     */
+    // // BLOCO 7: CANCELAMENTO DA CONTAGEM
     private void cancelarContagemRegressiva() {
         if (countDownTimer != null) {
             countDownTimer.cancel();
@@ -154,49 +145,80 @@ public class SosFragment extends Fragment {
 
         if (isHolding) {
             isHolding = false;
-
             if (binding != null) {
-                // Restaura o texto original do botão e descrições de acessibilidade
                 binding.btnSos.setText("SOS");
-                binding.btnSos.setContentDescription("Acionar emergência SOS. Mantenha pressionado para enviar o alerta com sua localização.");
-                binding.btnSos.announceForAccessibility("Envio de emergência cancelado.");
+                binding.btnSos.setContentDescription("Acionar emergência SOS. Mantenha pressionado por 1 segundo.");
             }
         }
     }
 
-    /**
-     * Dispara o alerta SOS no sistema e envia para gravação no Room Database via ViewModel.
-     */
-    private void dispararAlertaSos() {
+    // // BLOCO 8: ACIONAMENTO DO SOS DO APLICATIVO COM GEOLOCALIZAÇÃO REAL
+    private void dispararAlertaSosApp() {
         isHolding = false;
-        vibrar(500); // Feedback tátil longo confirmando o acionamento
+        vibrar(600); // Feedback tátil do disparo
 
         if (binding != null) {
             binding.btnSos.setText("SOS");
-            binding.btnSos.setContentDescription("Alerta SOS enviado com sucesso.");
-            binding.btnSos.announceForAccessibility("Emergência acionada! Sua localização foi enviada.");
+            binding.btnSos.announceForAccessibility("Emergência do App disparada com sucesso.");
         }
 
-        // Exemplo de coordenadas atuais capturadas pelo GPS (pode ser integrado ao FusedLocationProvider)
-        double latitudeAtual = -23.550520;
-        double longitudeAtual = -46.633308;
-
-        // Dispara a lógica de envio e gravação no Room via ViewModel
-        sosViewModel.enviarAlertaSos(latitudeAtual, longitudeAtual);
+        // Captura a latitude e longitude reais do smartphone
+        obterLocalizacaoEmTempoRealEEnviar();
     }
 
-    /**
-     * Executa resposta tátil por vibração no dispositivo, respeitando as preferências do usuário.
-     */
+    // // BLOCO 8.1: LEITURA DE GPS EM TEMPO REAL (ANDROID 10+ / API 29+)
+    @SuppressLint("MissingPermission")
+    private void obterLocalizacaoEmTempoRealEEnviar() {
+        // Valida se as permissões de localização foram concedidas
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            Toast.makeText(requireContext(), "Permissão de GPS necessária para obter a localização exata.", Toast.LENGTH_LONG).show();
+            // Dispara com zero como salvaguarda caso não haja permissão
+            sosViewModel.enviarAlertaSosApp(0.0, 0.0);
+            return;
+        }
+
+        // Solicita leitura instantânea com alta precisão
+        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cancellationTokenSource.getToken())
+                .addOnSuccessListener(location -> {
+                    if (location != null) {
+                        double latitudeAtual = location.getLatitude();
+                        double longitudeAtual = location.getLongitude();
+                        sosViewModel.enviarAlertaSosApp(latitudeAtual, longitudeAtual);
+                    } else {
+                        // Fallback: Tenta a última localização conhecida armazenada no cache do Android
+                        obterUltimaLocalizacaoConhecida();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Fallback em caso de falha na busca rápida de satélites
+                    obterUltimaLocalizacaoConhecida();
+                });
+    }
+
+    // // BLOCO 8.2: FALLBACK PARA ÚLTIMA POSIÇÃO CONHECIDA
+    @SuppressLint("MissingPermission")
+    private void obterUltimaLocalizacaoConhecida() {
+        fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+            if (location != null) {
+                sosViewModel.enviarAlertaSosApp(location.getLatitude(), location.getLongitude());
+            } else {
+                Toast.makeText(requireContext(), "Não foi possível obter a posição atual do GPS.", Toast.LENGTH_SHORT).show();
+                sosViewModel.enviarAlertaSosApp(0.0, 0.0);
+            }
+        });
+    }
+
+    // // BLOCO 9: VIBRAÇÃO DO SMARTPHONE
     private void vibrar(long milissegundos) {
         if (getContext() == null) return;
 
         SharedPreferences prefs = requireContext().getSharedPreferences("AuroraAccessibilityPrefs", Context.MODE_PRIVATE);
         boolean feedbackTatilAtivo = prefs.getBoolean("key_feedback_tatil", true);
-
         if (!feedbackTatilAtivo) return;
 
-        // Suporte moderno a vibração conforme a versão do Android
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             VibratorManager vibratorManager = (VibratorManager) requireContext().getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
             if (vibratorManager != null) {
@@ -210,30 +232,22 @@ public class SosFragment extends Fragment {
         }
     }
 
-    /**
-     * Configura a exibição da janela modal de serviços de emergência (Polícia, SAMU e Bombeiros).
-     */
+    // // BLOCO 10: SELETOR DE LIGAÇÕES DE EMERGÊNCIA
     private void configurarSeletorEmergencia() {
         if (binding == null) return;
 
         binding.btnLigarEmergencia.setOnClickListener(v -> {
-            // Infla o layout do diálogo utilizando ViewBinding
             DialogSeletorEmergenciaBinding dialogBinding = DialogSeletorEmergenciaBinding.inflate(getLayoutInflater());
-
             AlertDialog.Builder construtorAlerta = new AlertDialog.Builder(requireContext());
             construtorAlerta.setView(dialogBinding.getRoot());
 
             AlertDialog dialogo = construtorAlerta.create();
-
-            // Aplica fundo transparente para garantir o visual com cantos arredondados do layout
             if (dialogo.getWindow() != null) {
                 dialogo.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             }
 
-            // Ação do botão voltar no diálogo
             dialogBinding.btnVoltar.setOnClickListener(view -> dialogo.dismiss());
 
-            // Ações dos botões de chamadas telefônicas
             dialogBinding.btnPolicia.setOnClickListener(view -> {
                 abrirDiscador("190");
                 dialogo.dismiss();
@@ -253,19 +267,16 @@ public class SosFragment extends Fragment {
         });
     }
 
-    /**
-     * Redireciona o usuário para o discador telefônico padrão do Android.
-     */
     private void abrirDiscador(String numeroTelefone) {
         Intent intentDiscar = new Intent(Intent.ACTION_DIAL);
         intentDiscar.setData(Uri.parse("tel:" + numeroTelefone));
         startActivity(intentDiscar);
     }
 
+    // // BLOCO 11: LIMPEZA DE RECURSOS
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // Garante o encerramento do timer e limpa o binding para evitar vazamento de memória (Memory Leak)
         cancelarContagemRegressiva();
         binding = null;
     }

@@ -59,7 +59,7 @@ dependencies {
     // 1. INTERFACE DE USUÁRIO (UI) E RECURSOS CORE
     // =========================================================================
     // Suporte para compatibilidade de componentes visuais em versões antigas do Android
-    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.github.bumptech.glide:glide:5.0.9")
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
     // Componentes visuais do Material Design (Botões, Cards, Modais, etc.)
@@ -73,6 +73,9 @@ dependencies {
     // Gerenciamento das telas de preferências e configurações do usuário
     implementation(libs.preference)
 
+
+        // Provedor de Geolocalização de Alta Precisão
+    implementation (libs.play.services.location)
 
     // =========================================================================
     // 2. NAVEGAÇÃO ENTRE TELAS (JETPACK NAVIGATION)
@@ -130,17 +133,17 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     // Retrofit e Gson para comunicação com o backend
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 
 // OSMDroid
     implementation(libs.osmdroid.android)
     // Splash
     implementation(libs.core.splashscreen)
 
-    implementation("com.google.android.gms:play-services-auth:21.0.0")
-    implementation("androidx.navigation:navigation-fragment:2.7.7")
-    implementation("androidx.navigation:navigation-ui:2.7.7")
+    implementation(libs.play.services.auth)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
 
 
 
