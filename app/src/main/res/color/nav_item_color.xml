@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- // Estado Selecionado / Ativo -->
+    <item android:color="?attr/colorPrimary" android:state_checked="true" />
 
-    <!-- =================================================================== -->
-    <!-- ESTADO: ITEM SELECIONADO / ATIVO (CHECKED = TRUE)                  -->
-    <!-- =================================================================== -->
-    <item android:color="@color/cor_primaria" android:state_checked="true" />
-
-    <!-- =================================================================== -->
-    <!-- ESTADO: ITEM NÃO SELECIONADO / INATIVO (CHECKED = FALSE)            -->
-    <!-- =================================================================== -->
+    <!-- // Estado Inativo -->
     <item android:color="@color/text_secondary" android:state_checked="false" />
-
 </selector>

@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Base.Theme.Aurora" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Cores Primárias, Secundárias e Terciárias (Material 3) -->
+        <!-- // Cores Primárias, Secundárias e Terciárias (Material 3) -->
         <item name="colorPrimary">@color/cor_primaria</item>
         <item name="colorOnPrimary">#FFFFFF</item>
 
@@ -12,27 +12,58 @@
         <item name="colorTertiary">@color/cor_terciaria</item>
         <item name="colorOnTertiary">#FFFFFF</item>
 
-        <!-- Fundos, Superfícies e Bordas (Chaves Unificadas) -->
+        <!-- // Fundos, Superfícies e Bordas -->
         <item name="android:windowBackground">@color/app_background</item>
         <item name="colorSurface">@color/app_surface</item>
         <item name="colorOnSurface">@color/on_surface</item>
         <item name="colorOnBackground">@color/on_background</item>
 
-        <!-- Cor da borda para TextInputLayouts Outlined e Cards M3 -->
+        <!-- // Cor da borda para TextInputLayouts Outlined e Cards M3 -->
         <item name="colorOutline">@color/cor_borda</item>
 
-        <!-- Cores de Texto Padrão -->
+        <!-- // Cores de Texto Padrão -->
         <item name="android:textColorPrimary">@color/text_primary</item>
         <item name="android:textColorSecondary">@color/text_secondary</item>
 
-        <!-- Fonte Padrão do Aplicativo -->
+        <!-- // Fonte Padrão do Aplicativo -->
         <item name="fontFamily">@font/inter</item>
         <item name="android:fontFamily">@font/inter</item>
     </style>
 
     <style name="Theme.Aurora" parent="Base.Theme.Aurora" />
 
-    <!-- Estilos de Tipografia do Design System Aurora (M3) -->
+    <!-- // =================================================================== -->
+    <!-- // THEME OVERLAYS DINÂMICOS (SOBRESCREVEM A COR EM TODAS AS TELAS)    -->
+    <!-- // =================================================================== -->
+    <style name="ThemeOverlay.Aurora.Azul" parent="">
+        <item name="colorPrimary">@color/aurora_azul</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+    </style>
+
+    <style name="ThemeOverlay.Aurora.Verde" parent="">
+        <item name="colorPrimary">@color/aurora_verde</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+    </style>
+
+    <style name="ThemeOverlay.Aurora.Amarelo" parent="">
+        <item name="colorPrimary">@color/aurora_amarelo</item>
+        <!-- // Texto escuro sobre amarelo para manter contraste WCAG -->
+        <item name="colorOnPrimary">#121216</item>
+    </style>
+
+    <style name="ThemeOverlay.Aurora.Vermelho" parent="">
+        <item name="colorPrimary">@color/aurora_vermelho</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+    </style>
+
+    <!-- // Overlay de Alto Contraste: reforça bordas (colorOutline) -->
+    <style name="ThemeOverlay.Aurora.AltoContraste" parent="">
+        <item name="colorOutline">?attr/colorPrimary</item>
+    </style>
+
+    <!-- // =================================================================== -->
+    <!-- // ESTILOS DE TIPOGRAFIA DO DESIGN SYSTEM AURORA (M3)                -->
+    <!-- // =================================================================== -->
     <style name="TextAppearance.Aurora.Title" parent="TextAppearance.Material3.TitleLarge">
         <item name="fontFamily">@font/poppins</item>
         <item name="android:fontFamily">@font/poppins</item>
@@ -51,9 +82,5 @@
         <item name="android:fontFamily">@font/inter</item>
         <item name="android:textFontWeight">400</item>
     </style>
-
-    <!--Cor contato card-->
-    <color name="contatocard">#EAF3F8</color>
-    <color name="bordacontatocard">#1B1818</color>
 
 </resources>

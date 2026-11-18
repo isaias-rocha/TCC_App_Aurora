@@ -1,32 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- ScrollView principal habilitado para preencher a tela inteira (fillViewport) -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/accessibility"
+    android:id="@+id/layout_acessibilidade"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
     android:fillViewport="true"
-    android:padding="24dp"
+    android:padding="20dp"
     tools:context=".ui.acessibilidade.AcessibilidadeActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="24dp">
 
-        <!-- BOTÃO VOLTAR: voltar à página anterior. -->
-        <ImageButton
-            android:id="@+id/btn_voltar_acessibilidade"
+        <!-- // ========================================================= -->
+        <!-- // CABEÇALHO E BOTÃO VOLTAR                                 -->
+        <!-- // ========================================================= -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_btn_voltar"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Voltar para a tela anterior"
-            android:src="@drawable/ic_voltar"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="?attr/colorOnBackground" />
+            app:strokeColor="?android:attr/textColorSecondary"
+            app:strokeWidth="1dp">
 
-        <!-- TÍTULO DA TELA: Não precisa de contentDescription manual, pois o TalkBack lê o android:text diretamente. -->
+            <ImageButton
+                android:id="@+id/btn_voltar_acessibilidade"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Voltar para a tela anterior"
+                android:padding="12dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_voltar"
+                app:tint="?attr/colorOnBackground" />
+        </com.google.android.material.card.MaterialCardView>
+
         <TextView
             android:id="@+id/tv_titulo_acessibilidade"
             style="@style/TextAppearance.Aurora.Title"
@@ -40,7 +55,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_voltar_acessibilidade" />
+            app:layout_constraintTop_toBottomOf="@id/card_btn_voltar" />
 
         <TextView
             android:id="@+id/tv_subtitulo_acessibilidade"
@@ -55,13 +70,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_titulo_acessibilidade" />
 
-        <!-- SEÇÃO 1: VISUAL -->
+        <!-- // ========================================================= -->
+        <!-- // SEÇÃO 1: VISUAL                                          -->
+        <!-- // ========================================================= -->
         <TextView
             android:id="@+id/tv_secao_visual"
             style="@style/TextAppearance.Aurora.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="24dp"
             android:accessibilityHeading="true"
             android:text="VISUAL"
             android:textColor="?attr/colorPrimary"
@@ -70,12 +87,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_subtitulo_acessibilidade" />
 
+        <!-- // CARD 1: TEMA DO APLICATIVO (MODO CLARO / MODO ESCURO) -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_visual"
+            android:id="@+id/card_tema"
             style="@style/Widget.Aurora.SwitchCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -84,61 +102,538 @@
             app:strokeWidth="0dp">
 
             <LinearLayout
+                android:id="@+id/row_tema"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingVertical="8dp">
+                android:padding="16dp">
 
-                <!-- ITEM: ALTO CONTRASTE
-                     O contêiner (ConstraintLayout) é o elemento focável e clicável.
-                     O contentDescription unifica o título e o detalhe em uma única leitura fluida para o TalkBack. -->
+                <!-- // Cabeçalho do Card Tema -->
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/row_alto_contraste"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:contentDescription="Modo de Alto Contraste. Destaca bordas e aumenta a legibilidade das cores."
-                    android:focusable="true"
-                    android:minHeight="56dp"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="12dp">
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_icone_tema"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_paleta"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/colorPrimary" />
 
                     <TextView
-                        android:id="@+id/tv_alto_contraste"
+                        android:id="@+id/tv_tema_aplicativo"
                         style="@style/TextAppearance.Aurora.Subtitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:text="Modo de Alto Contraste"
+                        android:layout_marginStart="12dp"
+                        android:text="Tema do Aplicativo"
                         android:textColor="?attr/colorOnSurface"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@id/switch_alto_contraste"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/iv_icone_tema"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         style="@style/TextAppearance.Aurora.Body"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
                         android:layout_marginTop="2dp"
-                        android:layout_marginEnd="16dp"
-                        android:text="Destaca bordas e aumenta a legibilidade das cores"
+                        android:text="Escolha entre o modo claro ou escuro."
                         android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toStartOf="@id/switch_alto_contraste"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_alto_contraste" />
+                        android:textSize="11sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/iv_icone_tema"
+                        app:layout_constraintTop_toBottomOf="@id/tv_tema_aplicativo" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <!-- O Switch fica marcado como clickable/focusable=false para evitar que o leitor
-                         de tela precise passar duas vezes no mesmo item (no container e na chave). -->
+                <!-- // Opções em Quadrado: Modo Claro e Modo Escuro -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <!-- // Opção 1: Modo Claro -->
+                    <LinearLayout
+                        android:id="@+id/opcao_preview_claro"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:contentDescription="Selecionar Modo Claro"
+                        android:focusable="true"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/card_preview_claro"
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:tag="ignorar_tema_dinamico"
+                            app:cardBackgroundColor="#F8F9FA"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="#D1D5DB"
+                            app:strokeWidth="1dp">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <!-- // Badge Circular Central de Check -->
+                                <com.google.android.material.card.MaterialCardView
+                                    android:id="@+id/badge_check_claro"
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:layout_gravity="center"
+                                    android:tag="ignorar_tema_dinamico"
+                                    android:visibility="gone"
+                                    app:cardBackgroundColor="?attr/colorPrimary"
+                                    app:cardCornerRadius="18dp"
+                                    app:cardElevation="2dp"
+                                    app:strokeWidth="0dp">
+
+                                    <ImageView
+                                        android:id="@+id/iv_check_claro"
+                                        android:layout_width="18dp"
+                                        android:layout_height="18dp"
+                                        android:layout_gravity="center"
+                                        android:importantForAccessibility="no"
+                                        android:src="@drawable/ic_check"
+                                        app:tint="#FFFFFF" />
+                                </com.google.android.material.card.MaterialCardView>
+                            </FrameLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/iv_icone_label_claro"
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/ic_sol"
+                                app:tint="?android:attr/textColorSecondary" />
+
+                            <TextView
+                                android:id="@+id/tv_label_claro"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:text="Modo Claro"
+                                android:textColor="?android:attr/textColorSecondary"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- // Opção 2: Modo Escuro -->
+                    <LinearLayout
+                        android:id="@+id/opcao_preview_escuro"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:contentDescription="Selecionar Modo Escuro"
+                        android:focusable="true"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/card_preview_escuro"
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:tag="ignorar_tema_dinamico"
+                            app:cardBackgroundColor="#121216"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="?attr/colorPrimary"
+                            app:strokeWidth="2dp">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <!-- // Badge Circular Central de Check -->
+                                <com.google.android.material.card.MaterialCardView
+                                    android:id="@+id/badge_check_escuro"
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:layout_gravity="center"
+                                    android:visibility="visible"
+                                    app:cardBackgroundColor="?attr/colorPrimary"
+                                    app:cardCornerRadius="18dp"
+                                    app:cardElevation="2dp"
+                                    app:strokeWidth="0dp">
+
+                                    <ImageView
+                                        android:id="@+id/iv_check_escuro"
+                                        android:layout_width="18dp"
+                                        android:layout_height="18dp"
+                                        android:layout_gravity="center"
+                                        android:importantForAccessibility="no"
+                                        android:src="@drawable/ic_check"
+                                        app:tint="#FFFFFF" />
+                                </com.google.android.material.card.MaterialCardView>
+                            </FrameLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/iv_icone_label_escuro"
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/ic_lua"
+                                app:tint="?attr/colorPrimary" />
+
+                            <TextView
+                                android:id="@+id/tv_label_escuro"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:text="Modo Escuro"
+                                android:textColor="?attr/colorPrimary"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- // CARD 2: COR PRINCIPAL (AZUL, VERDE, AMARELO E VERMELHO) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_cor_principal"
+            style="@style/Widget.Aurora.SwitchCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_tema"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:id="@+id/row_cor_principal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- // Cabeçalho Cor Principal -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_icone_cor"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_paleta"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/colorPrimary" />
+
+                    <TextView
+                        android:id="@+id/tv_cor_principal"
+                        style="@style/TextAppearance.Aurora.Subtitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="Cor Principal"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/btn_dropdown_cor"
+                        app:layout_constraintStart_toEndOf="@id/iv_icone_cor"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        style="@style/TextAppearance.Aurora.Body"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="Personalize a cor do aplicativo."
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="11sp"
+                        app:layout_constraintEnd_toStartOf="@id/btn_dropdown_cor"
+                        app:layout_constraintStart_toEndOf="@id/iv_icone_cor"
+                        app:layout_constraintTop_toBottomOf="@id/tv_cor_principal" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_dropdown_cor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:contentDescription="Selecionar cor principal"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:paddingHorizontal="14dp"
+                        android:text="Azul"
+                        android:textAllCaps="false"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"
+                        app:backgroundTint="#1D70F5"
+                        app:cornerRadius="17dp"
+                        app:icon="@drawable/icone_seta_baixo"
+                        app:iconGravity="end"
+                        app:iconPadding="6dp"
+                        app:iconSize="16dp"
+                        app:iconTint="#FFFFFF"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- // Paleta das 4 Cores Circulares -->
+                <LinearLayout
+                    android:id="@+id/container_cores_circulares"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <!-- // 1. Azul -->
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cor_azul"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="center"
+                            android:tag="ignorar_tema_dinamico"
+                            android:clickable="true"
+                            android:contentDescription="Selecionar cor Azul"
+                            android:focusable="true"
+                            app:cardBackgroundColor="#1D70F5"
+                            app:cardCornerRadius="50dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="?attr/colorOnSurface"
+                            app:strokeWidth="2dp">
+
+                            <ImageView
+                                android:id="@+id/check_cor_azul"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:layout_gravity="center"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/ic_check"
+                                app:tint="#FFFFFF" />
+                        </com.google.android.material.card.MaterialCardView>
+                    </FrameLayout>
+
+                    <!-- // 2. Verde -->
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cor_verde"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="center"
+                            android:tag="ignorar_tema_dinamico"
+                            android:clickable="true"
+                            android:contentDescription="Selecionar cor Verde"
+                            android:focusable="true"
+                            app:cardBackgroundColor="#2E7D32"
+                            app:cardCornerRadius="50dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="?attr/colorOnSurface"
+                            app:strokeWidth="0dp">
+
+                            <ImageView
+                                android:id="@+id/check_cor_verde"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:layout_gravity="center"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/ic_check"
+                                android:visibility="gone"
+                                app:tint="#FFFFFF" />
+                        </com.google.android.material.card.MaterialCardView>
+                    </FrameLayout>
+
+                    <!-- // 3. Amarelo -->
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cor_amarelo"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="center"
+                            android:tag="ignorar_tema_dinamico"
+                            android:clickable="true"
+                            android:contentDescription="Selecionar cor Amarelo"
+                            android:focusable="true"
+                            app:cardBackgroundColor="#EAB308"
+                            app:cardCornerRadius="50dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="?attr/colorOnSurface"
+                            app:strokeWidth="0dp">
+
+                            <ImageView
+                                android:id="@+id/check_cor_amarelo"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:layout_gravity="center"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/ic_check"
+                                android:visibility="gone"
+                                app:tint="#121216" />
+                        </com.google.android.material.card.MaterialCardView>
+                    </FrameLayout>
+
+                    <!-- // 4. Vermelho -->
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cor_vermelho"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="center"
+                            android:tag="ignorar_tema_dinamico"
+                            android:clickable="true"
+                            android:contentDescription="Selecionar cor Vermelho"
+                            android:focusable="true"
+                            app:cardBackgroundColor="#DC2626"
+                            app:cardCornerRadius="50dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="?attr/colorOnSurface"
+                            app:strokeWidth="0dp">
+
+                            <ImageView
+                                android:id="@+id/check_cor_vermelho"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:layout_gravity="center"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/ic_check"
+                                android:visibility="gone"
+                                app:tint="#FFFFFF" />
+                        </com.google.android.material.card.MaterialCardView>
+                    </FrameLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- // CARD 3: MODO  MO -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_daltonismo"
+            style="@style/Widget.Aurora.SwitchCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_cor_principal"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- // Switch Ativar/Desativar Daltonismo -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/row_daltonismo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:contentDescription="Modo Daltonismo. Adapte a visualização das cores."
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/iv_icone_daltonismo"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_daltonismo"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/colorPrimary" />
+
+                    <TextView
+                        android:id="@+id/tv_daltonismo"
+                        style="@style/TextAppearance.Aurora.Subtitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="12dp"
+                        android:text="Modo Daltonismo"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/switch_daltonismo"
+                        app:layout_constraintStart_toEndOf="@id/iv_icone_daltonismo"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        style="@style/TextAppearance.Aurora.Body"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="12dp"
+                        android:text="Adapte a visualização das cores."
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="11sp"
+                        app:layout_constraintEnd_toStartOf="@id/switch_daltonismo"
+                        app:layout_constraintStart_toEndOf="@id/iv_icone_daltonismo"
+                        app:layout_constraintTop_toBottomOf="@id/tv_daltonismo" />
+
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/switch_alto_contraste"
+                        android:id="@+id/switch_daltonismo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:clickable="false"
-                        android:contentDescription="Alternar Modo de Alto Contraste"
+                        android:contentDescription="Alternar Modo Daltonismo"
                         android:focusable="false"
                         android:importantForAccessibility="no"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -146,61 +641,236 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <!-- Divisor visual (oculto para o leitor de tela para não interromper a navegação) -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginHorizontal="16dp"
-                    android:alpha="0.1"
-                    android:background="?android:attr/textColorSecondary"
-                    android:importantForAccessibility="no" />
-
-                <!-- ITEM: TAMANHO DA FONTE -->
-                <LinearLayout
-                    android:id="@+id/row_tamanho_fonte"
+                <!-- // Menu de Seleção do Tipo de Daltonismo (WCAG) -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/row_tipo_daltonismo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="12dp">
+                    android:layout_marginTop="12dp">
+
+                    <TextView
+                        android:id="@+id/tv_label_tipo_adaptacao"
+                        style="@style/TextAppearance.Aurora.Body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tipo de adaptação:"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_tipo_daltonismo"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="12dp"
+                        android:contentDescription="Selecionar tipo de adaptação para daltonismo"
+                        android:gravity="start|center_vertical"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:minHeight="0dp"
+                        android:paddingHorizontal="14dp"
+                        android:text="Selecione"
+                        android:textAllCaps="false"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="12sp"
+                        app:cornerRadius="12dp"
+                        app:icon="@drawable/icone_seta_baixo"
+                        app:iconGravity="end"
+                        app:iconSize="16dp"
+                        app:iconTint="?android:attr/textColorSecondary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_label_tipo_adaptacao"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:strokeColor="?android:attr/textColorSecondary"
+                        app:strokeWidth="1dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- // CARD 4: MODO DE ALTO CONTRASTE -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_alto_contraste"
+            style="@style/Widget.Aurora.SwitchCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_daltonismo"
+            app:strokeWidth="0dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/row_alto_contraste"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:contentDescription="Modo de Alto Contraste. Destaca bordas e aumenta a legibilidade das cores."
+                android:focusable="true"
+                android:minHeight="64dp"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/iv_icone_alto_contraste"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_alto_contraste"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="?attr/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/tv_alto_contraste"
+                    style="@style/TextAppearance.Aurora.Subtitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:text="Modo de Alto Contraste"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/switch_alto_contraste"
+                    app:layout_constraintStart_toEndOf="@id/iv_icone_alto_contraste"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    style="@style/TextAppearance.Aurora.Body"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="12dp"
+                    android:text="Destaca bordas e aumenta a legibilidade das cores."
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="11sp"
+                    app:layout_constraintEnd_toStartOf="@id/switch_alto_contraste"
+                    app:layout_constraintStart_toEndOf="@id/iv_icone_alto_contraste"
+                    app:layout_constraintTop_toBottomOf="@id/tv_alto_contraste" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_alto_contraste"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:contentDescription="Alternar Modo de Alto Contraste"
+                    android:focusable="false"
+                    android:importantForAccessibility="no"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- // CARD 5: TAMANHO DA FONTE -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_tamanho_fonte"
+            style="@style/Widget.Aurora.SwitchCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_alto_contraste"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:id="@+id/row_tamanho_fonte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_icone_tamanho_fonte"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_tamanho_texto"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/colorPrimary" />
 
                     <TextView
                         android:id="@+id/tv_tamanho_fonte"
                         style="@style/TextAppearance.Aurora.Subtitle"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
                         android:text="Tamanho da Fonte"
                         android:textColor="?attr/colorOnSurface"
-                        android:textSize="16sp" />
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/iv_icone_tamanho_fonte"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/tv_subtitulo_tamanho_fonte"
                         style="@style/TextAppearance.Aurora.Body"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
                         android:layout_marginTop="2dp"
-                        android:text="Ajuste a escala dos textos para facilitar a leitura"
+                        android:text="Ajuste a escala dos textos para facilitar a leitura."
                         android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="12sp" />
+                        android:textSize="11sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/iv_icone_tamanho_fonte"
+                        app:layout_constraintTop_toBottomOf="@id/tv_tamanho_fonte" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <com.google.android.material.slider.Slider
                         android:id="@+id/slider_tamanho_fonte"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
                         android:contentDescription="Controle deslizante para alterar o tamanho da fonte"
                         android:stepSize="1"
+                        android:value="1"
                         android:valueFrom="0"
                         android:valueTo="3"
                         app:tickVisible="true" />
-                </LinearLayout>
 
+                    <TextView
+                        android:id="@+id/tv_valor_tamanho_fonte"
+                        style="@style/TextAppearance.Aurora.Subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="16sp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- SEÇÃO 2: INTERAÇÃO E RESPOSTA -->
+        <!-- // ========================================================= -->
+        <!-- // SEÇÃO 2: INTERAÇÃO E FEEDBACK                            -->
+        <!-- // ========================================================= -->
         <TextView
             android:id="@+id/tv_secao_interacao"
             style="@style/TextAppearance.Aurora.Title"
@@ -213,14 +883,15 @@
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/card_visual" />
+            app:layout_constraintTop_toBottomOf="@id/card_tamanho_fonte" />
 
+        <!-- // CARD 6: VIBRAÇÃO -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_interacao"
+            android:id="@+id/card_vibracao"
+            style="@style/Widget.Aurora.SwitchCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:cardBackgroundColor="?attr/colorSurface"
+            android:layout_marginTop="10dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -228,131 +899,151 @@
             app:layout_constraintTop_toBottomOf="@id/tv_secao_interacao"
             app:strokeWidth="0dp">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/row_feedback_tatil"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingVertical="8dp">
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:contentDescription="Vibração. Vibra o celular ao acionar o botão SOS e alertas."
+                android:focusable="true"
+                android:minHeight="64dp"
+                android:padding="16dp">
 
-                <!-- ITEM: FEEDBACK TÁTIL (VIBRAÇÃO) -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/row_feedback_tatil"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/iv_icone_vibracao"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_vibracao"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="?attr/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/tv_feedback_tatil"
+                    style="@style/TextAppearance.Aurora.Subtitle"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:contentDescription="Vibração. Vibra o celular ao acionar o botão SOS e alertas."
-                    android:focusable="true"
-                    android:minHeight="56dp"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="12dp">
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:text="Vibração"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/switch_feedback_tatil"
+                    app:layout_constraintStart_toEndOf="@id/iv_icone_vibracao"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tv_feedback_tatil"
-                        style="@style/TextAppearance.Aurora.Subtitle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:text="Vibração"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="16sp"
-                        app:layout_constraintEnd_toStartOf="@id/switch_feedback_tatil"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        style="@style/TextAppearance.Aurora.Body"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginEnd="16dp"
-                        android:text="Vibra o celular ao acionar o botão SOS e alertas"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toStartOf="@id/switch_feedback_tatil"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_feedback_tatil" />
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/switch_feedback_tatil"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="false"
-                        android:clickable="false"
-                        android:contentDescription="Alternar feedback por vibração"
-                        android:focusable="false"
-                        android:importantForAccessibility="no"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <!-- Divisor visual (oculto para o leitor de tela para não interromper a navegação) -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginHorizontal="16dp"
-                    android:alpha="0.1"
-                    android:background="?android:attr/textColorSecondary"
-                    android:importantForAccessibility="no" />
-
-                <!-- ITEM: LEITOR DE TELA (TALKBACK) -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/row_leitor_tela"
-                    android:layout_width="match_parent"
+                <TextView
+                    style="@style/TextAppearance.Aurora.Body"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:contentDescription="Suporte a TalkBack. Otimiza a leitura de voz dos botões e alertas do app."
-                    android:focusable="true"
-                    android:minHeight="56dp"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="12dp">
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="12dp"
+                    android:text="Vibra o celular ao acionar o botão SOS e alertas."
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="11sp"
+                    app:layout_constraintEnd_toStartOf="@id/switch_feedback_tatil"
+                    app:layout_constraintStart_toEndOf="@id/iv_icone_vibracao"
+                    app:layout_constraintTop_toBottomOf="@id/tv_feedback_tatil" />
 
-                    <TextView
-                        android:id="@+id/tv_leitor_tela"
-                        style="@style/TextAppearance.Aurora.Subtitle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:text="Suporte a TalkBack"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@id/switch_leitor_tela"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_feedback_tatil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:clickable="false"
+                    android:contentDescription="Alternar feedback por vibração"
+                    android:focusable="false"
+                    android:importantForAccessibility="no"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-                    <TextView
-                        style="@style/TextAppearance.Aurora.Body"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginEnd="16dp"
-                        android:text="Otimiza a leitura de voz dos botões e alertas do app"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toStartOf="@id/switch_leitor_tela"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_leitor_tela" />
+        <!-- // CARD 7: SUPORTE A TALKBACK -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_talkback"
+            style="@style/Widget.Aurora.SwitchCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_vibracao"
+            app:strokeWidth="0dp">
 
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/switch_leitor_tela"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="false"
-                        android:clickable="false"
-                        android:contentDescription="Alternar otimização para leitor de tela"
-                        android:focusable="false"
-                        android:importantForAccessibility="no"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/row_talkback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:contentDescription="Suporte a TalkBack. Otimiza a leitura de voz dos botões e alertas do app."
+                android:focusable="true"
+                android:minHeight="64dp"
+                android:padding="16dp">
 
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/iv_icone_talkback"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_acessibilidade"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="?attr/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/tv_leitor_tela"
+                    style="@style/TextAppearance.Aurora.Subtitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:text="Suporte a TalkBack"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/switch_leitor_tela"
+                    app:layout_constraintStart_toEndOf="@id/iv_icone_talkback"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    style="@style/TextAppearance.Aurora.Body"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="12dp"
+                    android:text="Otimiza a leitura de voz dos botões e alertas do app."
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="11sp"
+                    app:layout_constraintEnd_toStartOf="@id/switch_leitor_tela"
+                    app:layout_constraintStart_toEndOf="@id/iv_icone_talkback"
+                    app:layout_constraintTop_toBottomOf="@id/tv_leitor_tela" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_leitor_tela"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:clickable="false"
+                    android:contentDescription="Alternar otimização para leitor de tela"
+                    android:focusable="false"
+                    android:importantForAccessibility="no"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
