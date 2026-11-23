@@ -1,29 +1,23 @@
 package com.equipe1.aurora.domain.model;
 
 import com.google.gson.annotations.SerializedName;
-import org.osmdroid.util.GeoPoint;
-import java.util.List;
 
 public class BairroPoligono {
 
-    @SerializedName("nome_bairro")
+    @SerializedName("idBairro")
+    private Long idBairro;
+
+    @SerializedName("nomeBairro")
     private String nomeBairro;
 
-    @SerializedName("nivel_risco")
+    @SerializedName("nivelRisco")
     private String nivelRisco;
 
-    @SerializedName("coordenadas_vertices")
-    private List<GeoPoint> coordenadasVertices; // Mapeado automaticamente pelo Gson!
+    @SerializedName("coordenadasVertices")
+    private String coordenadasVertices;
 
-    public String getNomeBairro() {
-        return nomeBairro;
-    }
-
-    public String getNivelRisco() {
-        return nivelRisco;
-    }
-
-    public List<GeoPoint> getCoordenadasVertices() {
-        return coordenadasVertices;
-    }
+    public Long getIdBairro() { return idBairro; }
+    public String getNomeBairro() { return nomeBairro; }
+    public String getNivelRisco() { return nivelRisco; }
+    public String getCoordenadasVertices() { return coordenadasVertices; }
 }

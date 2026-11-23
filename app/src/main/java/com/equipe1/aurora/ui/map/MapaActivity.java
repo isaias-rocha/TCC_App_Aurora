@@ -95,9 +95,9 @@ public class MapaActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     for (BairroPoligono bairro : response.body()) {
                         try {
-                            List<GeoPoint> pontosGeo = bairro.getCoordenadasVertices();
+                            List<GeoPoint> pontosGeo = converterStringParaGeoPoints(bairro.getCoordenadasVertices());
 
-                            if (pontosGeo != null && !pontosGeo.isEmpty()) {
+                            if (!pontosGeo.isEmpty()) {
                                 Polygon poligono = new Polygon(map);
                                 poligono.setPoints(pontosGeo);
                                 poligono.setTitle("Bairro: " + bairro.getNomeBairro() + " (Risco: " + bairro.getNivelRisco() + ")");
@@ -170,6 +170,26 @@ public class MapaActivity extends AppCompatActivity {
                 Log.e("MAPA_ERRO", "Falha ao carregar crimes: " + t.getMessage());
             }
         });
+    }
+
+    private List<GeoPoint> converterStringParaGeoPoints(String coordsStr) {
+        List<GeoPoint> pontos = new ArrayList<>();
+        if (coordsStr == null || coordsStr.trim().isEmpty()) {
+            return pontos;
+        }
+
+        String[] vertices = coordsStr.split(";");
+        for (String vertice : vertices) {
+            String[] latLon = vertice.split(",");
+            if (latLon.length == 2) {
+                try {
+                    double lat = Double.parseDouble(latLon[0].trim());
+                    double lon = Double.parseDouble(latLon[1].trim());
+                    pontos.add(new GeoPoint(lat, lon));
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+        return pontos;
     }
 
     private void configurarIconePorCrime(Marker marker, String tipoCrime) {

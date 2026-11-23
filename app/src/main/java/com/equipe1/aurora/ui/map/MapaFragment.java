@@ -301,7 +301,7 @@ public class MapaFragment extends Fragment {
     // 5. TOQUES NO MAPA E PESQUISA
     // =========================================================================
 
-    private void setupMapClickListener() {
+    private void    setupMapClickListener() {
         MapEventsReceiver mapEventsReceiver = new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
@@ -323,7 +323,8 @@ public class MapaFragment extends Fragment {
 
             @Override
             public boolean longPressHelper(GeoPoint p) {
-                return false;
+                abrirDialogoReportarOcorrencia(p);
+                return true;
             }
         };
 
@@ -765,13 +766,13 @@ public class MapaFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     for (BairroPoligono bairro : response.body()) {
 
-                        // ✅ Pega a lista de GeoPoints diretamente da classe de modelo
-                        List<GeoPoint> pontosGeo = bairro.getCoordenadasVertices();
+                        // Converte a String "lat,lon;lat,lon..." em List<GeoPoint>
+                        List<GeoPoint> pontosGeo = converterStringParaGeoPoints(bairro.getCoordenadasVertices());
 
                         if (pontosGeo == null || pontosGeo.isEmpty()) continue;
 
                         Polygon poligono = new Polygon(map);
-                        poligono.setPoints(pontosGeo); // Passa a lista direto para o OSMDroid
+                        poligono.setPoints(pontosGeo);
                         poligono.setTitle("Bairro: " + bairro.getNomeBairro() + " (Risco: " + bairro.getNivelRisco() + ")");
 
                         String nivelRisco = bairro.getNivelRisco() != null ? bairro.getNivelRisco().toUpperCase() : "MEDIO";
@@ -805,6 +806,25 @@ public class MapaFragment extends Fragment {
                 Log.e("MAPA_ERRO", "Falha na conexão com a API de bairros: " + t.getMessage());
             }
         });
+    }
+    private List<GeoPoint> converterStringParaGeoPoints(String coordsStr) {
+        List<GeoPoint> pontos = new ArrayList<>();
+        if (coordsStr == null || coordsStr.trim().isEmpty()) {
+            return pontos;
+        }
+
+        String[] vertices = coordsStr.split(";");
+        for (String vertice : vertices) {
+            String[] latLon = vertice.split(",");
+            if (latLon.length == 2) {
+                try {
+                    double lat = Double.parseDouble(latLon[0].trim());
+                    double lon = Double.parseDouble(latLon[1].trim());
+                    pontos.add(new GeoPoint(lat, lon));
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+        return pontos;
     }
 
     // 3. Marcadores de Ocorrências e Crimes Importados
@@ -880,5 +900,81 @@ public class MapaFragment extends Fragment {
             map.getOverlays().remove(overlay);
         }
         camadasRiscosList.clear();
+    }
+
+    // 4. Registra Ocorrencia
+
+    private void abrirDialogoReportarOcorrencia(GeoPoint ponto) {
+        if (!isAdded() || getContext() == null) return;
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(requireContext());
+        builder.setTitle("Reportar Ocorrência");
+
+        LinearLayout layout = new LinearLayout(requireContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(50, 30, 50, 10);
+
+        android.widget.Spinner spinnerTipo = new android.widget.Spinner(requireContext());
+        String[] tipos = {"Roubo", "Furto", "Assalto", "Atividade Suspeita", "Iluminação Precária"};
+        android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<>(
+                requireContext(), android.R.layout.simple_spinner_dropdown_item, tipos);
+        spinnerTipo.setAdapter(adapter);
+        layout.addView(spinnerTipo);
+
+        EditText etDescricao = new EditText(requireContext());
+        etDescricao.setHint("Descreva o que aconteceu...");
+        layout.addView(etDescricao);
+
+        builder.setView(layout);
+
+        builder.setPositiveButton("Enviar", (dialog, which) -> {
+            String tipoSelecionado = spinnerTipo.getSelectedItem().toString();
+            String descricao = etDescricao.getText().toString().trim();
+            if (descricao.isEmpty()) descricao = "Reportado por usuário no mapa";
+
+            enviarOcorrenciaParaApi(tipoSelecionado, descricao, ponto);
+        });
+
+        builder.setNegativeButton("Cancelar", null);
+        builder.show();
+    }
+
+    private void enviarOcorrenciaParaApi(String tipo, String descricao, GeoPoint ponto) {
+        OcorrenciaCrime nova = new OcorrenciaCrime(tipo, descricao, ponto.getLatitude(), ponto.getLongitude());
+
+        ApiClient.getApiService().registrarCrime(nova).enqueue(new Callback<OcorrenciaCrime>() {
+            @Override
+            public void onResponse(Call<OcorrenciaCrime> call, Response<OcorrenciaCrime> response) {
+                if (!isAdded() || getContext() == null) return;
+
+                if (response.isSuccessful() && response.body() != null) {
+                    Toast.makeText(getContext(), "Ocorrência registrada com sucesso!", Toast.LENGTH_SHORT).show();
+
+                    // Desenha o novo pino imediatamente no mapa
+                    Marker marker = new Marker(map);
+                    marker.setPosition(ponto);
+                    marker.setTitle(tipo);
+                    marker.setSnippet(descricao);
+                    marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                    configurarIconePorCrime(marker, tipo);
+
+                    map.getOverlays().add(marker);
+                    camadasRiscosList.add(marker);
+
+                    // Recarrega os polígonos caso o distrito tenha mudado de nível de risco
+                    carregarPoligonosBairros();
+                    map.invalidate();
+                } else {
+                    Toast.makeText(getContext(), "Erro ao registrar: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OcorrenciaCrime> call, Throwable t) {
+                if (isAdded() && getContext() != null) {
+                    Toast.makeText(getContext(), "Falha de conexão: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
