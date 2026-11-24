@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Dispositivos"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textColor="?attr/colorPrimary"
         android:textSize="24sp"
         android:textStyle="bold" />
 
