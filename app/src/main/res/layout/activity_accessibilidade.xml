@@ -50,7 +50,7 @@
             android:layout_marginTop="16dp"
             android:accessibilityHeading="true"
             android:text="Acessibilidade"
-            android:textColor="?attr/colorOnBackground"
+            android:textColor="?attr/colorPrimary"
             android:textSize="28sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -459,7 +459,7 @@
                     <!-- // 2. Verde -->
                     <FrameLayout
                         android:layout_width="0dp"
-                        android:layout_height="44dp"
+                        android:layout_height="48dp"
                         android:layout_weight="1">
 
                         <com.google.android.material.card.MaterialCardView
@@ -492,7 +492,7 @@
                     <!-- // 3. Amarelo -->
                     <FrameLayout
                         android:layout_width="0dp"
-                        android:layout_height="44dp"
+                        android:layout_height="48dp"
                         android:layout_weight="1">
 
                         <com.google.android.material.card.MaterialCardView
@@ -525,7 +525,7 @@
                     <!-- // 4. Vermelho -->
                     <FrameLayout
                         android:layout_width="0dp"
-                        android:layout_height="44dp"
+                        android:layout_height="48dp"
                         android:layout_weight="1">
 
                         <com.google.android.material.card.MaterialCardView
@@ -558,7 +558,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- // CARD 3: MODO  MO -->
+        <!-- // CARD 3: MODO DALTONISMO -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_daltonismo"
             style="@style/Widget.Aurora.SwitchCard"

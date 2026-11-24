@@ -6,6 +6,7 @@ import com.equipe1.aurora.domain.model.Contato;
 import com.equipe1.aurora.domain.model.OcorrenciaCrime;
 import com.equipe1.aurora.infra.dto.ConsultaResponseDto;
 import com.equipe1.aurora.infra.dto.UsuarioDto;
+import com.equipe1.aurora.infra.dto.ViaCepResponseDto;
 import com.equipe1.aurora.infra.local.entity.AlertaSosEntity;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public interface ApiService {
 
@@ -51,7 +53,7 @@ public interface ApiService {
             @Query("limite") Integer limite
     );
 
-    // Endpoint adicionado para sincronização de alertas locais gerados offline no Room[cite: 118, 119]
+    // Endpoint adicionado para sincronização de alertas locais gerados offline no Room
     @Headers("X-API-Key: equipe01-aurora")
     @POST("sincronizar_sos.php")
     Call<Void> sincronizarAlertaOffline(@Body AlertaSosEntity alerta);
@@ -90,4 +92,11 @@ public interface ApiService {
 
     @GET("api/mapa/crimes")
     Call<List<OcorrenciaCrime>> listarCrimes();
+
+    // =========================================================================
+    // BLOCO 5: CONSULTA DE ENDEREÇO EXTERNA (VIACEP)
+    // =========================================================================
+    // @Url permite passar a URL completa da ViaCEP sobrescrevendo a BASE_URL padrão
+    @GET
+    Call<ViaCepResponseDto> buscarEnderecoPorCep(@Url String urlCompleta);
 }

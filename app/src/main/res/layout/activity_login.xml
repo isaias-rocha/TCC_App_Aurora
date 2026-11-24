@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:hint="@string/login_hint_email"
-            app:endIconDrawable="@drawable/ic_email"
+            app:startIconDrawable="@drawable/ic_email"
             app:endIconMode="custom"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -94,6 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="@string/login_hint_senha"
+            app:startIconDrawable="@drawable/ic_cadeado"
             app:endIconContentDescription="@string/common_desc_alternar_senha"
             app:endIconMode="password_toggle"
             app:layout_constraintEnd_toEndOf="parent"
@@ -130,7 +131,7 @@
             android:layout_height="48dp"
             android:clickable="true"
             android:focusable="true"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:text="@string/login_esqueceu_senha"
             android:textColor="?attr/colorPrimary"
             android:textSize="14sp"
@@ -176,6 +177,20 @@
             app:layout_constraintTop_toBottomOf="@id/btn_logar"
             app:layout_constraintWidth_max="320dp"
             app:strokeColor="?attr/colorOutline" />
+
+        <!-- BOTÃO LOGAR -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_teste"
+            style="@style/Widget.Aurora.Button"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="36dp"
+            android:contentDescription="@string/login_desc_btn_entrar"
+            android:text="Entrar direto para teste"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_logar_google"
+            app:layout_constraintWidth_max="320dp" />
 
         <!-- LINK PARA CADASTRO -->
         <LinearLayout

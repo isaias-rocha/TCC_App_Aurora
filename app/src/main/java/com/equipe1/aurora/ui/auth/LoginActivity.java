@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText etEmail, etSenha;
     private CheckBox checkLembrar;
     private TextView tvEsqueceuSenha, tvIrParaCadastro;
-    private MaterialButton btnLogar, btnLogarGoogle;
+    private MaterialButton btnLogar, btnLogarGoogle, btnTeste;
 
     // --- MVVM e Google Auth ---
     private AuthViewModel viewModel;
@@ -119,6 +119,12 @@ public class LoginActivity extends AppCompatActivity {
 
             viewModel.realizarLogin(email, senha, checkLembrar.isChecked(), preferences);
         });
+
+        // botao pde teste para navegar nas outras telas de teste
+        btnTeste.setOnClickListener(v-> {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+        });
 /*
         btnLogarGoogle.setOnClickListener(v -> {
             Intent signInIntent = googleSignInClient.getSignInIntent();
@@ -150,6 +156,7 @@ public class LoginActivity extends AppCompatActivity {
         checkLembrar = findViewById(R.id.check_lembrarCredenciais);
         tvEsqueceuSenha = findViewById(R.id.tv_ir_para_esqueceuSenha);
         btnLogar = findViewById(R.id.btn_logar);
+        btnTeste = findViewById(R.id.btn_teste);
         btnLogarGoogle = findViewById(R.id.btn_logar_google);
         tvIrParaCadastro = findViewById(R.id.tv_ir_para_cadastro);
     }
