@@ -4,14 +4,14 @@ import com.google.gson.annotations.SerializedName;
 
 public class OcorrenciaCrime {
 
-    @SerializedName("tipo_crime") // Nome da chave vinda da API JSON
+    @SerializedName("tipoCrime")
     private String tipoCrime;
 
     @SerializedName("descricao")
     private String descricao;
 
     @SerializedName("latitude")
-    private double latitude; // Gson converte string ou number JSON para double
+    private double latitude;
 
     @SerializedName("longitude")
     private double longitude;
@@ -19,7 +19,14 @@ public class OcorrenciaCrime {
     // Construtor vazio (necessário para o Gson)
     public OcorrenciaCrime() {}
 
-    // Getters e Setters retornando double nativo
+    // Construtor usado para enviar uma nova ocorrência
+    public OcorrenciaCrime(String tipoCrime, String descricao, double latitude, double longitude) {
+        this.tipoCrime = tipoCrime;
+        this.descricao = descricao;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public String getTipoCrime() {
         return tipoCrime;
     }

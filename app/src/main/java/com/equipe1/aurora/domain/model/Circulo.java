@@ -1,15 +1,18 @@
 package com.equipe1.aurora.domain.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.annotations.SerializedName;
 
 public class Circulo {
-    public final String id;
-    public final String nome;
-    public final List<Membro> membros = new ArrayList<>();
+    @SerializedName("idCirculo")
+    private Long idCirculo;
 
-    public Circulo(String id, String nome) {
-        this.id = id;
-        this.nome = nome;
-    }
+    @SerializedName("codigoConvite")
+    private String codigoConvite;
+
+    @SerializedName("nome")
+    private String nome;
+
+    public Long getIdCirculo() { return idCirculo; }
+    public String getCodigoConvite() { return codigoConvite; }
+    public String getNome() { return nome; }
 }
