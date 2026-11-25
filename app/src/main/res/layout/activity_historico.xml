@@ -1,68 +1,228 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/splash_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp"
-    tools:context=".ui.history.HistoricoActivity">
+    android:padding="24dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Histórico"
-        style="@style/TextAppearance.Aurora.Title"
-        android:textSize="22sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Suas últimas ocorrências e rotas."
-        style="@style/TextAppearance.Aurora.Subtitle"
-        android:textSize="14sp" />
-
-    <!-- Filter Chips -->
-    <LinearLayout
+    <!-- ========================================================================= -->
+    <!-- BLOCO 1: CABEÇALHO (BOTAO VOLTAR, TÍTULOS E COMPARTILHAR) -->
+    <!-- ========================================================================= -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="16dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp">
 
-        <Button
-            android:layout_width="wrap_content"
+        <!-- Botão Voltar -->
+        <ImageButton
+            android:id="@+id/btn_voltar"
+            android:layout_width="48dp"
             android:layout_height="48dp"
-            android:backgroundTint="@color/cor_primaria"
-            android:text="Todos"
-            style="@style/TextAppearance.Aurora.Body"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp" />
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/common_voltar_tela_anterior"
+            android:focusable="true"
+            android:src="@drawable/ic_voltar"
+            app:tint="?attr/colorOnSurface" />
 
-        <Button
+        <!-- Botão Compartilhar / Exportar -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_compartilhar"
+            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginStart="8dp"
-            android:backgroundTint="#1E293B"
-            android:text="Rotas"
-            style="@style/TextAppearance.Aurora.Body"
-            android:textColor="#94A3B8"
-            android:textSize="12sp" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@id/btn_voltar"
+            android:text="Compartilhar"
+            android:textAllCaps="false"
+            android:textSize="13sp"
+            app:icon="@android:drawable/ic_menu_share"
+            app:iconGravity="textStart"
+            app:iconPadding="6dp"
+            app:iconTint="?attr/colorPrimary" />
 
-        <Button
+        <!-- Títulos da Tela -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_voltar"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_titulo_cadastro"
+                style="@style/TextAppearance.Aurora.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/historico_titulo"
+                android:textColor="?attr/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tv_subtitulo_cadastro"
+                style="@style/TextAppearance.Aurora.Subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/historico_subtitulo"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- ========================================================================= -->
+    <!-- BLOCO 2: MAPA INTERATIVO (OPENSTREETMAP - OSM) -->
+    <!-- ========================================================================= -->
+    <org.osmdroid.views.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_marginBottom="12dp" />
+
+    <!-- ========================================================================= -->
+    <!-- BLOCO 3: FILTROS PRINCIPAIS (TIPO DE REGISTRO) -->
+    <!-- ========================================================================= -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupFiltros"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginStart="8dp"
-            android:backgroundTint="#1E293B"
-            style="@style/TextAppearance.Aurora.Body"
-            android:text="Alertas"
-            android:textColor="#94A3B8"
-            android:textSize="12sp" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            app:singleSelection="true">
 
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipTodos"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Todos" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipSos"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alertas SOS" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipOcorrencias"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ocorrências" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipRotas"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rotas" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_limpar_filtro"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Limpar filtros"
+                android:textAllCaps="false"
+                android:textColor="@color/vermelho_alerta"
+                android:visibility="gone"
+                app:icon="@android:drawable/ic_menu_close_clear_cancel"
+                app:iconGravity="textStart"
+                app:iconPadding="4dp"
+                app:iconTint="@color/vermelho_alerta"
+                tools:visibility="visible" />
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <!-- ========================================================================= -->
+    <!-- BLOCO 4: SUBFILTROS DE PERÍODO (DINÂMICOS) -->
+    <!-- ========================================================================= -->
+    <HorizontalScrollView
+        android:id="@+id/scrollPeriodo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:scrollbars="none"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupPeriodo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipPeriodoTodos"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Qualquer data" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipHoje"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hoje" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipOntem"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ontem" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipEstaSemana"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Últimos 7 dias" />
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <!-- ========================================================================= -->
+    <!-- BLOCO 5: INDICADOR DE CARREGAMENTO E ESTADOS DE TELA -->
+    <!-- ========================================================================= -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvStateVazio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:text="Nenhum registro encontrado no histórico."
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?attr/colorOutline"
+        android:visibility="gone" />
+
+    <!-- ========================================================================= -->
+    <!-- BLOCO 6: LISTA RECYCLERVIEW DO HISTÓRICO -->
+    <!-- ========================================================================= -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHistorico"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
 </LinearLayout>

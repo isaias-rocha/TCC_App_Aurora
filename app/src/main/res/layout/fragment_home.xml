@@ -12,312 +12,604 @@
         android:layout_height="wrap_content"
         android:padding="24dp">
 
-        <!-- Saudação usuario -->
-        <TextView
-            android:id="@+id/tv_greeting"
-            style="@style/TextAppearance.Aurora.Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Olá, Usuário!"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@id/img_profile"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_subtitle"
-            style="@style/TextAppearance.Aurora.Subtitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Que bom te ver por aqui."
-            android:textColor="#94A3B8"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@id/img_profile"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_greeting" />
-
-        <!-- Foto de Perfil Central -->
-
-        <!-- BARRA DE PESQUISA -->
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/img_profile"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/card"
-            android:padding="4dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_profile"
-            app:layout_constraintBottom_toTopOf="@+id/search_bar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
-
+        <!-- CABEÇALHO DO PERFIL -->
         <LinearLayout
-            android:id="@+id/search_bar"
+            android:id="@+id/ll_header_profile"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:background="@drawable/card"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_subtitle"
-            tools:layout_editor_absoluteX="24dp">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/etSearch"
+            <!-- Foto de Perfil -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/img_foto_perfil"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/card"
+                android:importantForAccessibility="no"
+                android:padding="4dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_perfil2"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
+
+            <!-- Bloco de Textos -->
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
                 android:layout_weight="1"
-                android:background="@null"
-                android:hint="Pesquisar lugares, amigos..."
-                android:paddingStart="12dp"
-                android:textColor="?android:attr/textColorPrimary"
-                android:textColorHint="#94A3B8"
-                android:textSize="14sp" />
+                android:clickable="true"
+                android:contentDescription="@string/home_desc_header_profile"
+                android:focusable="true"
+                android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_search"
-                app:tint="#94A3B8" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:importantForAccessibility="no"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_ola"
+                        style="@style/TextAppearance.Aurora.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:importantForAccessibility="no"
+                        android:text="@string/home_ola"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_nome_usuario"
+                        style="@style/TextAppearance.Aurora.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:ellipsize="end"
+                        android:importantForAccessibility="no"
+                        android:maxLines="1"
+                        android:text="@string/home_nome_usuario"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_subtitulo"
+                    style="@style/TextAppearance.Aurora.Subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:importantForAccessibility="no"
+                    android:text="@string/home_subtitulo_boas_vindas"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <!-- Ícone de Notificação -->
+            <ImageButton
+                android:id="@+id/btn_notificacao"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/home_desc_notificacao"
+                android:padding="12dp"
+                android:src="@drawable/ic_notificacao"
+                app:tint="?attr/colorOnSurface" />
+
         </LinearLayout>
+
+        <!-- BARRA DE PESQUISA -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/search_bar"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="36dp"
+            app:cardBackgroundColor="?attr/colorSurface"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_header_profile"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_pesquisa"
+                    app:tint="?attr/colorOnSurfaceVariant" />
+
+                <EditText
+                    android:id="@+id/et_pesquisa"
+                    style="@style/TextAppearance.Aurora.Body"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:autofillHints="name"
+                    android:background="@null"
+                    android:hint="@string/home_hint_pesquisa"
+                    android:inputType="text"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textColorHint="?attr/colorOnSurfaceVariant"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- CARD DO MAPA -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_map_preview"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_width="0dp"
+            android:layout_height="300dp"
             android:layout_marginTop="24dp"
-            app:cardBackgroundColor="#1E293B"
+            app:cardBackgroundColor="?attr/colorSurface"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/search_bar">
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <!-- O Mapa ao fundo -->
                 <org.osmdroid.views.MapView
-                    android:id="@+id/map_preview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <!-- Camada invisível por cima para receber o clique -->
-                <View
-                    android:id="@+id/view_map_click_overlay"
+                    android:id="@+id/mapa_preview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:contentDescription="card do mapa"
+                    android:importantForAccessibility="no" />
+
+                <View
+                    android:id="@+id/view_mapa_clique_sobreposicao"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
+                    android:contentDescription="@string/home_desc_mapa_preview"
                     android:focusable="true" />
             </FrameLayout>
-
         </com.google.android.material.card.MaterialCardView>
 
-
-        <!-- ATALHOS: Casa, Trabalho, Adicionar -->
+        <!-- TÍTULO SEÇÃO: NAVEGAÇÃO RÁPIDA -->
         <TextView
-            android:id="@+id/tv_friends_title"
+            android:id="@+id/tv_secoes_title"
+            style="@style/TextAppearance.Aurora.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            android:text="Amigos próximos"
-            android:textColor="#FFFFFF"
+            android:layout_marginTop="32dp"
+            android:accessibilityHeading="true"
+            android:text="@string/home_titulo_navegacao_rapida"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ll_shortcuts" />
+            app:layout_constraintTop_toBottomOf="@id/card_map_preview" />
 
-
-        <!-- SEÇÃO: AMIGOS PRÓXIMOS -->
-        <TextView
-            android:id="@+id/tv_friends_see_all"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ver todos"
-            android:textColor="#6C5CE7"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@id/tv_friends_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_friends_title" />
-
+        <!-- MENU HORIZONTAL DE SEÇÕES -->
         <HorizontalScrollView
-            android:layout_width="match_parent"
+            android:id="@+id/hsv_secoes"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:scrollbars="none"
-            app:layout_constraintTop_toBottomOf="@id/tv_friends_title">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_secoes_title">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <!-- Amigo 1 -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                <!-- Card: Rotas Salvas -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btn_rotas_salvas"
+                    android:layout_width="140dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="12dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/home_desc_btn_rotas_salvas"
+                    android:focusable="true"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="?attr/colorPrimary"
+                    app:strokeWidth="1.5dp">
 
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_profile_user"
-                        android:tint="@color/texto"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:importantForAccessibility="no"
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="contato"
-                        android:textColor="#FFFFFF"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_localizacao"
+                            app:tint="?attr/colorPrimary" />
 
-                    <!-- distância -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="321 m"
-                        android:textColor="#94A3B8"
-                        android:textSize="10sp" />
-                </LinearLayout>
+                        <TextView
+                            style="@style/TextAppearance.Aurora.Subtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:importantForAccessibility="no"
+                            android:text="@string/home_rotas_salvas"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            style="@style/TextAppearance.Aurora.Body"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:importantForAccessibility="no"
+                            android:text="@string/home_subtitulo_rotas_salvas"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Card: Histórico -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btn_historico"
+                    android:layout_width="140dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="12dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/home_desc_btn_historico"
+                    android:focusable="true"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="?attr/colorPrimary"
+                    app:strokeWidth="1.5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:importantForAccessibility="no"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_historico"
+                            app:tint="?attr/colorPrimary" />
+
+                        <TextView
+                            style="@style/TextAppearance.Aurora.Subtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:importantForAccessibility="no"
+                            android:text="@string/home_historico"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            style="@style/TextAppearance.Aurora.Body"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:importantForAccessibility="no"
+                            android:text="@string/home_subtitulo_historico"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Card: Dispositivo -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btn_secao_dispositivo"
+                    android:layout_width="140dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="12dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/home_desc_btn_dispositivos"
+                    android:focusable="true"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="?attr/colorPrimary"
+                    app:strokeWidth="1.5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:importantForAccessibility="no"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_hardware"
+                            app:tint="?attr/colorPrimary" />
+
+                        <TextView
+                            style="@style/TextAppearance.Aurora.Subtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:importantForAccessibility="no"
+                            android:text="@string/home_dispositivos"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            style="@style/TextAppearance.Aurora.Body"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:importantForAccessibility="no"
+                            android:text="@string/home_subtitulo_dispositivos"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Card: Círculos -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btn_secao_circulos"
+                    android:layout_width="140dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="12dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/home_desc_btn_circulos"
+                    android:focusable="true"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="?attr/colorPrimary"
+                    app:strokeWidth="1.5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:importantForAccessibility="no"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_circulo"
+                            app:tint="?attr/colorPrimary" />
+
+                        <TextView
+                            style="@style/TextAppearance.Aurora.Subtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:importantForAccessibility="no"
+                            android:text="@string/home_circulos"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            style="@style/TextAppearance.Aurora.Body"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:importantForAccessibility="no"
+                            android:text="@string/home_subtitulo_circulos"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
         </HorizontalScrollView>
 
-        <!-- Lista de atalhos -->
-        <LinearLayout
-            android:id="@+id/ll_shortcuts"
-            android:layout_width="match_parent"
+        <!-- SEÇÃO: MEUS CÍRCULOS -->
+        <TextView
+            android:id="@+id/tv_circulos_title"
+            style="@style/TextAppearance.Aurora.Subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="28dp"
+            android:accessibilityHeading="true"
+            android:gravity="center_vertical"
+            android:text="@string/home_titulo_meus_circulos"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hsv_secoes" />
+
+        <TextView
+            android:id="@+id/tv_gerenciar_circulos"
+            style="@style/TextAppearance.Aurora.Subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:contentDescription="@string/home_desc_gerenciar_circulos"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:text="@string/home_btn_gerenciar"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_circulos_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_circulos_title" />
+
+        <HorizontalScrollView
+            android:id="@+id/hsv_circulos_usuario"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:weightSum="3"
-            app:layout_constraintTop_toBottomOf="@id/card_map_preview">
+            android:layout_marginTop="12dp"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_circulos_title">
 
-
-            <!-- Item: Casa -->
             <LinearLayout
-                android:id="@+id/btn_shortcut_casa"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/card_icons"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="12dp">
+                android:id="@+id/container_circulos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_home"
-                    app:tint="@color/texto" />
+                <!-- Card Criar Novo Círculo -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_add_circulo"
+                    android:layout_width="120dp"
+                    android:layout_height="85dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/home_desc_add_circulo"
+                    android:focusable="true"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="?attr/colorPrimary"
+                    app:strokeWidth="1dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Casa"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:importantForAccessibility="no"
+                        android:orientation="vertical"
+                        android:padding="8dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Adicionar"
-                    android:textColor="#94A3B8"
-                    android:textSize="10sp" />
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_circulo_adicionar"
+                            app:tint="?attr/colorPrimary" />
+
+                        <TextView
+                            style="@style/TextAppearance.Aurora.Body"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:importantForAccessibility="no"
+                            android:text="@string/home_novo_circulo"
+                            android:textColor="?attr/colorPrimary"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
             </LinearLayout>
+        </HorizontalScrollView>
 
+        <!-- SEÇÃO: CONTATOS PRÓXIMOS -->
+        <TextView
+            android:id="@+id/tv_contatos_proximos"
+            style="@style/TextAppearance.Aurora.Subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="28dp"
+            android:accessibilityHeading="true"
+            android:gravity="center_vertical"
+            android:text="@string/home_titulo_contatos_proximos"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hsv_circulos_usuario" />
 
-            <!-- Item: Trabalho -->
+        <TextView
+            android:id="@+id/tv_ver_todos"
+            style="@style/TextAppearance.Aurora.Subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:contentDescription="@string/home_desc_ver_todos_amigos"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:text="@string/home_btn_ver_todos"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_contatos_proximos"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_contatos_proximos" />
+
+        <HorizontalScrollView
+            android:id="@+id/hsv_friends"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_contatos_proximos">
+
             <LinearLayout
-                android:id="@+id/btn_shortcut_trabalho"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/card_icons"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="12dp">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_work"
-                    app:tint="@color/texto" />
-
-                <TextView
+                <!-- Amigo Exemplo 1 -->
+                <LinearLayout
+                    android:id="@+id/container_amigo_exemplo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Trabalho"
-                    android:textColor="#ffff"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:layout_marginEnd="24dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/home_desc_contato_exemplo"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Adicionar"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="10sp" />
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_perfil2"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                        app:strokeColor="?attr/colorPrimary"
+                        app:strokeWidth="2dp" />
+
+                    <TextView
+                        style="@style/TextAppearance.Aurora.Subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:importantForAccessibility="no"
+                        android:text="@string/home_contato_exemplo_nome"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        style="@style/TextAppearance.Aurora.Body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:importantForAccessibility="no"
+                        android:text="@string/home_contato_exemplo_distancia"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="10sp" />
+                </LinearLayout>
             </LinearLayout>
-
-            <!-- Item: Adicionar -->
-            <LinearLayout
-                android:id="@+id/btn_shortcut_adicionar"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/card_icons"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="12dp">
-
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_circle_add"
-                    app:tint="@color/texto" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Trabalho"
-                    android:textColor="#ffff"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Adicionar"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-        </LinearLayout>
-
+        </HorizontalScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

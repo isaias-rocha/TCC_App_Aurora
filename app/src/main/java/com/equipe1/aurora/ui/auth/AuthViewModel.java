@@ -7,14 +7,13 @@ import android.util.Patterns;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import com.equipe1.aurora.rede.api.ApiClient;
-import com.equipe1.aurora.domain.model.UsuarioDto;
+import com.equipe1.aurora.infra.network.api.ApiClient;
+import com.equipe1.aurora.infra.dto.UsuarioDto;
 
 
 /**
  * AuthViewModel: O "cérebro" do fluxo de autenticação.
- *
+
  * Responsabilidades:
  * 1. Processar e validar todos os dados de formulários (Login, Cadastro, Esqueceu Senha, OTP).
  * 2. Gerenciar a autenticação reativa via provedores sociais (Google Sign-In).
@@ -53,11 +52,11 @@ public class AuthViewModel extends ViewModel {
     private final MutableLiveData<String> mensagemToast = new MutableLiveData<>();
 
 
-    // ============================================================================================
-    // 2. EXPOSIÇÃO PÚBLICA (LiveData - Apenas Leitura)
-    // Convertemos para LiveData simples para que a Activity consiga apenas "observar" os dados,
-    // sem a permissão de modificar seus valores. É o princípio do encapsulamento no MVVM.
-    // ============================================================================================
+// ============================================================================================
+// 2. EXPOSIÇÃO PÚBLICA (LiveData - Apenas Leitura)
+// Convertemos para LiveData simples para que a Activity consiga apenas "observar" os dados,
+// sem a permissão de modificar os seus valores. É o princípio do encapsulamento no MVVM.
+// ============================================================================================
 
     // Getters para a tela de Login
     public LiveData<UsuarioDto> getUsuarioLogado() {
@@ -137,14 +136,20 @@ public class AuthViewModel extends ViewModel {
      */
     public void realizarLogin(String email, String senha, boolean lembrarCredenciais, SharedPreferences preferences) {
         boolean valido = true;
+
+        // Validação 1: O campo de e-mail está em branco?
         if (TextUtils.isEmpty(email)) {
             emailLoginError.setValue("O e-mail não pode estar vazio!");
             valido = false;
         }
+
+        // Validação 2: O campo de senha está em branco?
         if (TextUtils.isEmpty(senha)) {
             senhaLoginError.setValue("A senha não pode estar vazia!");
             valido = false;
         }
+
+        // Se alguma validação falhou, interrompe a execução
         if (!valido) return;
 
         // Cria um DTO apenas com e-mail e senha para enviar ao servidor
@@ -152,6 +157,8 @@ public class AuthViewModel extends ViewModel {
         loginDto.setEmail(email);
         loginDto.setSenha(senha);
 
+        // Notifica a Activity do sucesso no login
+        loginSucesso.setValue(true);
         // Dispara a requisição para o Spring Boot consultar o MySQL
         ApiClient.getApiService().realizarLoginApi(loginDto)
                 .enqueue(new retrofit2.Callback<UsuarioDto>() {
@@ -338,6 +345,5 @@ public class AuthViewModel extends ViewModel {
 
         mensagemToast.setValue("Código validado com sucesso!");
         otpSucesso.setValue(true);
-    }
-
+        }
     }

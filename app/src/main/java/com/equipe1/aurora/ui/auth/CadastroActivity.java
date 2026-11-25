@@ -1,6 +1,5 @@
 package com.equipe1.aurora.ui.auth;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;

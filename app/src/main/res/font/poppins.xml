@@ -6,7 +6,7 @@
         app:fontStyle="normal"
         app:fontWeight="700" />
 
-    <!-- Poppins SemiBold - Subtítulos, Títulos de Cards e Cabeçalhos de Seção. -->
+    <!-- Poppins SemiBold - Subtítulos, Títulos de Cards e Cabeçalhos de Seção, Botões -->
     <font
         app:font="@font/poppins_semibold"
         app:fontStyle="normal"

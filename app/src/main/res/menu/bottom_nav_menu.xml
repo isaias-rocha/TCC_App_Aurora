@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
         <item
@@ -7,7 +8,7 @@
 
         <item
             android:id="@+id/nav_mapa"
-            android:icon="@drawable/ic_map"
+            android:icon="@drawable/ic_mapa"
             android:title="@string/menu_mapa" />
 
         <!-- Item neutro do espaço do botão SOS -->
@@ -22,8 +23,8 @@
             android:title="@string/menu_contatos" />
 
         <item
-            android:id="@+id/nav_perfil"
-            android:icon="@drawable/ic_profile"
-            android:title="@string/menu_perfil" />
+            android:id="@+id/nav_menu"
+            android:icon="@drawable/ic_menu"
+            android:title="@string/menu_menu" />
 
 </menu>

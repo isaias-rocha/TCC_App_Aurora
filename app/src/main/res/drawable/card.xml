@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
 
-    <corners android:radius="32dp" />
-    <!-- Referenciando a cor configurada nos arquivos values/colors.xml -->
-    <solid android:color="@color/on_bg_claro" />
+    <solid android:color="@android:color/transparent" />
 
+    <!-- O segredo está aqui: referenciar a cor dinâmica -->
+    <stroke
+        android:width="2dp"
+        android:color="@color/cor_borda" />
+
+    <corners android:radius="8dp" />
 </shape>

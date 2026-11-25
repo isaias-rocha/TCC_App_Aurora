@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:padding="24dp"
-    tools:context=".ui.config.AccessibilidadeActivity">
+    tools:context=".ui.acessibilidade.AcessibilidadeActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Voltar para a tela anterior"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_voltar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="?attr/colorOnBackground" />
@@ -29,9 +29,11 @@
         <!-- TÍTULO DA TELA: Não precisa de contentDescription manual, pois o TalkBack lê o android:text diretamente. -->
         <TextView
             android:id="@+id/tv_titulo_acessibilidade"
+            style="@style/TextAppearance.Aurora.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:accessibilityHeading="true"
             android:text="Acessibilidade"
             android:textColor="?attr/colorOnBackground"
             android:textSize="28sp"
@@ -42,6 +44,7 @@
 
         <TextView
             android:id="@+id/tv_subtitulo_acessibilidade"
+            style="@style/TextAppearance.Aurora.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -55,9 +58,11 @@
         <!-- SEÇÃO 1: VISUAL -->
         <TextView
             android:id="@+id/tv_secao_visual"
+            style="@style/TextAppearance.Aurora.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
+            android:accessibilityHeading="true"
             android:text="VISUAL"
             android:textColor="?attr/colorPrimary"
             android:textSize="12sp"
@@ -101,6 +106,7 @@
 
                     <TextView
                         android:id="@+id/tv_alto_contraste"
+                        style="@style/TextAppearance.Aurora.Subtitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
@@ -113,6 +119,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        style="@style/TextAppearance.Aurora.Body"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -133,6 +140,7 @@
                         android:clickable="false"
                         android:contentDescription="Alternar Modo de Alto Contraste"
                         android:focusable="false"
+                        android:importantForAccessibility="no"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -142,60 +150,52 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_marginHorizontal="16dp"
                     android:alpha="0.1"
                     android:background="?android:attr/textColorSecondary"
                     android:importantForAccessibility="no" />
 
-                <!-- ITEM: TEMA DO APLICATIVO -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/row_reduzir_animacoes"
+                <!-- ITEM: TAMANHO DA FONTE -->
+                <LinearLayout
+                    android:id="@+id/row_tamanho_fonte"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:contentDescription="Tema do Aplicativo. Alternar entre tema claro e escuro."
-                    android:focusable="true"
-                    android:minHeight="56dp"
+                    android:orientation="vertical"
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="12dp">
 
                     <TextView
-                        android:id="@+id/tv_modo_tema"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:text="Tema do Aplicativo"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@id/switch_reduzir_animacoes"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginEnd="16dp"
-                        android:text="Alterar tema do aplicativo"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toStartOf="@id/switch_reduzir_animacoes"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_modo_tema" />
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/switch_reduzir_animacoes"
+                        android:id="@+id/tv_tamanho_fonte"
+                        style="@style/TextAppearance.Aurora.Subtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:clickable="false"
-                        android:contentDescription="Alternar tema do aplicativo"
-                        android:focusable="false"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:text="Tamanho da Fonte"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_subtitulo_tamanho_fonte"
+                        style="@style/TextAppearance.Aurora.Body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Ajuste a escala dos textos para facilitar a leitura"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="12sp" />
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/slider_tamanho_fonte"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:contentDescription="Controle deslizante para alterar o tamanho da fonte"
+                        android:stepSize="1"
+                        android:valueFrom="0"
+                        android:valueTo="3"
+                        app:tickVisible="true" />
+                </LinearLayout>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -203,9 +203,11 @@
         <!-- SEÇÃO 2: INTERAÇÃO E RESPOSTA -->
         <TextView
             android:id="@+id/tv_secao_interacao"
+            style="@style/TextAppearance.Aurora.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:accessibilityHeading="true"
             android:text="INTERAÇÃO E FEEDBACK"
             android:textColor="?attr/colorPrimary"
             android:textSize="12sp"
@@ -247,18 +249,19 @@
 
                     <TextView
                         android:id="@+id/tv_feedback_tatil"
+                        style="@style/TextAppearance.Aurora.Subtitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
                         android:text="Vibração"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
-                        android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@id/switch_feedback_tatil"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        style="@style/TextAppearance.Aurora.Body"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -278,22 +281,24 @@
                         android:clickable="false"
                         android:contentDescription="Alternar feedback por vibração"
                         android:focusable="false"
+                        android:importantForAccessibility="no"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <!-- Divisor visual -->
+                <!-- Divisor visual (oculto para o leitor de tela para não interromper a navegação) -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_marginHorizontal="16dp"
                     android:alpha="0.1"
                     android:background="?android:attr/textColorSecondary"
                     android:importantForAccessibility="no" />
 
-                <!-- ITEM: LEITOR DE TELA (TALKBACK)
-                     Corrigido clickable="true" na linha para manter padronização de toque estendido. -->
+                <!-- ITEM: LEITOR DE TELA (TALKBACK) -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/row_leitor_tela"
                     android:layout_width="match_parent"
@@ -308,6 +313,7 @@
 
                     <TextView
                         android:id="@+id/tv_leitor_tela"
+                        style="@style/TextAppearance.Aurora.Subtitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
@@ -320,6 +326,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        style="@style/TextAppearance.Aurora.Body"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -339,6 +346,7 @@
                         android:clickable="false"
                         android:contentDescription="Alternar otimização para leitor de tela"
                         android:focusable="false"
+                        android:importantForAccessibility="no"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

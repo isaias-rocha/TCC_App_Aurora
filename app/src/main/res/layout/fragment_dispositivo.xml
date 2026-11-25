@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_dispositivo"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground"
+    android:orientation="vertical"
+    android:padding="24dp"
+    tools:context="com.equipe1.aurora.ui.dispositivo.DispositivoFragment">
+
+    <!-- BOTÃO VOLTAR -->
+    <ImageButton
+        android:id="@+id/btn_voltar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/common_voltar_tela_anterior"
+        android:src="@drawable/ic_voltar"
+        app:tint="?attr/colorOnBackground" />
+
+    <!-- TÍTULO DA TELA -->
+    <TextView
+        android:id="@+id/tvTitle"
+        style="@style/TextAppearance.Aurora.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Dispositivos"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <!-- RECYCLERVIEW ONDE OS CARDS SERÃO INSERIDOS DINAMICAMENTE -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDispositivos"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_dispositivo" />
+
+    <!-- BOTÃO PARA PAREAR NOVO DISPOSITIVO -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnParearDispositivo"
+        style="@style/Widget.Aurora.Button"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:text="Parear Novo Dispositivo"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        app:cornerRadius="12dp" />
+
+</LinearLayout>
