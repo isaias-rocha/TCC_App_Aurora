@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="Base.Theme.Aurora" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <!-- Cor do Chip selecionado (substitui o lilás padrão do M3) -->
+        <item name="colorSecondaryContainer">@color/cor_chip_selecionado</item>
+        <item name="colorOnSecondaryContainer">@color/cor_texto_chip_selecionado</item>
+
+        <!-- Fundo do Chip quando NÃO está selecionado (remove o tom rosado) -->
+        <item name="colorSurfaceContainerLow">@color/cor_chip_normal</item>
+        <item name="colorSurfaceContainer">@color/cor_chip_normal</item>
+
+        <!-- Borda do Chip quando NÃO está selecionado -->
+        <item name="colorOutlineVariant">@color/cor_borda</item>
+
         <!-- Cores Primárias, Secundárias e Terciárias (Material 3) -->
         <item name="colorPrimary">@color/cor_primaria</item>
         <item name="colorOnPrimary">#FFFFFF</item>
@@ -28,6 +40,7 @@
         <!-- Fonte Padrão do Aplicativo -->
         <item name="fontFamily">@font/inter</item>
         <item name="android:fontFamily">@font/inter</item>
+
     </style>
 
     <style name="Theme.Aurora" parent="Base.Theme.Aurora" />
@@ -51,9 +64,5 @@
         <item name="android:fontFamily">@font/inter</item>
         <item name="android:textFontWeight">400</item>
     </style>
-
-    <!--Cor contato card-->
-    <color name="contatocard">#EAF3F8</color>
-    <color name="bordacontatocard">#1B1818</color>
 
 </resources>

@@ -15,4 +15,13 @@
     <color name="text_primary">#EDEDED</color>
     <color name="text_secondary">#A0A0A0</color>
     <color name="cor_borda">#616161</color>
+
+    <!-- Cores dos Chips (Modo Escuro) -->
+    <color name="cor_chip_selecionado">#1E3A8A</color> <!-- Azul escuro -->
+    <color name="cor_texto_chip_selecionado">#C2DDFB</color> <!-- Azul claro para contraste -->
+    <color name="cor_chip_normal">#1E1E1E</color>
+
+    <!-- Cor contato card (Modo Escuro) -->
+    <color name="contatocard">#475052</color>
+    <color name="bordacontatocard">#1B1818</color>
 </resources>

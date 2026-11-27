@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background">
+
+    <!-- Cabeçalho do Chat -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_header_chat"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_voltar_mensagens"
+            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/common_voltar_tela_anterior"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:padding="8dp"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_voltar"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconTint="?android:attr/textColorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorOutline"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_avatar_chat"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/colorSurfaceVariant"
+            android:padding="6dp"
+            android:src="@drawable/ic_perfil2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_voltar_mensagens"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+            app:strokeColor="?attr/colorOutline"
+            app:strokeWidth="1dp" />
+
+        <View
+            android:id="@+id/view_online_chat"
+            android:layout_width="11dp"
+            android:layout_height="11dp"
+            android:background="@android:drawable/presence_online"
+            app:layout_constraintBottom_toBottomOf="@id/iv_avatar_chat"
+            app:layout_constraintEnd_toEndOf="@id/iv_avatar_chat" />
+
+        <TextView
+            android:id="@+id/tv_nome_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textAppearance="@style/TextAppearance.Aurora.Subtitle"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/iv_avatar_chat"
+            app:layout_constraintTop_toTopOf="@id/iv_avatar_chat"
+            tools:text="Usuário" />
+
+        <TextView
+            android:id="@+id/tv_status_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="@string/chat_status_online"
+            android:textAppearance="@style/TextAppearance.Aurora.Body"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_avatar_chat"
+            app:layout_constraintStart_toEndOf="@id/iv_avatar_chat"
+            app:layout_constraintTop_toBottomOf="@id/tv_nome_chat" />
+
+        <ImageButton
+            android:id="@+id/btn_menu_chat"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/chat_desc_opcoes"
+            android:src="@drawable/ic_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?android:attr/textColorPrimary" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Divisor -->
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider_header"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:dividerColor="?attr/colorOutline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_header_chat" />
+
+    <!-- Lista de Mensagens -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_mensagens"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:padding="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/divider_footer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider_header"
+        app:stackFromEnd="true"
+        tools:listitem="@layout/item_mensagem_enviada" />
+
+    <!-- Divisor Inferior -->
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider_footer"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:dividerColor="?attr/colorOutline"
+        app:layout_constraintBottom_toTopOf="@id/container_input_chat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Barra de Digitação -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_input_chat"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Botão Anexo / Enviar Localização -->
+        <ImageButton
+            android:id="@+id/btn_anexar_chat"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/chat_desc_anexar"
+            android:src="@drawable/bg_localizacao"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?android:attr/colorPrimary" />
+
+        <!-- Campo de Texto -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_mensagem_chat"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            app:boxBackgroundColor="@color/app_background"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:boxStrokeColor="?attr/colorOutline"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_enviar_mensagem"
+            app:layout_constraintStart_toEndOf="@id/btn_anexar_chat"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_mensagem_chat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:hint="@string/chat_hint_mensagem"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLines="4"
+                android:minHeight="48dp"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="10dp"
+                android:textAppearance="@style/TextAppearance.Aurora.Body"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textColorHint="?android:attr/textColorSecondary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Botão Enviar -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_enviar_mensagem"
+            style="@style/Widget.Material3.Button.IconButton.Filled"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/chat_desc_enviar"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            app:backgroundTint="?attr/colorSecondary"
+            app:icon="@drawable/bg_carta"
+            app:iconTint="?attr/colorOnSecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

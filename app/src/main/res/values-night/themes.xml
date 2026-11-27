@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="Base.Theme.Aurora" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Cores Primárias, Secundárias e Terciárias (Material 3 - Modo Escuro) -->
@@ -28,6 +28,10 @@
         <!-- Fonte Padrão do Aplicativo -->
         <item name="fontFamily">@font/inter</item>
         <item name="android:fontFamily">@font/inter</item>
+
+        <!-- Cor do Chip selecionado (substitui o lilás padrão do M3) -->
+        <item name="colorSecondaryContainer">@color/cor_chip_selecionado</item>
+        <item name="colorOnSecondaryContainer">@color/cor_texto_chip_selecionado</item>
     </style>
 
     <style name="Theme.Aurora" parent="Base.Theme.Aurora" />
@@ -38,7 +42,5 @@
         <item name="android:fontFamily">@font/inter</item>
         <item name="android:textFontWeight">400</item>
     </style>
-    <!--Cor contato card-->
-    <color name="contatocard">#475052</color>
-    <color name="bordacontatocard">#1B1818</color>
+
 </resources>
