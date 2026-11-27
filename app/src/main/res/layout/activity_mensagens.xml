@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background"
+    android:paddingHorizontal="16dp"
+    android:paddingTop="16dp">
+
+    <!-- Botão Voltar -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_voltar_mensagens"
+        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:contentDescription="@string/common_voltar_tela_anterior"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:padding="8dp"
+        app:cornerRadius="10dp"
+        app:icon="@drawable/ic_voltar"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconTint="?android:attr/textColorPrimary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="?attr/colorOutline" />
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/tv_titulo_mensagens"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Mensagens"
+        android:textAppearance="@style/TextAppearance.Aurora.Title"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintEnd_toStartOf="@id/btn_menu_mensagens"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_voltar_mensagens" />
+
+    <!-- Menu 3 pontos -->
+    <ImageButton
+        android:id="@+id/btn_menu_mensagens"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Mais opções"
+        android:src="@drawable/ic_menu"
+        app:layout_constraintBottom_toBottomOf="@id/tv_titulo_mensagens"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_titulo_mensagens"
+        app:tint="?android:attr/textColorPrimary" />
+
+    <!-- Subtítulo -->
+    <TextView
+        android:id="@+id/tv_subtitulo_mensagens"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Converse com seus contatos e membros do círculo"
+        android:textAppearance="@style/TextAppearance.Aurora.Body"
+        android:textColor="?android:attr/textColorSecondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_titulo_mensagens" />
+
+    <!-- Barra de Pesquisa -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_pesquisar_conversa"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:boxBackgroundColor="?attr/colorSurface"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxStrokeColor="?attr/colorOutline"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_subtitulo_mensagens"
+        app:startIconDrawable="@drawable/ic_pesquisa"
+        app:startIconTint="?android:attr/textColorSecondary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_pesquisar_conversa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Pesquisar conversas, contatos, grupos"
+            android:inputType="text"
+            android:paddingVertical="12dp"
+            android:textAppearance="@style/TextAppearance.Aurora.Body"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textColorHint="?android:attr/textColorSecondary" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Filtros (Todas, Individuais, Grupos, Círculos) -->
+    <HorizontalScrollView
+        android:id="@+id/scroll_filtros"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/til_pesquisar_conversa">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group_filtros"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:selectionRequired="true"
+            app:singleLine="true"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_todas"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Todas"
+                android:textAppearance="@style/TextAppearance.Aurora.Body" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_individuais"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contatos"
+                android:textAppearance="@style/TextAppearance.Aurora.Body" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_grupos"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Grupos"
+                android:textAppearance="@style/TextAppearance.Aurora.Body" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_circulos"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Círculos"
+                android:textAppearance="@style/TextAppearance.Aurora.Body" />
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <!-- Lista de Conversas -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_conversas"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/scroll_filtros"
+        tools:listitem="@layout/item_conversa" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

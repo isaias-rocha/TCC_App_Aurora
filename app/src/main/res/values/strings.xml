@@ -238,4 +238,13 @@
     <string name="mapa_desc_btn_toggle_riscos">Mostrar ou Ocultar as àreas de riscos</string>
     <string name="historico_titulo">Histórico</string>
     <string name="historico_subtitulo">Registros de suas rotas e alertas</string>
+
+    <!-- =================================================================== -->
+    <!-- TELA DE CHAT (ACTIVITY_CHAT)                                       -->
+    <!-- =================================================================== -->
+    <string name="chat_status_online">Online</string>
+    <string name="chat_desc_opcoes">Opções do chat</string>
+    <string name="chat_desc_anexar">Anexar ou enviar localização</string>
+    <string name="chat_hint_mensagem">Digite uma mensagem&#8230;</string>
+    <string name="chat_desc_enviar">Enviar mensagem</string>
 </resources>

@@ -22,7 +22,12 @@
     <color name="text_secondary">#64748B</color>
     <color name="cor_borda">#CBD5E1</color>
 
-    <!-- // Cor contato card -->
+    <!-- Cores dos Chips -->
+    <color name="cor_chip_selecionado">#DBEAFE</color> <!-- Azul suave -->
+    <color name="cor_texto_chip_selecionado">#1E3A8A</color> <!-- Azul escuro para contraste -->
+    <color name="cor_chip_normal">#FFFFFF</color>
+
+    <!-- Cor contato card -->
     <color name="contatocard">#EAF3F8</color>
     <color name="bordacontatocard">#1B1818</color>
 </resources>
