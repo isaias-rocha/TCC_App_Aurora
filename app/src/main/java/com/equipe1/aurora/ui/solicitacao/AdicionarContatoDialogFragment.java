@@ -31,7 +31,6 @@ public class AdicionarContatoDialogFragment extends DialogFragment {
 
         // Ação do Botão Enviar
         binding.btnEnviar.setOnClickListener(v -> {
-            String email = binding.etEmail.getText() != null ? binding.etEmail.getText().toString().trim() : "";
             String telefone = binding.etTelefone.getText() != null ? binding.etTelefone.getText().toString().trim() : "";
             Toast.makeText(getContext(), "Click enviar solicitação teste", Toast.LENGTH_SHORT).show();
 

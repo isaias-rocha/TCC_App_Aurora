@@ -62,7 +62,9 @@
         android:roundIcon="@drawable/ic_launcher_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.Aurora"
+        android:name=".AuroraApplication"
         android:usesCleartextTraffic="true"> <!-- Permite tráfego HTTP local para desenvolvimento no XAMPP -->
+
 
         <!-- =========================================================================
              SERVIÇOS DE SEGUNDO PLANO

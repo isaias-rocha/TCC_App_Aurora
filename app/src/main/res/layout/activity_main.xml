@@ -28,24 +28,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="80dp"
+            android:paddingBottom="88dp"
             app:defaultNavHost="true"
             app:navGraph="@navigation/nav_graph"
             tools:layout="@layout/fragment_home" />
 
         <!-- ==================================================================================== -->
-        <!-- BARRA DE NAVEGAÇÃO INFERIOR (BottomAppBar com recorte central)                      -->
+        <!-- BARRA DE NAVEGAÇÃO INFERIOR (BottomAppBar com estilo de recorte curvo ativado)       -->
         <!-- ==================================================================================== -->
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar"
+            style="@style/Widget.MaterialComponents.BottomAppBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:layout_gravity="bottom"
-            android:backgroundTint="@color/app_surface"
+            app:backgroundTint="@color/app_surface"
+            app:contentInsetStart="0dp"
+            app:contentInsetEnd="0dp"
+            app:elevation="10dp"
             app:fabAlignmentMode="center"
-            app:fabCradleMargin="0dp"
-            app:fabCradleRoundedCornerRadius="20dp"
-            app:fabCradleVerticalOffset="4dp"
+            app:fabCradleMargin="10dp"
+            app:fabCradleRoundedCornerRadius="28dp"
+            app:fabCradleVerticalOffset="8dp"
             app:hideOnScroll="false"
             tools:ignore="BottomAppBar">
 
@@ -67,7 +71,7 @@
         </com.google.android.material.bottomappbar.BottomAppBar>
 
         <!-- ==================================================================================== -->
-        <!-- BOTÃO SOS (FloatingActionButton ancorado no centro da BottomAppBar)                 -->
+        <!-- BOTÃO SOS (FloatingActionButton ancorado no centro da curva)                         -->
         <!-- ==================================================================================== -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btn_sos"
@@ -81,11 +85,10 @@
             android:src="@drawable/ic_sos"
             app:backgroundTint="@color/vermelho_alerta"
             app:borderWidth="0dp"
-            app:elevation="6dp"
+            app:elevation="8dp"
             app:fabSize="normal"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
             app:layout_anchor="@id/bottom_app_bar"
-            app:layout_anchorGravity="center"
             app:maxImageSize="38dp"
             app:rippleColor="@android:color/white"
             app:tint="@android:color/white"

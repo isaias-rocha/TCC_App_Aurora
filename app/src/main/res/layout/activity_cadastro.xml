@@ -1,38 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:clipToPadding="false"
     tools:context=".ui.auth.CadastroActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="24dp">
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp">
 
-        <!-- BOTÃO VOLTAR -->
+        <!-- ====================================== -->
+        <!-- 1. BOTÃO VOLTAR                        -->
+        <!-- ====================================== -->
+
         <ImageButton
             android:id="@+id/btn_voltar"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
             android:contentDescription="@string/common_voltar_tela_anterior"
-            android:focusable="true"
             android:src="@drawable/ic_voltar"
+            app:tint="?attr/colorOnSurface"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="?attr/colorOnSurface" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- TÍTULOS -->
+        <!-- ====================================== -->
+        <!-- 2. CABEÇALHO                           -->
+        <!-- ====================================== -->
+
         <TextView
             android:id="@+id/tv_titulo_cadastro"
             style="@style/TextAppearance.Aurora.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="32dp"
             android:text="@string/cadastro_titulo"
             android:textColor="?attr/colorPrimary"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,26 +50,31 @@
         <TextView
             android:id="@+id/tv_subtitulo_cadastro"
             style="@style/TextAppearance.Aurora.Subtitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="8dp"
             android:text="@string/cadastro_subtitulo"
             android:textColor="?attr/colorOnSurfaceVariant"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_titulo_cadastro" />
 
-        <!-- CAMPO NOME -->
+        <!-- ====================================== -->
+        <!-- 3. DADOS PESSOAIS                      -->
+        <!-- ====================================== -->
+
+        <!-- Nome completo -->
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_nome"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="36dp"
             android:hint="@string/cadastro_hint_nome"
-            app:endIconDrawable="@drawable/ic_nome"
-            app:endIconMode="custom"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:startIconDrawable="@drawable/ic_nome"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_subtitulo_cadastro">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -68,10 +82,13 @@
                 style="@style/TextAppearance.Aurora.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:autofillHints="name" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- CAMPO EMAIL -->
+        <!-- E-mail -->
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_email_cadastro"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -79,10 +96,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="@string/cadastro_hint_email"
-            app:endIconDrawable="@drawable/ic_email"
-            app:endIconMode="custom"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:startIconDrawable="@drawable/ic_email"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/til_nome">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -90,10 +106,13 @@
                 style="@style/TextAppearance.Aurora.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:autofillHints="emailAddress" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- CAMPO TELEFONE -->
+        <!-- Telefone -->
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_telefone"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -101,10 +120,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="@string/cadastro_hint_telefone"
-            app:endIconDrawable="@drawable/ic_telefone"
-            app:endIconMode="custom"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:startIconDrawable="@drawable/ic_telefone"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/til_email_cadastro">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -113,10 +131,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="phone"
-                android:maxLength="14" />
+                android:autofillHints="phone" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- CAMPO SENHA -->
+        <!-- ====================================== -->
+        <!-- 4. SENHA E CONFIRMAÇÃO                 -->
+        <!-- ====================================== -->
+
+        <!-- Senha -->
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_senha"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -124,10 +148,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="@string/cadastro_hint_senha"
-            app:endIconContentDescription="@string/common_desc_alternar_senha"
+            app:startIconDrawable="@drawable/ic_cadeado"
             app:endIconMode="password_toggle"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:endIconContentDescription="@string/common_desc_alternar_senha"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/til_telefone">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -135,10 +160,13 @@
                 style="@style/TextAppearance.Aurora.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:autofillHints="newPassword" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- CAMPO CONFIRMAR SENHA -->
+        <!-- Confirmar senha -->
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_confirmar_senha"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -146,10 +174,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="@string/cadastro_hint_confirmar_senha"
-            app:endIconContentDescription="@string/cadastro_desc_alternar_confirmar_senha"
+            app:startIconDrawable="@drawable/ic_cadeado"
+            app:endIconContentDescription="@string/common_desc_alternar_senha"
             app:endIconMode="password_toggle"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/til_senha">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -157,49 +186,441 @@
                 style="@style/TextAppearance.Aurora.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:autofillHints="newPassword" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- BOTÃO CADASTRAR -->
+        <!-- ====================================== -->
+        <!-- 5. CARD DE ENDEREÇO                    -->
+        <!-- ====================================== -->
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_endereco"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp"
+            app:strokeColor="?attr/colorOutlineVariant"
+            app:strokeWidth="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/til_confirmar_senha">
+
+            <LinearLayout
+                android:id="@+id/container_endereco"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Cabeçalho do card -->
+
+                <LinearLayout
+                    android:id="@+id/header_endereco"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+
+                    <ImageView
+                        android:id="@+id/iv_icone_tema"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_localizacao"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/colorPrimary" />
+
+
+                    <!-- Título e descrição -->
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_endereco"
+                            style="@style/TextAppearance.Aurora.Subtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Endereço"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Digite seu CEP para preencher seu endereço automaticamente."
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+
+                    <!-- Seta de expansão -->
+
+                    <ImageButton
+                        android:id="@+id/btn_expandir_endereco"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Recolher ou expandir endereço"
+                        android:src="@drawable/ic_seta_cima"
+                        app:tint="?attr/colorOnSurface" />
+
+                </LinearLayout>
+
+                <!-- ================================== -->
+                <!-- FORMULÁRIO DE ENDEREÇO             -->
+                <!-- ================================== -->
+
+                <LinearLayout
+                    android:id="@+id/form_endereco"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+                    <!-- CEP -->
+
+                    <TextView
+                        style="@style/TextAppearance.Aurora.Body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CEP *"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_cep"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:hint="Digite seu CEP"
+                        app:endIconMode="custom"
+                        app:endIconDrawable="@drawable/ic_pesquisa"
+                        app:endIconContentDescription="Consultar CEP">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_cep"
+                            style="@style/TextAppearance.Aurora.Body"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:maxLength="8"
+                            android:autofillHints="postalCode" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Logradouro -->
+
+                    <TextView
+                        style="@style/TextAppearance.Aurora.Body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="Endereço (logradouro)"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_logradouro"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_logradouro"
+                            style="@style/TextAppearance.Aurora.Body"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Rua Exemplo"
+                            android:inputType="textCapSentences" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Bairro e cidade -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:orientation="horizontal"
+                        android:baselineAligned="false">
+
+                        <!-- Bairro -->
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/TextAppearance.Aurora.Body"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Bairro"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textStyle="bold" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/til_bairro"
+                                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/et_bairro"
+                                    style="@style/TextAppearance.Aurora.Body"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Centro"
+                                    android:inputType="textCapSentences" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                        <!-- Cidade -->
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="6dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/TextAppearance.Aurora.Body"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Cidade"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textStyle="bold" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/til_cidade"
+                                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/et_cidade"
+                                    style="@style/TextAppearance.Aurora.Body"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="São Paulo"
+                                    android:inputType="textCapWords" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- Estado e número -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:orientation="horizontal"
+                        android:baselineAligned="false">
+
+                        <!-- Estado -->
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/TextAppearance.Aurora.Body"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Estado"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textStyle="bold" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/til_estado"
+                                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp">
+
+                                <AutoCompleteTextView
+                                    android:id="@+id/et_estado"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="UF"
+                                    android:inputType="none"
+                                    android:textColor="?attr/colorOnSurface"
+                                    android:textSize="14sp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                        <!-- Número -->
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="6dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/TextAppearance.Aurora.Body"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Número"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textStyle="bold" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/til_numero"
+                                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/et_numero"
+                                    style="@style/TextAppearance.Aurora.Body"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Exemplo: 123"
+                                    android:inputType="text" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- Complemento -->
+
+                    <TextView
+                        style="@style/TextAppearance.Aurora.Body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="Complemento (opcional)"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_complemento"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_complemento"
+                            style="@style/TextAppearance.Aurora.Body"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Exemplo: Apto 101, Bloco B"
+                            android:inputType="textCapSentences" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Apelido do endereço -->
+
+                    <TextView
+                        style="@style/TextAppearance.Aurora.Body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="Apelido (opcional)"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_apelido"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_apelido"
+                            style="@style/TextAppearance.Aurora.Body"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Exemplo: Casa, Trabalho"
+                            android:inputType="textCapSentences" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ====================================== -->
+        <!-- 6. BOTÃO CADASTRAR                     -->
+        <!-- ====================================== -->
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_cadastrar"
             style="@style/Widget.Aurora.Button"
             android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_marginTop="36dp"
-            android:contentDescription="@string/cadastro_desc_btn_cadastrar"
+            android:layout_height="60dp"
+            android:layout_marginTop="24dp"
             android:text="@string/cadastro_btn_cadastrar"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/til_confirmar_senha" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_endereco" />
 
-        <!-- LINK PARA LOGIN -->
+        <!-- ====================================== -->
+        <!-- 7. LINK PARA LOGIN                     -->
+        <!-- ====================================== -->
+
         <LinearLayout
             android:id="@+id/container_voltar_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:clickable="true"
-            android:contentDescription="@string/cadastro_voltar_login"
-            android:focusable="true"
+            android:layout_marginTop="20dp"
             android:gravity="center"
-            android:minHeight="48dp"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:minHeight="48dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_cadastrar"
-            app:layout_constraintVertical_bias="1.0">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_cadastrar"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
                 android:id="@+id/tv_ir_para_login_desc"
                 style="@style/TextAppearance.Aurora.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:importantForAccessibility="no"
                 android:text="@string/cadastro_ja_tem_conta"
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="14sp" />
+                android:importantForAccessibility="no" />
 
             <TextView
                 android:id="@+id/tv_ir_para_login"
@@ -207,12 +628,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:importantForAccessibility="no"
                 android:text="@string/cadastro_voltar_login"
                 android:textColor="?attr/colorPrimary"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:importantForAccessibility="no" />
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </ScrollView>

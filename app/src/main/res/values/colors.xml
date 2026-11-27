@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Cores Globais -->
+    <!-- // Cores Globais Padrão -->
     <color name="cor_primaria">#1F51E6</color>
     <color name="cor_segundaria">#1F874B</color>
-    <color name="cor_terciaria">#9C6D22</color>
+    <color name="cor_terciaria">#EAB308</color>
     <color name="vermelho_alerta">#DB3929</color>
     <color name="texto">#000000</color>
 
-    <!-- Mapeamento Semântico para Modo Claro -->
+    <!-- // Paleta Dinâmica Selecionável (Acessibilidade) -->
+    <color name="aurora_azul">#1F51E6</color>
+    <color name="aurora_verde">#1F874B</color>
+    <color name="aurora_amarelo">#EAB308</color>
+    <color name="aurora_vermelho">#DB3929</color>
+
+    <!-- // Mapeamento Semântico para Modo Claro -->
     <color name="app_background">#FFFFFF</color>
     <color name="app_surface">#F8FAFC</color>
     <color name="on_background">#1E293B</color>
